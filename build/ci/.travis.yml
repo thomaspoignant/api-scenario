@@ -1,0 +1,10 @@
+language: go
+go:
+  - "1.14"
+before_install:
+  - go get github.com/mattn/goveralls
+  - go get golang.org/x/lint/golint
+  - make update-dependencies
+script:
+  - make coverage
+  - $GOPATH/bin/goveralls -coverprofile=.coverage/profile.cov -service=travis-ci
