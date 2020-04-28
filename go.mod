@@ -1,4 +1,4 @@
-module github.com/thomaspoignant/rest-scenario
+module github.com/thomaspoignant/api-scenario
 
 go 1.14
 

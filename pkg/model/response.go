@@ -3,7 +3,7 @@ package model
 import (
 	"errors"
 	"github.com/sendgrid/rest"
-	"github.com/thomaspoignant/rest-scenario/pkg/util"
+	"github.com/thomaspoignant/api-scenario/pkg/util"
 	"time"
 )
 

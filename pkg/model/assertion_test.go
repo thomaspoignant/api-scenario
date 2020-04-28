@@ -2,8 +2,8 @@ package model
 
 import (
 	"fmt"
-	"github.com/thomaspoignant/rest-scenario/pkg/util"
-	"github.com/thomaspoignant/rest-scenario/test"
+	"github.com/thomaspoignant/api-scenario/pkg/util"
+	"github.com/thomaspoignant/api-scenario/test"
 	"net/http"
 	"testing"
 	"time"

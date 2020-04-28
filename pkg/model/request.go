@@ -2,7 +2,7 @@ package model
 
 import (
 	"github.com/sendgrid/rest"
-	"github.com/thomaspoignant/rest-scenario/pkg/model/context"
+	"github.com/thomaspoignant/api-scenario/pkg/model/context"
 )
 
 type Request struct {

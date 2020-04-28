@@ -26,5 +26,5 @@ vendor/
 .DS_Store
 
 # binary
-rest-scenario
-!rest-scenario/
+api-scenario
+!api-scenario/

@@ -2,8 +2,8 @@ package util_test
 
 import (
 	"github.com/google/go-cmp/cmp"
-	"github.com/thomaspoignant/rest-scenario/pkg/util"
-	"github.com/thomaspoignant/rest-scenario/test"
+	"github.com/thomaspoignant/api-scenario/pkg/util"
+	"github.com/thomaspoignant/api-scenario/test"
 	"testing"
 )
 
