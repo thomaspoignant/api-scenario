@@ -214,7 +214,7 @@ func formatTimestamp(s string) string {
 		format = strings.ReplaceAll(format, "HH", "hh")
 
 		// ParseInt will work because regex extract an int
-		timestamp, _ := strconv.ParseInt(timestampStr, 10, 64)
+		timestamp,_ := strconv.ParseInt(timestampStr, 10, 64)
 		replaceValue := fmtdate.Format(format, time.Unix(timestamp, 0))
 		s = strings.Replace(s, variable, replaceValue, 1)
 	}
