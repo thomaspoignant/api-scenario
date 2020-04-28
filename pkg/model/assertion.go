@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/jmoiron/jsonq"
-	"github.com/thomaspoignant/rest-scenario/pkg/util"
+	"github.com/thomaspoignant/api-scenario/pkg/util"
 	"reflect"
 	"strconv"
 	"strings"

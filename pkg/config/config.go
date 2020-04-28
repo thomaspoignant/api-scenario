@@ -23,7 +23,7 @@ func InitConfig() (Config, error) {
 	acceptCharset := flag.String("Accept-Charset", "utf-8", "Accept-Charset header to override.")
 	contentType := flag.String("Content-Type", "application/scim+json; charset=utf-8", "Content-Type header to override.")
 	authorization := flag.String("Authorization", "", "[MANDATORY] Authorization header to pass to all the request.")
-	userAgent := flag.String("User-Agent", "SCIM Integration (rest-scenario)", "User-Agent header to override.")
+	userAgent := flag.String("User-Agent", "SCIM Integration (api-scenario)", "User-Agent header to override.")
 	pauseDuration := flag.Int("Pause-Duration", 5.0, "Pause between each API call.")
 	baseUrl := flag.String("Base-Url", "", "[MANDATORY] Base URL of your SCIM API.")
 	flag.Parse()

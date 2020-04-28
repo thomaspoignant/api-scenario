@@ -8,7 +8,7 @@ GOVET=$(GOCMD) vet
 
 GOFMT=gofmt
 GOLINT=golint
-BINARY_NAME=rest-scenario
+BINARY_NAME=api-scenario
 CMD_FOLDER=cmd
 COVERAGE_FOLDER=.coverage
 
@@ -32,7 +32,7 @@ test: update-dependencies generate
 	$(GOTEST) -short -mod=vendor ./...
 
 build: update-dependencies generate
-	$(GOBUILD) -mod=vendor -o rest-scenario $(CMD_FOLDER)/rest-scenario/main.go
+	$(GOBUILD) -mod=vendor -o $(BINARY_NAME) $(CMD_FOLDER)/$(BINARY_NAME)/main.go
 
 coverage:
 	mkdir -p .coverage/

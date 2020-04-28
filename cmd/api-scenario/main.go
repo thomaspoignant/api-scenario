@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/thomaspoignant/rest-scenario/pkg/config"
-	"github.com/thomaspoignant/rest-scenario/pkg/model"
+	"github.com/thomaspoignant/api-scenario/pkg/config"
+	"github.com/thomaspoignant/api-scenario/pkg/model"
 	"io/ioutil"
 	"os"
 )

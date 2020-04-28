@@ -2,8 +2,8 @@ package model_test
 
 import (
 	"github.com/sendgrid/rest"
-	"github.com/thomaspoignant/rest-scenario/pkg/model"
-	"github.com/thomaspoignant/rest-scenario/test"
+	"github.com/thomaspoignant/api-scenario/pkg/model"
+	"github.com/thomaspoignant/api-scenario/test"
 	"testing"
 )
 
