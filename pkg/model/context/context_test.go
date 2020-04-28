@@ -1,6 +1,7 @@
 package context_test
 
 import (
+	"fmt"
 	"github.com/google/uuid"
 	"github.com/thomaspoignant/rest-scenario/pkg/model/context"
 	"github.com/thomaspoignant/rest-scenario/test"
@@ -237,7 +238,10 @@ func Test_builtin_hmacSha256(t *testing.T) {
 func Test_builtin_timestampFormat(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
-	input := "{{format_timestamp(1587064097, YYYY-YY-MM-DD-HH-hh-mm-ss)}}"
+	t1 := time.Date(2020, time.April, 16, 21, 8, 17, 0, time.Local)
+	timestamp := t1.Unix()
+
+	input := fmt.Sprintf("{{format_timestamp(%d, YYYY-YY-MM-DD-HH-hh-mm-ss)}}", timestamp)
 	got := ctx.Patch(input)
 	want := "2020-20-04-16-21-09-08-17"
 
