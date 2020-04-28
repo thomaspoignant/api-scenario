@@ -25,6 +25,7 @@ update-dependencies: ## update golang dependencies
 	go mod vendor
 
 generate:
+	$(GOGET) github.com/alvaroloes/enumer
 	$(GOCMD) generate ./...
 
 test: update-dependencies generate
