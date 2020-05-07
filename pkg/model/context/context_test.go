@@ -18,7 +18,7 @@ func resetContext() {
 func Test_PatchOneElement(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
-	ctx.AddToContext("SCIMBaseURL", "http://google.fr")
+	ctx.Add("SCIMBaseURL", "http://google.fr")
 
 	input := "{{SCIMBaseURL}}/Users"
 	want := "http://google.fr/Users"
@@ -30,7 +30,7 @@ func Test_PatchOneElement(t *testing.T) {
 func Test_NothingToPatch(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
-	ctx.AddToContext("SCIMBaseURL", "http://google.fr")
+	ctx.Add("SCIMBaseURL", "http://google.fr")
 
 	input := "http://yahoo.fr/Users"
 	want := "http://yahoo.fr/Users"
@@ -42,7 +42,7 @@ func Test_NothingToPatch(t *testing.T) {
 func Test_MultipleElementsWithSameKey(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
-	ctx.AddToContext("SCIMBaseURL", "http://google.fr")
+	ctx.Add("SCIMBaseURL", "http://google.fr")
 
 	input := "{{SCIMBaseURL}}/Users?param={{SCIMBaseURL}}"
 	want := "http://google.fr/Users?param=http://google.fr"
@@ -54,8 +54,8 @@ func Test_MultipleElementsWithSameKey(t *testing.T) {
 func Test_MultipleElementsWithMultipeKeys(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
-	ctx.AddToContext("SCIMBaseURL", "http://google.fr")
-	ctx.AddToContext("name", "John")
+	ctx.Add("SCIMBaseURL", "http://google.fr")
+	ctx.Add("name", "John")
 
 	input := "{{SCIMBaseURL}}/Users?param={{name}}"
 	want := "http://google.fr/Users?param=John"

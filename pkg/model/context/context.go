@@ -37,7 +37,7 @@ func GetContext() *context {
 	return instance
 }
 
-func (context *context) AddToContext(key string, value string) {
+func (context *context) Add(key string, value string) {
 	context.variables[key] = value
 }
 
@@ -50,9 +50,7 @@ func (context *context) Patch(str string) string {
 	for key, value := range context.variables {
 		if strings.Contains(result, "{{"+key+"}}") {
 			result = strings.ReplaceAll(result, "{{"+key+"}}", value)
-			//TODO : add to patched values
 		}
-
 	}
 	result = context.patchBuiltin(result)
 	return result

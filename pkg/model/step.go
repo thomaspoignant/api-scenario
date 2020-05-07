@@ -164,13 +164,13 @@ func attachVariablesToContext(response Response, vars []Variable) []ResultVariab
 		switch variable.Source {
 		case ResponseTime:
 			value := strconv.FormatInt(int64(response.TimeElapsed.Round(time.Millisecond)/time.Millisecond), 10)
-			context.GetContext().AddToContext(variable.Name, value)
+			context.GetContext().Add(variable.Name, value)
 			result = append(result, ResultVariable{Key: variable.Name, NewValue: value, Type: Created})
 			break
 
 		case ResponseStatus:
 			value := fmt.Sprintf("%v", response.StatusCode)
-			context.GetContext().AddToContext(variable.Name, value)
+			context.GetContext().Add(variable.Name, value)
 			result = append(result, ResultVariable{Key: variable.Name, NewValue: value, Type: Created})
 			break
 
@@ -185,17 +185,17 @@ func attachVariablesToContext(response Response, vars []Variable) []ResultVariab
 
 			switch value := extractedKey.(type) {
 			case string:
-				context.GetContext().AddToContext(variable.Name, value)
+				context.GetContext().Add(variable.Name, value)
 				result = append(result, ResultVariable{Key: variable.Name, NewValue: value, Type: Created})
 				break
 			case bool:
 				castValue := strconv.FormatBool(value)
-				context.GetContext().AddToContext(variable.Name, castValue)
+				context.GetContext().Add(variable.Name, castValue)
 				result = append(result, ResultVariable{Key: variable.Name, NewValue: castValue, Type: Created})
 				break
 			case float64:
 				castValue := fmt.Sprintf("%g", value)
-				context.GetContext().AddToContext(variable.Name, castValue)
+				context.GetContext().Add(variable.Name, castValue)
 				result = append(result, ResultVariable{Key: variable.Name, NewValue: castValue, Type: Created})
 				break
 			default:
