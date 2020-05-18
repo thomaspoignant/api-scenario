@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/jmoiron/jsonq"
 	"github.com/sendgrid/rest"
-	"github.com/thomaspoignant/api-scenario/pkg/log"
+	"github.com/sirupsen/logrus"
 	"github.com/thomaspoignant/api-scenario/pkg/model/context"
 	"github.com/thomaspoignant/api-scenario/pkg/util"
 	"net/url"
@@ -33,7 +33,7 @@ type Step struct {
 }
 
 func (step *Step) Run() (ResultStep, error) {
-	log.Logger.Info("------------------------")
+	logrus.Info("------------------------")
 	switch step.StepType {
 	case Pause:
 		return step.pause(step.Duration)
@@ -46,7 +46,7 @@ func (step *Step) Run() (ResultStep, error) {
 
 func (step *Step) pause(numberOfSecond int) (ResultStep, error) {
 	start := time.Now()
-	log.Logger.Infof("Waiting for %ds", numberOfSecond)
+	logrus.Infof("Waiting for %ds", numberOfSecond)
 	// compute pause time and wait
 	duration := time.Duration(numberOfSecond) * time.Second
 	time.Sleep(duration)
@@ -59,7 +59,6 @@ func (step *Step) pause(numberOfSecond int) (ResultStep, error) {
 }
 
 func (step *Step) request() (ResultStep, error) {
-
 	// convert step to api apiReq
 	apiReq, err := step.convertToRestRequest()
 	if err != nil {
@@ -99,7 +98,7 @@ func (step *Step) request() (ResultStep, error) {
 	result.VariableCreated = attachVariablesToContext(response, step.Variables)
 
 	if len(result.VariableCreated) > 0 {
-		log.Logger.Info("Variables Created:")
+		logrus.Info("Variables Created:")
 		for _, currentVar := range result.VariableCreated {
 			currentVar.Print()
 		}
@@ -151,7 +150,7 @@ func (step *Step) extractUrl() (string, map[string]string, error) {
 func assertResponse(response Response, assertions []Assertion) []resultAssertion {
 
 	if len(assertions)>0 {
-		log.Logger.Info("Assertions:")
+		logrus.Info("Assertions:")
 	}
 
 	var result []resultAssertion
@@ -223,21 +222,21 @@ func attachVariablesToContext(response Response, vars []Variable) []ResultVariab
 
 // Display Request
 func outputRequest(apiReq Request, appliedVar []ResultVariable ){
-	log.Logger.Infof("%s %s", apiReq.Method, apiReq.displayUrl())
+	logrus.Infof("%s %s", apiReq.Method, apiReq.displayUrl())
 	if len(apiReq.Body) > 0 {
-		log.Logger.Debugf("Body: %v", string(apiReq.Body))
+		logrus.Debugf("Body: %v", string(apiReq.Body))
 	}
 	if len(apiReq.Headers) > 0{
-		log.Logger.Debug("Headers:")
+		logrus.Debug("Headers:")
 		for key, value := range apiReq.Headers {
-			log.Logger.Debugf("\t%s: %s", key, value)
+			logrus.Debugf("\t%s: %s", key, value)
 		}
 	}
 	if len(appliedVar) > 0 {
-		log.Logger.Info("Variables Used:")
+		logrus.Info("Variables Used:")
 		for _, currentVar := range appliedVar {
 			currentVar.Print()
 		}
 	}
-	log.Logger.Infof("---")
+	logrus.Infof("---")
 }

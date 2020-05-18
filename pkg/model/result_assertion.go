@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"github.com/thomaspoignant/api-scenario/pkg/log"
 )
 
@@ -53,5 +54,5 @@ func (ar *resultAssertion) Print() {
 		output += log.ErrorColor.Sprintf(" - %s", ar.Err)
 	}
 
-	log.Logger.Info(output)
+	logrus.Info(output)
 }

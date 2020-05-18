@@ -66,20 +66,19 @@ func initConfig() {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
 
-	// Disable logs
+	// Init log level
+	logrus.SetLevel(logrus.InfoLevel)
 	if quiet {
-		log.Logger.Level = logrus.ErrorLevel
+		logrus.SetLevel(logrus.ErrorLevel)
 	}
-
 	if verbose {
-		log.Logger.Level = logrus.TraceLevel
+		logrus.SetLevel(logrus.TraceLevel)
 	}
 
-	// Disable colors
+	// Init log formatter
+	logFormatter := &log.OutputFormatter{ DisableColors: false }
 	if noColor {
-		log.Logger.Formatter = &log.OutputFormatter{
-			DisableColors: true,
-		}
+		logFormatter.DisableColors = true
 	}
-
+	logrus.SetFormatter(logFormatter)
 }

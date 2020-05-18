@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"github.com/thomaspoignant/api-scenario/pkg/log"
 )
 
@@ -38,5 +39,5 @@ func (rv *ResultVariable) Print() {
 		output += log.ErrorColor.Sprintf(" - %s", rv.Err.Error())
 	}
 
-	log.Logger.Info(output)
+	logrus.Info(output)
 }

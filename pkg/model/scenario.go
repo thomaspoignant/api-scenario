@@ -3,7 +3,7 @@ package model
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/thomaspoignant/api-scenario/pkg/log"
+	"github.com/sirupsen/logrus"
 	"io/ioutil"
 )
 
@@ -23,13 +23,13 @@ func (scenario *Scenario) Run() ScenarioResult {
 	}
 
 
-	log.Logger.Infof("Running api-scenario: %s (%s)", scenario.Name, scenario.Version)
-	log.Logger.Infof("%s\n", scenario.Description)
+	logrus.Infof("Running api-scenario: %s (%s)", scenario.Name, scenario.Version)
+	logrus.Infof("%s\n", scenario.Description)
 
 	for _, step := range scenario.Steps {
 		stepRes, err := step.Run()
 		if err != nil {
-			log.Logger.Fatalf("impossible to execute the step: %v\n%v", err, step)
+			logrus.Fatalf("impossible to execute the step: %v\n%v", err, step)
 			break
 		}
 		result.StepResults = append(result.StepResults, stepRes)
