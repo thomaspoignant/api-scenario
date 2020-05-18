@@ -74,21 +74,7 @@ func (step *Step) request() (ResultStep, error) {
 	apiReq.AddHeadersFromFlags()
 
 	// Display results
-	log.Logger.Infof("%s %s", apiReq.Method, apiReq.displayUrl())
-	if len(apiReq.Body) > 0 {
-		log.Logger.Debugf("Body: %v", string(apiReq.Body))
-	}
-	if len(apiReq.Headers) > 0{
-		log.Logger.Debug("Headers:")
-		for key, value := range apiReq.Headers {
-			log.Logger.Debugf("\t%s: %s", key, value)
-		}
-	}
-	if len(result.VariableApplied) > 0 {
-		log.Logger.Info("Variables Used:")
-		printVariables(result.VariableApplied)
-	}
-	log.Logger.Infof("---")
+	outputRequest(apiReq, result.VariableApplied)
 
 	// call the API
 	start := time.Now()
@@ -111,9 +97,12 @@ func (step *Step) request() (ResultStep, error) {
 
 	// Add variables to context
 	result.VariableCreated = attachVariablesToContext(response, step.Variables)
+
 	if len(result.VariableCreated) > 0 {
 		log.Logger.Info("Variables Created:")
-		printVariables(result.VariableCreated)
+		for _, currentVar := range result.VariableCreated {
+			currentVar.Print()
+		}
 	}
 	return result, nil
 }
@@ -232,8 +221,23 @@ func attachVariablesToContext(response Response, vars []Variable) []ResultVariab
 	return result
 }
 
-func printVariables(variables []ResultVariable) {
-	for _, currentVar := range variables {
-		currentVar.Print()
+// Display Request
+func outputRequest(apiReq Request, appliedVar []ResultVariable ){
+	log.Logger.Infof("%s %s", apiReq.Method, apiReq.displayUrl())
+	if len(apiReq.Body) > 0 {
+		log.Logger.Debugf("Body: %v", string(apiReq.Body))
 	}
+	if len(apiReq.Headers) > 0{
+		log.Logger.Debug("Headers:")
+		for key, value := range apiReq.Headers {
+			log.Logger.Debugf("\t%s: %s", key, value)
+		}
+	}
+	if len(appliedVar) > 0 {
+		log.Logger.Info("Variables Used:")
+		for _, currentVar := range appliedVar {
+			currentVar.Print()
+		}
+	}
+	log.Logger.Infof("---")
 }
