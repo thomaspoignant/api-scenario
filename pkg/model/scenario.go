@@ -3,9 +3,8 @@ package model
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/fatih/color"
-	"io/ioutil"
 	"github.com/thomaspoignant/api-scenario/pkg/util"
+	"io/ioutil"
 	"log"
 )
 
