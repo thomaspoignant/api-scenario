@@ -1,7 +1,10 @@
 package model
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/thomaspoignant/api-scenario/pkg/util"
+	"io/ioutil"
 	"log"
 )
 
@@ -39,4 +42,20 @@ func (scenario *Scenario) Run() ScenarioResult {
 	}
 
 	return result
+}
+
+func InitScenarioFromFile(inputFile string) (Scenario, error){
+	file, err := ioutil.ReadFile(inputFile)
+	if err != nil {
+		return Scenario{}, fmt.Errorf("Impossible to locate the file: %s\n Error: %v", inputFile, err)
+	}
+
+	// Unmarshall file to launch the scenario.
+	data := Scenario{}
+	err = json.Unmarshal([]byte(file), &data)
+	if err != nil {
+		return Scenario{}, fmt.Errorf("Impossible to read file: %s\n%v", inputFile, err)
+	}
+
+	return data, nil
 }

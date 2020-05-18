@@ -11,6 +11,7 @@ GOLINT=golint
 BINARY_NAME=api-scenario
 CMD_FOLDER=cmd
 COVERAGE_FOLDER=.coverage
+RELEASE_VERSION?=unset
 
 all: generate build lint test
 
@@ -32,7 +33,7 @@ test: update-dependencies generate
 	$(GOTEST) -short -mod=vendor ./...
 
 build: update-dependencies generate
-	$(GOBUILD) -mod=vendor -o $(BINARY_NAME) $(CMD_FOLDER)/$(BINARY_NAME)/main.go
+	$(GOBUILD) -ldflags "-X main.VersionString=$(RELEASE_VERSION)" -mod=vendor -o $(BINARY_NAME) main.go
 
 coverage:
 	mkdir -p .coverage/

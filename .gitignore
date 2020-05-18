@@ -28,3 +28,6 @@ vendor/
 # binary
 api-scenario
 !api-scenario/
+
+# coverage
+.coverage
