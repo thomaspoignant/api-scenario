@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/fatih/color"
 	"io/ioutil"
+	"github.com/thomaspoignant/api-scenario/pkg/util"
 	"log"
 )
 
@@ -30,7 +31,7 @@ func (scenario *Scenario) Run() ScenarioResult {
 		Version:     scenario.Version,
 		StepResults: []ResultStep{},
 	}
-	color.Green("%s", scenario.Description)
+	util.PrintfC(util.Green, "%s\n", scenario.Description)
 
 	for _, step := range scenario.Steps {
 		stepRes, err := step.Apply()
