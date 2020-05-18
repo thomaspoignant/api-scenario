@@ -9,3 +9,5 @@
 API-scenario is a simple command line tool that allow you to execute easily a scenario to test your APIs.  
 It is perfect to make end to end tests, you could use in your CI workflow to validate your deployment or just to test locally your development.
 
+---
+# Why this project?
