@@ -3,9 +3,8 @@ package model
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/thomaspoignant/api-scenario/pkg/util"
+	"github.com/thomaspoignant/api-scenario/pkg/log"
 	"io/ioutil"
-	"log"
 )
 
 type Scenario struct {
@@ -30,12 +29,15 @@ func (scenario *Scenario) Run() ScenarioResult {
 		Version:     scenario.Version,
 		StepResults: []ResultStep{},
 	}
-	util.PrintfC(util.Green, "%s\n", scenario.Description)
+
+
+	log.Logger.Infof("Running api-scenario: %s (%s)", scenario.Name, scenario.Version)
+	log.Logger.Infof("%s\n", scenario.Description)
 
 	for _, step := range scenario.Steps {
-		stepRes, err := step.Apply()
+		stepRes, err := step.Run()
 		if err != nil {
-			log.Fatalf("impossible to execute the step: %v\n%v", err, step)
+			log.Logger.Fatalf("impossible to execute the step: %v\n%v", err, step)
 			break
 		}
 		result.StepResults = append(result.StepResults, stepRes)

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"fmt"
 	"github.com/sendgrid/rest"
 	"github.com/spf13/viper"
 	"github.com/thomaspoignant/api-scenario/pkg/model/context"
@@ -71,3 +72,16 @@ func (req *Request) AddHeadersFromFlags() {
 	}
 }
 
+
+func (req *Request) displayUrl() string{
+	params := ""
+	for key, value := range req.QueryParams {
+		if len(params) == 0{
+			params += "?"
+		} else {
+			params += "&"
+		}
+		params += fmt.Sprintf("%s=%s",key, value)
+	}
+	return req.BaseURL + params
+}

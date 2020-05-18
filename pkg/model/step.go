@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/jmoiron/jsonq"
 	"github.com/sendgrid/rest"
+	"github.com/thomaspoignant/api-scenario/pkg/log"
 	"github.com/thomaspoignant/api-scenario/pkg/model/context"
 	"github.com/thomaspoignant/api-scenario/pkg/util"
 	"net/url"
@@ -31,7 +32,8 @@ type Step struct {
 	} `json:"form,omitempty"`
 }
 
-func (step *Step) Apply() (ResultStep, error) {
+func (step *Step) Run() (ResultStep, error) {
+	log.Logger.Info("------------------------")
 	switch step.StepType {
 	case Pause:
 		return step.pause(step.Duration)
@@ -44,7 +46,7 @@ func (step *Step) Apply() (ResultStep, error) {
 
 func (step *Step) pause(numberOfSecond int) (ResultStep, error) {
 	start := time.Now()
-
+	log.Logger.Infof("Waiting for %ds", numberOfSecond)
 	// compute pause time and wait
 	duration := time.Duration(numberOfSecond) * time.Second
 	time.Sleep(duration)
@@ -71,10 +73,22 @@ func (step *Step) request() (ResultStep, error) {
 	result.VariableApplied = apiReq.PatchWithContext()
 	apiReq.AddHeadersFromFlags()
 
+	// Display results
+	log.Logger.Infof("%s %s", apiReq.Method, apiReq.displayUrl())
+	if len(apiReq.Body) > 0 {
+		log.Logger.Debugf("Body: %v", string(apiReq.Body))
+	}
+	if len(apiReq.Headers) > 0{
+		log.Logger.Debug("Headers:")
+		for key, value := range apiReq.Headers {
+			log.Logger.Debugf("\t%s: %s", key, value)
+		}
+	}
 	if len(result.VariableApplied) > 0 {
-		util.Println("Variables Used:")
+		log.Logger.Info("Variables Used:")
 		printVariables(result.VariableApplied)
 	}
+	log.Logger.Infof("---")
 
 	// call the API
 	start := time.Now()
@@ -98,14 +112,14 @@ func (step *Step) request() (ResultStep, error) {
 	// Add variables to context
 	result.VariableCreated = attachVariablesToContext(response, step.Variables)
 	if len(result.VariableCreated) > 0 {
-		util.Println("Variables Created:")
+		log.Logger.Info("Variables Created:")
 		printVariables(result.VariableCreated)
 	}
 	return result, nil
 }
 
 func (step *Step) convertToRestRequest() (Request, error) {
-	baseUrl, queryParams, err := step.formatUrl()
+	baseUrl, queryParams, err := step.extractUrl()
 	if err != nil {
 		return Request{}, err
 	}
@@ -129,7 +143,7 @@ func (step *Step) convertToRestRequest() (Request, error) {
 	}, nil
 }
 
-func (step *Step) formatUrl() (string, map[string]string, error) {
+func (step *Step) extractUrl() (string, map[string]string, error) {
 	u, err := url.Parse(step.URL)
 	if err != nil {
 		return "", nil, err
@@ -146,7 +160,11 @@ func (step *Step) formatUrl() (string, map[string]string, error) {
 }
 
 func assertResponse(response Response, assertions []Assertion) []resultAssertion {
-	util.Println("Assertions:")
+
+	if len(assertions)>0 {
+		log.Logger.Info("Assertions:")
+	}
+
 	var result []resultAssertion
 	for _, assertion := range assertions {
 		assertionResult := assertion.Assert(response)

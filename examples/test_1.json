@@ -33,10 +33,21 @@
         {
           "comparison": "equal",
           "property": "page",
-          "value": "1",
+          "value": "13",
           "source": "response_json"
         }
       ]
+    },
+    {
+      "step_type": "pause",
+      "duration": 1
+    },
+    {
+      "url": "https://reqres.in/api/users",
+      "method": "POST",
+      "body": "{\"data\":{\"name_{{timestamp}}\": \"paul rudd\",\"movies\":[\"I Love You Man\", \"Role Models\"]}}",
+      "step_type": "request",
+      "assertions": []
     },
     {
       "step_type": "pause",

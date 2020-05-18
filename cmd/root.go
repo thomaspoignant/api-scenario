@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/thomaspoignant/api-scenario/pkg/log"
 	"os"
 
 	"github.com/mitchellh/go-homedir"
@@ -11,6 +13,9 @@ import (
 
 
 var cfgFile string
+var quiet bool
+var noColor bool
+var verbose bool
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
@@ -31,6 +36,9 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.api-scenario.yaml)")
+	runCmd.PersistentFlags().BoolVarP(&quiet, "quiet", "q", false, "Run your scenario in quiet mode")
+	runCmd.PersistentFlags().BoolVar(&noColor, "no-color", false, "Do not display color on the output")
+	runCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Run your scenario in quiet mode")
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -57,4 +65,21 @@ func initConfig() {
 	if err := viper.ReadInConfig(); err == nil {
 		fmt.Println("Using config file:", viper.ConfigFileUsed())
 	}
+
+	// Disable logs
+	if quiet {
+		log.Logger.Level = logrus.ErrorLevel
+	}
+
+	if verbose {
+		log.Logger.Level = logrus.TraceLevel
+	}
+
+	// Disable colors
+	if noColor {
+		log.Logger.Formatter = &log.OutputFormatter{
+			DisableColors: true,
+		}
+	}
+
 }
