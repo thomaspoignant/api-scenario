@@ -17,7 +17,6 @@ func Test_PatchWithContext_valid(t *testing.T) {
 			},
 			QueryParams: map[string]string{
 				"param1": "param1_{{random_int(1,1)}}",
-				"param2": "param2_{{random_int(1,1)}}",
 			},
 			Method: rest.Get,
 		},
@@ -27,7 +26,6 @@ func Test_PatchWithContext_valid(t *testing.T) {
 		{Key: "body", NewValue: "{\"hello\":\"world_1\"}", Type: model.Used},
 		{Key: "url", NewValue: "http://perdu.com/1", Type: model.Used},
 		{Key: "params[param1]", NewValue: "param1_1", Type: model.Used},
-		{Key: "params[param2]", NewValue: "param2_1", Type: model.Used},
 		{Key: "headers.Content-Type", NewValue: "other_test_1", Type: model.Used},
 	}
 	got := req.PatchWithContext()
