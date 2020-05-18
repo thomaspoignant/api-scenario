@@ -69,6 +69,7 @@ func (step *Step) request() (ResultStep, error) {
 
 	// apply variable on the request
 	result.VariableApplied = apiReq.PatchWithContext()
+	apiReq.AddHeadersFromFlags()
 
 	fmt.Println("Variables Used:")
 	printVariables(result.VariableApplied)
