@@ -2,6 +2,7 @@ package model
 
 import (
 	"github.com/sendgrid/rest"
+	"github.com/spf13/viper"
 	"github.com/thomaspoignant/api-scenario/pkg/model/context"
 )
 
@@ -61,3 +62,12 @@ func (req *Request) PatchWithContext() []ResultVariable {
 	}
 	return result
 }
+
+// AddHeadersFromFlags - Add headers from the command line flags to the request,
+// it may override existent headers.
+func (req *Request) AddHeadersFromFlags() {
+	for key, value := range viper.GetStringMapString("headers") {
+		req.Headers[key] = context.GetContext().Patch(value)
+	}
+}
+
