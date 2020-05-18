@@ -17,3 +17,12 @@ type ResultStep struct {
 	VariableApplied []ResultVariable
 	VariableCreated []ResultVariable
 }
+
+func (step *ResultStep) IsSuccess() bool {
+	for _, assert := range step.Assertion {
+		if !assert.Success {
+			return false
+		}
+	}
+	return true
+}

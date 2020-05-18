@@ -2,7 +2,8 @@ package model
 
 import (
 	"fmt"
-	"github.com/thomaspoignant/api-scenario/pkg/util"
+	"github.com/sirupsen/logrus"
+	"github.com/thomaspoignant/api-scenario/pkg/log"
 )
 
 type resultAssertion struct {
@@ -35,19 +36,23 @@ var sourceDisplayName = map[Source]string{
 }
 
 func (ar *resultAssertion) Print() {
+	output := ""
 	source := sourceDisplayName[ar.Source]
 	if len(ar.Property) > 0 {
 		source += "." + ar.Property
 	}
+
 	if ar.Success {
-		util.PrintC(util.Green, "\u2713\t")
+		output += log.SuccessColor.Sprintf("\u2713\t")
+		output += fmt.Sprintf("%s - %s", source, ar.Message)
 	} else {
-		util.PrintC(util.Red, "X\t")
+		output += log.ErrorColor.Sprintf("X\t%s - %s", source, ar.Message)
 	}
-	util.Printf("%s", source)
+
+	// Add error if we have it
 	if ar.Err != nil {
-		util.PrintfC(util.Red," - %s \n", ar.Err)
-	} else {
-		util.Printf(" - %s \n", ar.Message)
+		output += log.ErrorColor.Sprintf(" - %s", ar.Err)
 	}
+
+	logrus.Info(output)
 }

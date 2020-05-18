@@ -42,7 +42,10 @@ var runCmd = &cobra.Command{
 		}
 
 		// run the scenario
-		scenario.Run()
+		res := scenario.Run()
+		if !res.IsSuccess() {
+			os.Exit(1)
+		}
 	},
 }
 

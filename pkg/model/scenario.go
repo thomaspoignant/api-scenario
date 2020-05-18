@@ -3,9 +3,8 @@ package model
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/thomaspoignant/api-scenario/pkg/util"
+	"github.com/sirupsen/logrus"
 	"io/ioutil"
-	"log"
 )
 
 type Scenario struct {
@@ -15,14 +14,6 @@ type Scenario struct {
 	Steps       []Step `json:"steps"`
 	Description string `json:"description"`
 }
-
-type ScenarioResult struct {
-	Name        string       `json:"name"`
-	Version     string       `json:"version"`
-	Description string       `json:"description"`
-	StepResults []ResultStep `json:step_results`
-}
-
 func (scenario *Scenario) Run() ScenarioResult {
 	result := ScenarioResult{
 		Name:        scenario.Name,
@@ -30,12 +21,15 @@ func (scenario *Scenario) Run() ScenarioResult {
 		Version:     scenario.Version,
 		StepResults: []ResultStep{},
 	}
-	util.PrintfC(util.Green, "%s\n", scenario.Description)
+
+
+	logrus.Infof("Running api-scenario: %s (%s)", scenario.Name, scenario.Version)
+	logrus.Infof("%s\n", scenario.Description)
 
 	for _, step := range scenario.Steps {
-		stepRes, err := step.Apply()
+		stepRes, err := step.Run()
 		if err != nil {
-			log.Fatalf("impossible to execute the step: %v\n%v", err, step)
+			logrus.Fatalf("impossible to execute the step: %v\n%v", err, step)
 			break
 		}
 		result.StepResults = append(result.StepResults, stepRes)
@@ -58,4 +52,20 @@ func InitScenarioFromFile(inputFile string) (Scenario, error){
 	}
 
 	return data, nil
+}
+
+type ScenarioResult struct {
+	Name        string       `json:"name"`
+	Version     string       `json:"version"`
+	Description string       `json:"description"`
+	StepResults []ResultStep `json:step_results`
+}
+
+func (scenario *ScenarioResult) IsSuccess() bool {
+	for _, stepResult := range scenario.StepResults {
+		if !stepResult.IsSuccess() {
+			return false
+		}
+	}
+	return true
 }
