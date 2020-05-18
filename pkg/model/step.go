@@ -70,8 +70,10 @@ func (step *Step) request() (ResultStep, error) {
 	// apply variable on the request
 	result.VariableApplied = apiReq.PatchWithContext()
 
-	fmt.Println("Variables Used:")
-	printVariables(result.VariableApplied)
+	if len(result.VariableApplied) > 0 {
+		util.Println("Variables Used:")
+		printVariables(result.VariableApplied)
+	}
 
 	// call the API
 	start := time.Now()
@@ -94,10 +96,10 @@ func (step *Step) request() (ResultStep, error) {
 
 	// Add variables to context
 	result.VariableCreated = attachVariablesToContext(response, step.Variables)
-
-	fmt.Println("Variables Created:")
-	printVariables(result.VariableCreated)
-
+	if len(result.VariableCreated) > 0 {
+		util.Println("Variables Created:")
+		printVariables(result.VariableCreated)
+	}
 	return result, nil
 }
 
@@ -143,7 +145,7 @@ func (step *Step) formatUrl() (string, map[string]string, error) {
 }
 
 func assertResponse(response Response, assertions []Assertion) []resultAssertion {
-	fmt.Println("Assertions:")
+	util.Println("Assertions:")
 	var result []resultAssertion
 	for _, assertion := range assertions {
 		assertionResult := assertion.Assert(response)
