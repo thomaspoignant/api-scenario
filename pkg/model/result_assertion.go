@@ -2,7 +2,7 @@ package model
 
 import (
 	"fmt"
-	"github.com/fatih/color"
+	"github.com/thomaspoignant/api-scenario/pkg/util"
 )
 
 type resultAssertion struct {
@@ -40,14 +40,14 @@ func (ar *resultAssertion) Print() {
 		source += "." + ar.Property
 	}
 	if ar.Success {
-		color.New(color.FgGreen).Print("\u2713\t")
+		util.PrintC(util.Green, "\u2713\t")
 	} else {
-		color.New(color.FgRed).Print("X\t")
+		util.PrintC(util.Red, "X\t")
 	}
-	fmt.Printf("%s", source)
+	util.Printf("%s", source)
 	if ar.Err != nil {
-		fmt.Printf(" - %s \n", ar.Err)
+		util.PrintfC(util.Red," - %s \n", ar.Err)
 	} else {
-		fmt.Printf(" - %s \n", ar.Message)
+		util.Printf(" - %s \n", ar.Message)
 	}
 }

@@ -1,8 +1,7 @@
 package model
 
 import (
-	"fmt"
-	"github.com/fatih/color"
+	"github.com/thomaspoignant/api-scenario/pkg/util"
 )
 
 type ResultVariableType int
@@ -22,16 +21,16 @@ type ResultVariable struct {
 
 func (rv *ResultVariable) Print() {
 	if rv.Err == nil {
-		color.New(color.FgGreen).Print("\u2713\t")
+		util.PrintC(util.Green, "\u2713\t")
 	} else {
-		color.New(color.FgRed).Print("X\t")
+		util.PrintC(util.Red, "X\t")
 	}
 
-	fmt.Printf("%s '%s' set to '%s'", rv.Type, rv.Key, rv.NewValue)
+	util.Printf("%s '%s' set to '%s'", rv.Type, rv.Key, rv.NewValue)
 	if rv.Err != nil {
-		fmt.Printf(" - %s", rv.Err.Error())
+		util.Printf(" - %s", rv.Err.Error())
 	} else {
-		fmt.Print("\n")
+		util.Print("\n")
 	}
 
 }
