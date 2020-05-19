@@ -6,10 +6,10 @@ import (
 
 func FormatAuthorization(param string) string {
 	// Check if param starts with "Bearer"
-	const bearer = "bearer "
-	if strings.HasPrefix(strings.ToLower(param), bearer) {
+	const bearer = "Bearer "
+	param = strings.TrimSpace(param)
+	if strings.HasPrefix(strings.ToLower(param), strings.ToLower(bearer)) {
 		return param
 	}
-
-	return bearer + param
+	return bearer + strings.TrimSpace(param)
 }

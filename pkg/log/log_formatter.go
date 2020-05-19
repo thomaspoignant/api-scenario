@@ -13,6 +13,8 @@ type OutputFormatter struct {
 	DisableColors bool
 }
 
+// Format is used by logrus to print logs in stdout.
+// this formatter is basic and just print the message.
 func (f *OutputFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 	if f.DisableColors {
 		SuccessColor.DisableColor()
