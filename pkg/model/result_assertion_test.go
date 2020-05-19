@@ -8,7 +8,7 @@ import (
 )
 
 
-func Test_Success(t *testing.T) {
+func Test_PrintResultAssertion_Success(t *testing.T) {
 	test.SetupLog()
 	want := "✓\tstatus - '1' was not equal to 20\n"
 	res := model.NewResultAssertion(model.NotEqual, true, "1", "20")
@@ -16,7 +16,7 @@ func Test_Success(t *testing.T) {
 	test.Equals(t, "", want, got)
 }
 
-func Test_WithError(t *testing.T) {
+func Test_PrintResultAssertion_WithError(t *testing.T) {
 	test.SetupLog()
 	want := "X\tstatus.email - '1' was equal to 1\nrandom error\n"
 	res := model.NewResultAssertion(model.NotEqual, false, "1", "1")
