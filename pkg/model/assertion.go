@@ -22,7 +22,7 @@ const ComparisonNotSupportedMessage = "the comparison %s was not supported for t
 
 // Assert if the Assertion is valid for the current response,
 // return true/false if test applied or an error.
-func (assertion *Assertion) Assert(response Response) resultAssertion {
+func (assertion *Assertion) Assert(response Response) ResultAssertion {
 	switch assertion.Source {
 	case ResponseStatus:
 		res := assertNumber(assertion.Comparison, assertion.Value, float64(response.StatusCode))
@@ -42,7 +42,7 @@ func (assertion *Assertion) Assert(response Response) resultAssertion {
 
 	default:
 		message := fmt.Sprintf("the Source %s is not valid", assertion.Source)
-		return resultAssertion{Success: false, Err: errors.New(message), Message: message, Source: assertion.Source}
+		return ResultAssertion{Success: false, Err: errors.New(message), Message: message, Source: assertion.Source}
 	}
 }
 
@@ -50,7 +50,7 @@ func assertResponseJson(
 	assertionComparison Comparison,
 	assertionValue string,
 	assertionProperty string,
-	body map[string]interface{}) resultAssertion {
+	body map[string]interface{}) ResultAssertion {
 	// Convert property from Json syntax to an array of fields
 	jqPath := util.JsonConvertKeyName(assertionProperty)
 
@@ -67,7 +67,7 @@ func assertResponseJson(
 			return result
 		}
 		message := fmt.Sprintf("Unable to locate %s property in path '%s' in JSON", assertionProperty, assertionProperty)
-		return resultAssertion{Success: false, Message: message, Err: errors.New(message), Property: assertionProperty}
+		return ResultAssertion{Success: false, Message: message, Err: errors.New(message), Property: assertionProperty}
 	}
 
 	result := assertValue(assertionComparison, assertionValue, extractedKey, assertionProperty)
@@ -75,7 +75,7 @@ func assertResponseJson(
 	return result
 }
 
-func assertValue(comparison Comparison, assertionValue string, res interface{}, propertyName string) resultAssertion {
+func assertValue(comparison Comparison, assertionValue string, res interface{}, propertyName string) ResultAssertion {
 	switch value := res.(type) {
 	case string:
 		return assertString(comparison, assertionValue, value, propertyName)
@@ -90,11 +90,11 @@ func assertValue(comparison Comparison, assertionValue string, res interface{}, 
 	default:
 		// Not supposed to happen
 		message := fmt.Sprintf("%s comparison is not available for element of type %s", comparison, reflect.TypeOf(res))
-		return resultAssertion{Success: false, Message: message, Err: errors.New(message)}
+		return ResultAssertion{Success: false, Message: message, Err: errors.New(message)}
 	}
 }
 
-func assertNumber(comparison Comparison, assertionValue string, apiValue float64) resultAssertion {
+func assertNumber(comparison Comparison, assertionValue string, apiValue float64) ResultAssertion {
 	switch comparison {
 	case IsANumber:
 		return NewResultAssertion(comparison, true, apiValue)
@@ -113,7 +113,7 @@ func assertNumber(comparison Comparison, assertionValue string, apiValue float64
 		testValue, err := strconv.ParseFloat(assertionValue, 64)
 		if err != nil {
 			message := fmt.Sprintf("'%s' should be a number to compare with %s", assertionValue, comparison)
-			return resultAssertion{Err: err, Success: false, Message: message}
+			return ResultAssertion{Err: err, Success: false, Message: message}
 		}
 		success := testValue == apiValue
 		return NewResultAssertion(comparison, success, apiValue, assertionValue)
@@ -122,7 +122,7 @@ func assertNumber(comparison Comparison, assertionValue string, apiValue float64
 		testValue, err := strconv.ParseFloat(assertionValue, 64)
 		if err != nil {
 			message := fmt.Sprintf("'%s' should be a number to compare with %s", assertionValue, comparison)
-			return resultAssertion{Err: err, Success: false, Message: message}
+			return ResultAssertion{Err: err, Success: false, Message: message}
 		}
 		success := apiValue < testValue
 		return NewResultAssertion(comparison, success, apiValue, assertionValue)
@@ -131,7 +131,7 @@ func assertNumber(comparison Comparison, assertionValue string, apiValue float64
 		testValue, err := strconv.ParseFloat(assertionValue, 64)
 		if err != nil {
 			message := fmt.Sprintf("'%s' should be a number to compare with %s", assertionValue, comparison)
-			return resultAssertion{Err: err, Success: false, Message: message}
+			return ResultAssertion{Err: err, Success: false, Message: message}
 		}
 		success := apiValue > testValue
 		return NewResultAssertion(comparison, success, apiValue, assertionValue)
@@ -140,7 +140,7 @@ func assertNumber(comparison Comparison, assertionValue string, apiValue float64
 		testValue, err := strconv.ParseFloat(assertionValue, 64)
 		if err != nil {
 			message := fmt.Sprintf("'%s' should be a number to compare with %s", assertionValue, comparison)
-			return resultAssertion{Err: err, Success: false, Message: message}
+			return ResultAssertion{Err: err, Success: false, Message: message}
 		}
 		success := apiValue <= testValue
 		return NewResultAssertion(comparison, success, apiValue, assertionValue)
@@ -149,18 +149,18 @@ func assertNumber(comparison Comparison, assertionValue string, apiValue float64
 		testValue, err := strconv.ParseFloat(assertionValue, 64)
 		if err != nil {
 			message := fmt.Sprintf("'%s' should be a number to compare with %s", assertionValue, comparison)
-			return resultAssertion{Err: err, Success: false, Message: message}
+			return ResultAssertion{Err: err, Success: false, Message: message}
 		}
 		success := apiValue >= testValue
 		return NewResultAssertion(comparison, success, apiValue, assertionValue)
 
 	default:
 		message := fmt.Sprintf(ComparisonNotSupportedMessage, comparison)
-		return resultAssertion{Success: false, Message: message, Err: errors.New(message)}
+		return ResultAssertion{Success: false, Message: message, Err: errors.New(message)}
 	}
 }
 
-func assertString(comparison Comparison, assertionValue string, apiValue string, propertyName string) resultAssertion {
+func assertString(comparison Comparison, assertionValue string, apiValue string, propertyName string) ResultAssertion {
 	switch comparison {
 	case Equal:
 		success := assertionValue == apiValue
@@ -188,7 +188,7 @@ func assertString(comparison Comparison, assertionValue string, apiValue string,
 			return assertNumber(comparison, assertionValue, apiValueAsNumber)
 		}
 		message := fmt.Sprintf("'%s' was not a number impossible to use %s", apiValue, comparison)
-		return resultAssertion{Success: false, Message: message, Err: errors.New(message)}
+		return ResultAssertion{Success: false, Message: message, Err: errors.New(message)}
 
 	case IsLessThan:
 		success := apiValue < assertionValue
@@ -216,16 +216,16 @@ func assertString(comparison Comparison, assertionValue string, apiValue string,
 
 	default:
 		message := fmt.Sprintf(ComparisonNotSupportedMessage, comparison)
-		return resultAssertion{Success: false, Message: message, Err: errors.New(message)}
+		return ResultAssertion{Success: false, Message: message, Err: errors.New(message)}
 	}
 }
 
-func assertBool(comparison Comparison, assertionValue string, apiValue bool, propertyName string) resultAssertion {
+func assertBool(comparison Comparison, assertionValue string, apiValue bool, propertyName string) ResultAssertion {
 	// Parse the Assertion value to have the bool value
 	testValue, err := strconv.ParseBool(assertionValue)
 	if err != nil {
 		message := fmt.Sprintf("'%s' was not comparable with a boolean value %t", assertionValue, apiValue)
-		return resultAssertion{Success: false, Message: message, Err: errors.New(message)}
+		return ResultAssertion{Success: false, Message: message, Err: errors.New(message)}
 	}
 
 	switch comparison {
@@ -242,11 +242,11 @@ func assertBool(comparison Comparison, assertionValue string, apiValue bool, pro
 
 	default:
 		message := fmt.Sprintf(ComparisonNotSupportedMessage, comparison)
-		return resultAssertion{Success: false, Message: message, Err: errors.New(message)}
+		return ResultAssertion{Success: false, Message: message, Err: errors.New(message)}
 	}
 }
 
-func assertArray(comparison Comparison, assertionValue string, apiValue []interface{}, propertyName string) resultAssertion {
+func assertArray(comparison Comparison, assertionValue string, apiValue []interface{}, propertyName string) ResultAssertion {
 	switch comparison {
 	case IsANumber:
 		return NewResultAssertion(comparison, false, apiValue)
@@ -273,11 +273,11 @@ func assertArray(comparison Comparison, assertionValue string, apiValue []interf
 
 	default:
 		message := fmt.Sprintf(ComparisonNotSupportedMessage, comparison)
-		return resultAssertion{Success: false, Message: message, Err: errors.New(message)}
+		return ResultAssertion{Success: false, Message: message, Err: errors.New(message)}
 	}
 }
 
-func assertInterface(comparison Comparison, assertionValue string, apiValue map[string]interface{}, propertyName string) resultAssertion {
+func assertInterface(comparison Comparison, assertionValue string, apiValue map[string]interface{}, propertyName string) ResultAssertion {
 	switch comparison {
 	case IsANumber:
 		return NewResultAssertion(comparison, false, propertyName)
@@ -305,7 +305,7 @@ func assertInterface(comparison Comparison, assertionValue string, apiValue map[
 
 	default:
 		message := fmt.Sprintf(ComparisonNotSupportedMessage, comparison)
-		return resultAssertion{Success: false, Message: message, Err: errors.New(message)}
+		return ResultAssertion{Success: false, Message: message, Err: errors.New(message)}
 	}
 }
 
