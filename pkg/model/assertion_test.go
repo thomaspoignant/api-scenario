@@ -2,11 +2,12 @@ package model
 
 import (
 	"fmt"
-	"github.com/thomaspoignant/api-scenario/pkg/util"
-	"github.com/thomaspoignant/api-scenario/test"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/thomaspoignant/api-scenario/pkg/util"
+	"github.com/thomaspoignant/api-scenario/test"
 )
 
 type expectedResult struct {
