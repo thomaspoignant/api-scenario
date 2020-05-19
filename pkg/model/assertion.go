@@ -106,22 +106,22 @@ func (a *Assertion) assertResponseJson(body map[string]interface{}) ResultAssert
 	return result
 }
 
-func (a *Assertion) assertValue(got interface{}) ResultAssertion {
-	switch got := got.(type) {
+func (a *Assertion) assertValue(apiValue interface{}) resultAssertion {
+	switch apiValue := apiValue.(type) {
 	case string:
-		return a.assertString(got)
+		return a.assertString(apiValue)
 	case bool:
-		return a.assertBool(got)
+		return a.assertBool(apiValue)
 	case float64:
-		return a.assertNumber(got)
+		return a.assertNumber(apiValue)
 	case []interface{}:
-		return a.assertArray(got)
+		return a.assertArray(apiValue)
 	case map[string]interface{}:
-		return a.assertMap(got)
+		return a.assertMap(apiValue)
 	default:
 		// Not supposed to happen
-		message := fmt.Sprintf("%s comparison is not available for element of type %s", a.Comparison, reflect.TypeOf(got))
-		return ResultAssertion{Success: false, Message: message, Err: errors.New(message)}
+		message := fmt.Sprintf("%s comparison is not available for element of type %s", a.Comparison, reflect.TypeOf(apiValue))
+		return resultAssertion{Success: false, Message: message, Err: errors.New(message)}
 	}
 }
 
