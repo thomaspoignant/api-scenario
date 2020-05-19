@@ -30,7 +30,7 @@ func (rv *ResultVariable) Print() {
 	}
 
 	if rv.Err == nil {
-		logrus.Infof(log.SuccessColor.Sprint("\u2713\t") + "%s - %s", explanation)
+		logrus.Infof(log.SuccessColor.Sprint("\u2713\t") + "%s", explanation)
 		return
 	}
 	logrus.Errorf("X\t%s\n\t- %s",explanation, rv.Err.Error())
