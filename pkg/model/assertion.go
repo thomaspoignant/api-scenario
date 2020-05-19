@@ -55,6 +55,7 @@ func (a *Assertion) Assert(resp Response) ResultAssertion {
 }
 
 func (a *Assertion) assertResponseHeader(h http.Header) ResultAssertion {
+
 	//search for header using canonical key format
 	values := h.Values(a.Property)
 	if values == nil {
@@ -65,6 +66,12 @@ func (a *Assertion) assertResponseHeader(h http.Header) ResultAssertion {
 		}
 		message := fmt.Sprintf("Header %q not found.", a.Property)
 		return ResultAssertion{Success: false, Message: message, Err: errors.New(message), Property: a.Property}
+	}
+
+	if a.Comparison == HasKey {
+		result := NewResultAssertion(HasKey, true, a.Property)
+		result.Property = a.Property
+		return result
 	}
 
 	//Compare fisrt value of the given header key
