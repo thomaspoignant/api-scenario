@@ -9,6 +9,7 @@ import (
 
 func SetupLog() {
 	logrus.SetFormatter(&log.OutputFormatter{DisableColors: true})
+	logrus.SetLevel(logrus.TraceLevel)
 }
 
 func CaptureOutput(f func()) string {
