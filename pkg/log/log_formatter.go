@@ -7,7 +7,7 @@ import (
 )
 
 var SuccessColor = color.New(color.FgGreen)
-var ErrorColor = color.New(color.FgRed)
+var errorColor = color.New(color.FgRed)
 
 type OutputFormatter struct {
 	DisableColors bool
@@ -16,7 +16,11 @@ type OutputFormatter struct {
 func (f *OutputFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 	if f.DisableColors {
 		SuccessColor.DisableColor()
-		ErrorColor.DisableColor()
+		errorColor.DisableColor()
+	}
+
+	if entry.Level <= logrus.ErrorLevel {
+		return []byte(errorColor.Sprintln(entry.Message)), nil
 	}
 	return []byte(fmt.Sprintln(entry.Message)), nil
 }

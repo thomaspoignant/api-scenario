@@ -36,23 +36,18 @@ var sourceDisplayName = map[Source]string{
 }
 
 func (ar *resultAssertion) Print() {
-	output := ""
 	source := sourceDisplayName[ar.Source]
 	if len(ar.Property) > 0 {
 		source += "." + ar.Property
 	}
 
 	if ar.Success {
-		output += log.SuccessColor.Sprintf("\u2713\t")
-		output += fmt.Sprintf("%s - %s", source, ar.Message)
-	} else {
-		output += log.ErrorColor.Sprintf("X\t%s - %s", source, ar.Message)
+		logrus.Infof(log.SuccessColor.Sprint("\u2713\t") + "%s - %s", source, ar.Message)
+		return
 	}
 
-	// Add error if we have it
-	if ar.Err != nil {
-		output += log.ErrorColor.Sprintf(" - %s", ar.Err)
+	logrus.Errorf("X\t%s - %s", source, ar.Message)
+	if logrus.IsLevelEnabled(logrus.DebugLevel) && ar.Err != nil {
+		logrus.Debug(ar.Err)
 	}
-
-	logrus.Info(output)
 }
