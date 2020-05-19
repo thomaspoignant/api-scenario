@@ -97,8 +97,8 @@ func (a *Assertion) assertResponseJson(body map[string]interface{}) ResultAssert
 			result.Property = a.Property
 			return result
 		}
-		message := fmt.Sprintf("Unable to locate %s property in path '%s' in JSON", assertionProperty, assertionProperty)
-		return ResultAssertion{Success: false, Message: message, Err: errors.New(message), Property: assertionProperty}
+		message := fmt.Sprintf("Unable to locate %s property in path '%s' in JSON", a.Property, a.Property)
+		return ResultAssertion{Success: false, Message: message, Err: errors.New(message), Property: a.Property}
 	}
 
 	result := a.assertValue(extractedKey)
@@ -106,7 +106,7 @@ func (a *Assertion) assertResponseJson(body map[string]interface{}) ResultAssert
 	return result
 }
 
-func (a *Assertion) assertValue(apiValue interface{}) resultAssertion {
+func (a *Assertion) assertValue(apiValue interface{}) ResultAssertion {
 	switch apiValue := apiValue.(type) {
 	case string:
 		return a.assertString(apiValue)
@@ -121,7 +121,7 @@ func (a *Assertion) assertValue(apiValue interface{}) resultAssertion {
 	default:
 		// Not supposed to happen
 		message := fmt.Sprintf("%s comparison is not available for element of type %s", a.Comparison, reflect.TypeOf(apiValue))
-		return resultAssertion{Success: false, Message: message, Err: errors.New(message)}
+		return ResultAssertion{Success: false, Message: message, Err: errors.New(message)}
 	}
 }
 
