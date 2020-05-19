@@ -15,6 +15,29 @@ It is perfect to make end to end tests, you could use in your CI workflow to val
 ---
 
 
+## Using Variables to Pass Data Between Steps
+Request steps can define variables that extract data from HTTP responses returned when running the test.
+To create a variable, add a `variables` block to your step and specify the location of the data you'd like to extract from the response, and the **name** of this variable.
+
+```json
+"variables": [
+    {
+      "source": "response_json",
+      "property": "point",
+      "name": "active"
+    }
+  ]
+```
+**A variable is:**
+
+|                   |  |
+|---                |---
+|**Source**         |The location of the data to extract. Data can be extracted from<br><ul><li>HTTP header values - `response_header`</li><li>Response bodies - `response_json`</li><li>Response status code - `response_status`</li></ul>
+|**Property**       |The property of the source data to retrieve.<br>For HTTP headers this is the name of the header.<br>For JSON content, see below.<br>Unused status code.
+|**Variable Name**  |The name of the variable to assign the extracted value to.<br>In subsequent requests you can retrieve the value of the variable by this name.<br>[See Using Variables in Requests](#using-variables-in-requests).
+
+In the next steps you can use your extracted variable by using **`{{variable_name}}`** in your step _(example: `{{active}}`)_.
+
 ## Built-in Variables and Functions
 |**Variable/Function**       |**Description**       |**Example Output**
 |---	                 |---	            |---	
@@ -35,4 +58,9 @@ It is perfect to make end to end tests, you could use in your CI workflow to val
 |**`{{url_encode(value)}}`**                |Create a percent-encoded string suitable for URL querystrings. This is not required for URL or form parameters defined in the request editor which are automatically encoded. Only use this if you need to double encode a value in a URL or include a URL encoded string in a header value. 	|`This%20is%20100%25%20URL%20encoded.`
 
  	
- 	 	
+## Using Variables in Requests
+Once a variable has been defined, you can use it in any subsequent request.  
+Variables can be used in any request data field including the method, URL, header values, parameter values and request bodies.
+
+To include the value of a variable in a request, enter the name of the variable surrounded by double braces e.g. **`{{variable_name}}`**.  
+If a variable is undefined when a request using that variable is executed, we will keep the variable un-replaced.
