@@ -22,22 +22,16 @@ type ResultVariable struct {
 }
 
 func (rv *ResultVariable) Print() {
-	output := ""
-	if rv.Err == nil {
-		output += log.SuccessColor.Sprint("\u2713\t")
-	} else {
-		output += log.ErrorColor.Sprint("X\t")
-	}
-
+	explanation := ""
 	if rv.Type == Created {
-		output += fmt.Sprintf("%s '%s' is set to '%s'", rv.Type, rv.Key, rv.NewValue)
+		explanation += fmt.Sprintf("%s '%s' is set to '%s'", rv.Type, rv.Key, rv.NewValue)
 	} else {
-		output += fmt.Sprintf("%s '%s' to '%s'", rv.Type, rv.Key, rv.NewValue)
+		explanation += fmt.Sprintf("%s '%s' to '%s'", rv.Type, rv.Key, rv.NewValue)
 	}
 
-	if rv.Err != nil {
-		output += log.ErrorColor.Sprintf(" - %s", rv.Err.Error())
+	if rv.Err == nil {
+		logrus.Infof(log.SuccessColor.Sprint("\u2713\t") + "%s - %s", explanation)
+		return
 	}
-
-	logrus.Info(output)
+	logrus.Errorf("X\t%s\n\t- %s",explanation, rv.Err.Error())
 }
