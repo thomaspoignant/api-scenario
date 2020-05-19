@@ -6,7 +6,7 @@ import (
 	"github.com/thomaspoignant/api-scenario/pkg/log"
 )
 
-type resultAssertion struct {
+type ResultAssertion struct {
 	Success  bool
 	Source   Source
 	Property string
@@ -14,7 +14,7 @@ type resultAssertion struct {
 	Message  string
 }
 
-func NewResultAssertion(comparison Comparison, success bool, v ...interface{}) resultAssertion {
+func NewResultAssertion(comparison Comparison, success bool, v ...interface{}) ResultAssertion {
 	msg := comparison.GetMessage()
 	var message string
 	if success {
@@ -22,7 +22,7 @@ func NewResultAssertion(comparison Comparison, success bool, v ...interface{}) r
 	} else {
 		message = fmt.Sprintf(msg.Failure, v...)
 	}
-	return resultAssertion{
+	return ResultAssertion{
 		Success: success,
 		Message: message,
 		Err:     nil,
@@ -35,7 +35,7 @@ var sourceDisplayName = map[Source]string{
 	ResponseStatus: "status",
 }
 
-func (ar *resultAssertion) Print() {
+func (ar *ResultAssertion) Print() {
 	source := sourceDisplayName[ar.Source]
 	if len(ar.Property) > 0 {
 		source += "." + ar.Property

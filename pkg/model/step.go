@@ -62,7 +62,7 @@ func (step *Step) request() (ResultStep, error) {
 	// convert step to api apiReq
 	apiReq, err := step.convertToRestRequest()
 	if err != nil {
-		return ResultStep{}, errors.New("impossible to convert the ")
+		return ResultStep{}, errors.New("impossible to convert the request")
 	}
 
 	// init the result
@@ -72,7 +72,7 @@ func (step *Step) request() (ResultStep, error) {
 	result.VariableApplied = apiReq.PatchWithContext()
 	apiReq.AddHeadersFromFlags()
 
-	// Display results
+	// Display request
 	outputRequest(apiReq, result.VariableApplied)
 
 	// call the API
@@ -83,6 +83,8 @@ func (step *Step) request() (ResultStep, error) {
 	if err != nil {
 		return result, err
 	}
+
+	logrus.Infof("Time elapsed: %v", elapsed)
 
 	// Create a response
 	response, err := NewResponse(*res, elapsed)
@@ -147,13 +149,13 @@ func (step *Step) extractUrl() (string, map[string]string, error) {
 	return baseUrl, convertedQueryParams, nil
 }
 
-func assertResponse(response Response, assertions []Assertion) []resultAssertion {
+func assertResponse(response Response, assertions []Assertion) []ResultAssertion {
 
 	if len(assertions)>0 {
 		logrus.Info("Assertions:")
 	}
 
-	var result []resultAssertion
+	var result []ResultAssertion
 	for _, assertion := range assertions {
 		assertionResult := assertion.Assert(response)
 		result = append(result, assertionResult)
