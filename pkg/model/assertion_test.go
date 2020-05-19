@@ -2,11 +2,12 @@ package model
 
 import (
 	"fmt"
-	"github.com/thomaspoignant/api-scenario/pkg/util"
-	"github.com/thomaspoignant/api-scenario/test"
 	"net/http"
 	"testing"
 	"time"
+
+	"github.com/thomaspoignant/api-scenario/pkg/util"
+	"github.com/thomaspoignant/api-scenario/test"
 )
 
 type expectedResult struct {
@@ -1138,6 +1139,70 @@ func Test_ResponseJson_equals_bool_compareWithSomethingElse(t *testing.T) {
 	te(t, assertion, response, expectedResult{
 		source:   ResponseJson,
 		message:  "'toto' was not comparable with a boolean value true",
+		property: assertion.Property,
+		success:  false,
+		err:      true,
+	})
+}
+
+// response_header
+var header http.Header = map[string][]string{
+	"Content-Type": []string{"application/json; charset=utf-8"},
+}
+
+var responseH = Response{
+	Header: header,
+}
+
+func Test_ResponseHeader_equals(t *testing.T) {
+	assertion := Assertion{Comparison: Equal, Value: "application/json; charset=utf-8", Property: "Content-Type", Source: ResponseHeader}
+	te(t, assertion, responseH, expectedResult{
+		source:   ResponseHeader,
+		message:  "'application/json; charset=utf-8' was equal to application/json; charset=utf-8",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func Test_ResponseHeader_equals_non_canonical_format(t *testing.T) {
+	assertion := Assertion{Comparison: Equal, Value: "application/json; charset=utf-8", Property: "content-type", Source: ResponseHeader}
+	te(t, assertion, responseH, expectedResult{
+		source:   ResponseHeader,
+		message:  "'application/json; charset=utf-8' was equal to application/json; charset=utf-8",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func Test_ResponseHeader_HasKey(t *testing.T) {
+	assertion := Assertion{Comparison: HasKey, Value: "", Property: "Content-Type", Source: ResponseHeader}
+	te(t, assertion, responseH, expectedResult{
+		source:   ResponseHeader,
+		message:  "'Content-Type' key does exist",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func Test_ResponseHeader_IsNull(t *testing.T) {
+	assertion := Assertion{Comparison: IsNull, Value: "", Property: "unkown-key", Source: ResponseHeader}
+	te(t, assertion, responseH, expectedResult{
+		source:   ResponseHeader,
+		message:  "'unkown-key' was null",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func Test_ResponseHeader_error_NotFount(t *testing.T) {
+	assertion := Assertion{Comparison: Equal, Value: "toto", Property: "unkown-key", Source: ResponseHeader}
+	te(t, assertion, responseH, expectedResult{
+		source:   ResponseHeader,
+		message:  "Header \"unkown-key\" not found.",
 		property: assertion.Property,
 		success:  false,
 		err:      true,

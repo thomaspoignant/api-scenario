@@ -3,8 +3,9 @@ package model
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/sirupsen/logrus"
 	"io/ioutil"
+
+	"github.com/sirupsen/logrus"
 )
 
 type Scenario struct {
@@ -14,6 +15,7 @@ type Scenario struct {
 	Steps       []Step `json:"steps"`
 	Description string `json:"description"`
 }
+
 func (scenario *Scenario) Run() ScenarioResult {
 	result := ScenarioResult{
 		Name:        scenario.Name,
@@ -21,7 +23,6 @@ func (scenario *Scenario) Run() ScenarioResult {
 		Version:     scenario.Version,
 		StepResults: []ResultStep{},
 	}
-
 
 	logrus.Infof("Running api-scenario: %s (%s)", scenario.Name, scenario.Version)
 	logrus.Infof("%s\n", scenario.Description)
@@ -38,7 +39,7 @@ func (scenario *Scenario) Run() ScenarioResult {
 	return result
 }
 
-func InitScenarioFromFile(inputFile string) (Scenario, error){
+func InitScenarioFromFile(inputFile string) (Scenario, error) {
 	file, err := ioutil.ReadFile(inputFile)
 	if err != nil {
 		return Scenario{}, fmt.Errorf("Impossible to locate the file: %s\n Error: %v", inputFile, err)
