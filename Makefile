@@ -37,7 +37,8 @@ build: update-dependencies generate
 
 coverage:
 	mkdir -p .coverage/
-	$(GOTEST) -short -mod=vendor -coverprofile=.coverage/profile.cov ./...
+	$(GOTEST) -short -mod=vendor -coverprofile=.coverage/profile.cov.tmp ./...
+	cat .coverage/profile.cov.tmp | grep -v "_generated.go" > .coverage/profile.cov
 
 lint:
 	$(GOGET) golang.org/x/lint/golint
