@@ -3,12 +3,14 @@ package model
 import (
 	"errors"
 	"fmt"
-	"github.com/jmoiron/jsonq"
-	"github.com/thomaspoignant/api-scenario/pkg/util"
+	"net/http"
 	"reflect"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/jmoiron/jsonq"
+	"github.com/thomaspoignant/api-scenario/pkg/util"
 )
 
 type Assertion struct {
@@ -40,10 +42,40 @@ func (assertion *Assertion) Assert(response Response) ResultAssertion {
 		res.Source = assertion.Source
 		return res
 
+	case ResponseHeader:
+		res := assertResponseHeader(assertion.Comparison, assertion.Value, assertion.Property, response.Header)
+		res.Source = assertion.Source
+		return res
+
 	default:
 		message := fmt.Sprintf("the Source %s is not valid", assertion.Source)
 		return ResultAssertion{Success: false, Err: errors.New(message), Message: message, Source: assertion.Source}
 	}
+}
+
+func assertResponseHeader(assertionComparison Comparison,
+	assertionValue string,
+	assertionProperty string,
+	headers http.Header) resultAssertion {
+
+	//search for header using canonical key format
+	values := headers.Values(assertionProperty)
+	if values == nil {
+		if assertionComparison == IsNull {
+			result := NewResultAssertion(IsNull, true, assertionProperty)
+			result.Property = assertionProperty
+			return result
+		}
+		message := fmt.Sprintf("Header %q not found.", assertionProperty, assertionProperty)
+		return resultAssertion{Success: false, Message: message, Err: errors.New(message), Property: assertionProperty}
+	}
+
+	//Compare fisrt value of the given header key
+	//TODO handle many values for same key
+	result := assertValue(assertionComparison, assertionValue, headers.Get(assertionProperty), assertionProperty)
+	result.Property = assertionProperty
+	return result
+
 }
 
 func assertResponseJson(

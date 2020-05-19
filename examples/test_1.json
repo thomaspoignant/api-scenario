@@ -20,9 +20,7 @@
         }
       ],
       "headers": {
-        "Content-Type": [
-          "application/json"
-        ]
+        "Content-Type": ["application/json"]
       },
       "assertions": [
         {
@@ -35,6 +33,12 @@
           "property": "page",
           "value": "1",
           "source": "response_json"
+        },
+        {
+          "comparison": "equal",
+          "property": "content-type",
+          "value": "application/json; charset=utf-8",
+          "source": "response_header"
         }
       ]
     },

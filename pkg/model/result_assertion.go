@@ -2,6 +2,7 @@ package model
 
 import (
 	"fmt"
+
 	"github.com/sirupsen/logrus"
 	"github.com/thomaspoignant/api-scenario/pkg/log"
 )
@@ -33,6 +34,7 @@ var sourceDisplayName = map[Source]string{
 	ResponseJson:   "body",
 	ResponseTime:   "Response time",
 	ResponseStatus: "status",
+	ResponseHeader: "header",
 }
 
 func (ar *ResultAssertion) Print() {

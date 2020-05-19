@@ -2,15 +2,18 @@ package model
 
 import (
 	"errors"
+	"net/http"
+	"time"
+
 	"github.com/sendgrid/rest"
 	"github.com/thomaspoignant/api-scenario/pkg/util"
-	"time"
 )
 
 type Response struct {
 	TimeElapsed time.Duration          // e.g 1ms
 	StatusCode  int                    // e.g. 200
 	Body        map[string]interface{} // e.g. {"result: Success"}
+	Header      http.Header            // e.g. map[X-Ratelimit-Limit:[600]]
 }
 
 // Create a new responseApi from a rest.Response
@@ -29,5 +32,6 @@ func NewResponse(restResponse rest.Response, timeElapsed time.Duration) (Respons
 		Body:        body,
 		StatusCode:  restResponse.StatusCode,
 		TimeElapsed: timeElapsed,
+		Header:      restResponse.Headers,
 	}, nil
 }

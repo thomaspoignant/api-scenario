@@ -7,4 +7,5 @@ const (
 	ResponseStatus Source = iota //response_status
 	ResponseTime                 //response_time
 	ResponseJson                 //response_json
+	ResponseHeader               //response_header
 )
