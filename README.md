@@ -36,8 +36,6 @@ To create a variable, add a `variables` block to your step and specify the locat
 |**Property**       |The property of the source data to retrieve.<br>For HTTP headers this is the name of the header.<br>For JSON content, see below.<br>Unused status code.
 |**Variable Name**  |The name of the variable to assign the extracted value to.<br>In subsequent requests you can retrieve the value of the variable by this name.<br>[See Using Variables in Requests](#using-variables-in-requests).
 
-In the next steps you can use your extracted variable by using **`{{variable_name}}`** in your step _(example: `{{active}}`)_.
-
 ## Built-in Variables and Functions
 |**Variable/Function**       |**Description**       |**Example Output**
 |---	                 |---	            |---	
