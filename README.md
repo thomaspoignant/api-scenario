@@ -17,7 +17,8 @@ locally your development.
     - [The basic structure of the file is](#the-basic-structure-of-the-file)
     - [Our first step](#our-first-step)
 - [Steps](#steps)
-    - [Step types](#step-types)
+    - [Pause](#pause)
+    - [Request](#request)
 - [Request Chaining](#request-chaining)
     - [Using Variables to Pass Data Between Steps](#using-variables-to-pass-data-between-steps)
     - [Extracting Data from JSON Body Content](#extracting-data-from-json-body-content)
@@ -97,9 +98,42 @@ of `{{baseUrl}}` by `https://reqres.in`.
 
 ---
 # Steps
+There are different types of steps who allow performs different types of actions.  
+To specify the type of a step we are using the property `step_type` is the step object. _If there is no step_type property
+we ignore the step._
 
-## Step types
-There is 2 
+## Pause
+**`pause`** is simple, it is a step that wait X seconds.  
+This is useful when you have asynchronous API and allows waiting before calling the next API in the scenario.
+
+|Parameter      |Description  |
+|---            |---
+|step_type      | `pause`
+|duration       | Number of seconds to wait.
+
+**Example:** _Wait for 5 seconds_
+```json
+{
+  "step_type": "pause",
+  "duration": 5
+}
+```  
+
+## Request
+**`request`** is the step who can call a REST Api.  
+
+|Parameter      |Description  |
+|---            |---
+|step_type      | `request`
+|url            | URL of your endpoint
+|method         | HTTP verb of your request _(GET, POST, PUT, DELETE, OPTIONS, PATCH)_
+|variables      | Array of variables to extract from the response _([see Using Variables to Pass Data Between Steps for details](#using-variables-in-requests))_
+|headers        | Array of headers to attach to the request _([see how to add headers](#headers))_
+|assertions     | Array of assertions, this is the acceptance tests _([see how to create assertion tests](#headers))_
+
+### Headers
+
+### assertions
 
 ---
 # Request Chaining
