@@ -1,7 +1,6 @@
 package log_test
 
 import (
-	"fmt"
 	"github.com/sirupsen/logrus"
 	"github.com/thomaspoignant/api-scenario/pkg/log"
 	"testing"
@@ -21,7 +20,6 @@ func Test_OutputFormatter(t *testing.T) {
 
 	for _, tc := range testCases {
 		b, _ := tf.Format(&tc.value)
-		fmt.Print(string(b))
 		if string(b) != tc.expected {
 			t.Errorf("formatting expected for %v (result was %q instead of %q)", tc.value, string(b), tc.expected)
 		}
