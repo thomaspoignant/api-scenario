@@ -12,8 +12,6 @@ locally your development.
 
 ---
 
-- [API-scenario](#api-scenario)
-  - [Scenario API testing from the command line.](#scenario-api-testing-from-the-command-line)
 - [Why this project?](#why-this-project)
 - [Creating Your First Test](#creating-your-first-test)
   - [The basic structure of the file](#the-basic-structure-of-the-file)
@@ -23,8 +21,7 @@ locally your development.
   - [Request](#request)
     - [Headers](#headers)
     - [Assertions](#assertions)
-      - [An assertion is composed by:](#an-assertion-is-composed-by)
-      - [Example](#example)
+      - [Assertion composition](#assertion-composition)
       - [Available comparison type](#available-comparison-type)
 - [Request Chaining](#request-chaining)
   - [Using Variables to Pass Data Between Steps](#using-variables-to-pass-data-between-steps)
@@ -106,8 +103,9 @@ of `{{baseUrl}}` by `https://reqres.in`.
 ---
 # Steps
 There are different types of steps who allow performs different types of actions.  
-To specify the type of a step we are using the property `step_type` is the step object. _If there is no step_type property
-we ignore the step._
+To specify the type of a step we are using the property `step_type` is the step object. 
+
+_If there is no step_type property we ignore the step._
 
 ## Pause
 **`pause`** is simple, it is a step that wait X seconds.  
@@ -164,17 +162,17 @@ You can use variables in the headers, they will be replaced before sending the r
 ### Assertions
 Assertions are a big part of api-scenario, this is the acceptance tests of your request, it will allow you to simply write test to verify that you endpoint is doing what you want.
 
-#### An assertion is composed by:
+#### Assertion composition
 
-|Parameters      |Description  |
-|---            |---
-|**source**    | The location of the data to extract for comparison.<br>Authorized values are:<br><ul><li>response_status</li><li>response_time</li><li>response_json</li><li>response_header</li></ul>
+|Property        |Description  |
+|---             |---
+|**source**      | The location of the data to extract for comparison.<br>Authorized values are:<br><ul><li>response_status</li><li>response_time</li><li>response_json</li><li>response_header</li></ul>
 |**comparison**  | The type of operation to perform when comparing the extracted data with the target value.  _([see Available comparison type](#available-comparison-type))_.
 |**property**    | The property of the source data to retrieve.<br><ul><li>For **HTTP headers**, this is the name of the header.</li><li>Data from a **JSON** response body can be extracted by specifying the path of the data using standard JavaScript notation.</li><li>Unused for text content, status code, response time and response size.</li>
-|**value**    | The expected value used to compare against the actual value. 
+|**value**       | The expected value used to compare against the actual value. 
 
 
-#### Example
+**Example:**
 ```json
 {
   "comparison": "equals",
@@ -186,23 +184,23 @@ Assertions are a big part of api-scenario, this is the acceptance tests of your 
 
 #### Available comparison type
 
-|Comparison   |Key      |Description  |
-|---          |---      |---
-|**is empty** 	    |`empty`|The actual value exists and is an empty string or null.
-|**is not empty** 	|`not_empty`|The actual value exists and is a value other than an empty string or null.
-|**equals** 	      |`equal`|A string comparison of the actual and expected value. Non-string values are cast to a string before comparing. For comparing non-integer numbers, use equals (number).
-|**does not equal** |`not_equal`|A string comparison of the actual and target value.
-|**contains** 	    |`contains`|The actual value contains the target value as a substring.
-|**does not contain** 	|`does_not_contains`|The target value is not found within the actual value.
-|**has key**        |`has_key`|Checks for the existence of the expected value within a dictionary's keys. The actual value must point to a dictionary (JSON only).
-|**has value** 	    |`has_value`|Checks a list or dictionary for the existence of the expected value in any of the list or dictionary values. The actual value must point to a JSON list or dictionary (JSON only).
-|**is null**        |`is_null`|Checks that a value for a given JSON key is null.
-|**is a number**    |`is_a_number`|Validates the actual value is (or can be cast to) a valid numeric value.
-|**less than** 	    |`is_less_than`|Validates the actual value is (or can be cast to) a number less than the target value.
-|**less than or equal** 	|`is_less_than_or_equals`|Validates the actual value is (or can be cast to) a number less than or equal to the target value.
-|**greater than** 	|`is_greater_than`|Validates the actual value is (or can be cast to) a number greater than the target value.
+|Comparison         |Config name                 |Description  |
+|---                |---                         |---
+|**is empty** 	    |`empty`                     |The actual value exists and is an empty string or null.
+|**is not empty** 	|`not_empty`                 |The actual value exists and is a value other than an empty string or null.
+|**equals** 	    |`equal`                     |A string comparison of the actual and expected value. Non-string values are cast to a string before comparing. For comparing non-integer numbers, use equals (number).
+|**does not equal** |`not_equal`                 |A string comparison of the actual and target value.
+|**contains** 	    |`contains`                  |The actual value contains the target value as a substring.
+|**does not contain** 	|`does_not_contains`     |The target value is not found within the actual value.
+|**has key**        |`has_key`                   |Checks for the existence of the expected value within a dictionary's keys. The actual value must point to a dictionary (JSON only).
+|**has value** 	    |`has_value`                 |Checks a list or dictionary for the existence of the expected value in any of the list or dictionary values. The actual value must point to a JSON list or dictionary (JSON only).
+|**is null**        |`is_null`                   |Checks that a value for a given JSON key is null.
+|**is a number**    |`is_a_number`               |Validates the actual value is (or can be cast to) a valid numeric value.
+|**less than** 	    |`is_less_than`              |Validates the actual value is (or can be cast to) a number less than the target value.
+|**less than or equal** |`is_less_than_or_equals`|Validates the actual value is (or can be cast to) a number less than or equal to the target value.
+|**greater than** 	|`is_greater_than`           |Validates the actual value is (or can be cast to) a number greater than the target value.
 |**greater than or equal** 	|`is_greater_than_or_equal`|Validates the actual value is (or can be cast to) a number greater than or equal to the target value.
-|**equals (number)** 	|`equal_number`|Validates the actual value is (or can be cast to) a number equal to the target value. This setting performs a numeric comparison: for example, "1.000" would be considered equal to "1".
+|**equals (number)** 	|`equal_number`          |Validates the actual value is (or can be cast to) a number equal to the target value. This setting performs a numeric comparison: for example, "1.000" would be considered equal to "1".
 
 
 
