@@ -23,7 +23,7 @@ your release.
 # Creating Your First Test
 Creating a test is simple, you just have to write `json` file to describe you api calls, and describe assertions.
 
-### The basic structure of the file is:
+## The basic structure of the file is:
 ```json
 {
   "name": "Simple API Test Example",
@@ -39,14 +39,48 @@ This global fields allow to describe your scenario:
 - **name**: The name of your scenario
 - **description**: A complete description of what your scenario is doing
 - **version**: The version of your scenario
-- **steps**: Array of steps, it will describe all the steps of your scenario.
+- **steps**: Array of steps, it will describe all the steps of your scenario __(see [steps](#steps) for more details)__.
+
+## Our first step
+For our first step we will create a basic call who verify that an API answer with http code `200` when calling it.
+```json
+{
+  "step_type": "request",
+  "url": "{{baseUrl}}/api/users",
+  "method": "GET",
+  "headers": {
+    "Content-Type": ["application/json"]
+  },
+  "assertions": [
+    {
+      "comparison": "equal_number",
+      "value": "200",
+      "source": "response_status"
+    }
+  ]
+}
+```
+We manipulate different concepts here.
+- **step_type**: The type of the step, here we are using request because we want to test a rest 
+    API __(see [steps](#steps) to see the list of available step types)__.
+- **url**: The URL of our request, `{{baseUrl}}` will be replaced before the call.
+- **method**: The HTTP verb of our request.
+- **headers**: The list of headers we sent with the request.
+- **assertions**: This is the list of checks we are doing when we have received the response.
+    - **comparison**: The type of check we are doing, here we are testing that number are equals.
+    - **value**: The expected value
+    - **source**: On what part of the response we are looking, here we are checking the response status.
 
 
+Now the first scenario is build, we can run it __([see complete scenario](examples/first-test.json))__.
+```shell script
+$ api-scenario run --scenario="examples/first-test.json" --variable="baseUrl:https://reqres.in"
+```
+What we are doing is here is running our scenario file, and we ask to replace every occurrence 
+of `{{baseUrl}}` by `https://reqres.in`.
 
-
-
-
-
+---
+# Steps
 
 ---
 # Request Chaining
