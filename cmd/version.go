@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// init link version command to the main root command
 func init() {
 	rootCmd.AddCommand(versionCmd)
 }
