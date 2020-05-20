@@ -5,6 +5,7 @@ import (
 	"github.com/thomaspoignant/api-scenario/cmd"
 )
 
+// VersionString is the current version of the cli. It is override im the make file during the build.
 var VersionString = "unset"
 
 func main() {
