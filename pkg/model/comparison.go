@@ -63,7 +63,8 @@ var messages = map[Comparison]comparisonMessage{
 	Empty: {
 		Success: "'%v' was empty",
 		Failure: "'%v' was not empty"},
-	IsNull: {Success: "'%v' was null",
+	IsNull: {
+		Success: "'%v' was null",
 		Failure: "'%v' was not null"},
 	HasValue: {
 		Success: "'%v' had value",
@@ -73,6 +74,6 @@ var messages = map[Comparison]comparisonMessage{
 		Failure: "'%v' key does not exist"},
 }
 
-func (comparison Comparison) GetMessage() comparisonMessage {
-	return messages[comparison]
+func (i Comparison) GetMessage() comparisonMessage {
+	return messages[i]
 }
