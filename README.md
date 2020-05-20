@@ -7,7 +7,8 @@
 ![Go version](https://img.shields.io/github/go-mod/go-version/thomaspoignant/api-scenario?logo=go%20version "Go Version")
  
 API-scenario is a simple command line tool that allow you to execute easily a scenario to test your APIs.  
-It is perfect to make end to end tests, you could use in your CI workflow to validate your deployment or just to test locally your development.
+It is perfect to make end to end tests, you could use in your CI workflow to validate your deployment or just to test 
+locally your development.
 
 ---
 # Why this project?
@@ -35,6 +36,30 @@ To create a variable, add a `variables` block to your step and specify the locat
 |**Source**         |The location of the data to extract. Data can be extracted from<br><ul><li>HTTP header values - `response_header`</li><li>Response bodies - `response_json`</li><li>Response status code - `response_status`</li></ul>
 |**Property**       |The property of the source data to retrieve.<br>For HTTP headers this is the name of the header.<br>For JSON content, see below.<br>Unused status code.
 |**Variable Name**  |The name of the variable to assign the extracted value to.<br>In subsequent requests you can retrieve the value of the variable by this name.<br>[See Using Variables in Requests](#using-variables-in-requests).
+
+## Extracting Data from JSON Body Content
+Data from a JSON response body can be extracted by specifying the path of the target data using standard JavaScript 
+notation. [View sample JSON](./examples). 
+
+## Global Variables
+Some variables could be set up at launch, for that you can add options to the `run` command to pass it.
+Common values (base URLs, API tokens, etc.) that are shared across requests within a test, or tests within a bucket, 
+should be stored in an Initial Variable.
+Once defined, the variable is available to all requests within the test.
+
+To add a variable just use the option `--variable` or `-V` and specify the `key:value` of this variable.
+```shell script
+$ ./api-scenario run -F your_file.json --variable="baseUrl:http://www.google.com/" -V "token:token1234"
+```
+
+## Add / Override headers
+Overriding headers works the same as [global variables](#global-variables).  
+You can add a header for all your requests by using the option `--header` or `-H`, it will add or override the header 
+for all requests.
+
+```shell script
+$ ./api-scenario run -F your_file.json --header="Content-Type:application/json" -H "Authorization: Bearer Token123"
+```
 
 ## Built-in Variables and Functions
 |**Variable/Function**       |**Description**       |**Example Output**
