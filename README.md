@@ -39,7 +39,7 @@ This global fields allow to describe your scenario:
 - **name**: The name of your scenario
 - **description**: A complete description of what your scenario is doing
 - **version**: The version of your scenario
-- **steps**: Array of steps, it will describe all the steps of your scenario __(see [steps](#steps) for more details)__.
+- **steps**: Array of steps, it will describe all the steps of your scenario _(see [steps](#steps) for more details)_.
 
 ## Our first step
 For our first step we will create a basic call who verify that an API answer with http code `200` when calling it.
