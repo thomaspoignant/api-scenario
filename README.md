@@ -52,6 +52,8 @@ To add a variable just use the option `--variable` or `-V` and specify the `key:
 $ ./api-scenario run -F your_file.json --variable="baseUrl:http://www.google.com/" -V "token:token1234"
 ```
 
+__Note that if you create a variable in a step with the same name of a global variable it will override it.__
+
 ## Add / Override headers
 Overriding headers works the same as [global variables](#global-variables).  
 You can add a header for all your requests by using the option `--header` or `-H`, it will add or override the header 
