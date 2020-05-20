@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/jmoiron/jsonq"
 	"github.com/sendgrid/rest"
+	"github.com/sirupsen/logrus"
 	"github.com/thomaspoignant/api-scenario/pkg/model/context"
 	"github.com/thomaspoignant/api-scenario/pkg/util"
 	"net/url"
@@ -31,7 +32,8 @@ type Step struct {
 	} `json:"form,omitempty"`
 }
 
-func (step *Step) Apply() (ResultStep, error) {
+func (step *Step) Run() (ResultStep, error) {
+	logrus.Info("------------------------")
 	switch step.StepType {
 	case Pause:
 		return step.pause(step.Duration)
@@ -44,7 +46,7 @@ func (step *Step) Apply() (ResultStep, error) {
 
 func (step *Step) pause(numberOfSecond int) (ResultStep, error) {
 	start := time.Now()
-
+	logrus.Infof("Waiting for %ds", numberOfSecond)
 	// compute pause time and wait
 	duration := time.Duration(numberOfSecond) * time.Second
 	time.Sleep(duration)
@@ -57,11 +59,10 @@ func (step *Step) pause(numberOfSecond int) (ResultStep, error) {
 }
 
 func (step *Step) request() (ResultStep, error) {
-
 	// convert step to api apiReq
 	apiReq, err := step.convertToRestRequest()
 	if err != nil {
-		return ResultStep{}, errors.New("impossible to convert the ")
+		return ResultStep{}, errors.New("impossible to convert the request")
 	}
 
 	// init the result
@@ -69,9 +70,10 @@ func (step *Step) request() (ResultStep, error) {
 
 	// apply variable on the request
 	result.VariableApplied = apiReq.PatchWithContext()
+	apiReq.AddHeadersFromFlags()
 
-	fmt.Println("Variables Used:")
-	printVariables(result.VariableApplied)
+	// Display request
+	outputRequest(apiReq, result.VariableApplied)
 
 	// call the API
 	start := time.Now()
@@ -81,6 +83,8 @@ func (step *Step) request() (ResultStep, error) {
 	if err != nil {
 		return result, err
 	}
+
+	logrus.Infof("Time elapsed: %v", elapsed)
 
 	// Create a response
 	response, err := NewResponse(*res, elapsed)
@@ -95,14 +99,17 @@ func (step *Step) request() (ResultStep, error) {
 	// Add variables to context
 	result.VariableCreated = attachVariablesToContext(response, step.Variables)
 
-	fmt.Println("Variables Created:")
-	printVariables(result.VariableCreated)
-
+	if len(result.VariableCreated) > 0 {
+		logrus.Info("Variables Created:")
+		for _, currentVar := range result.VariableCreated {
+			currentVar.Print()
+		}
+	}
 	return result, nil
 }
 
 func (step *Step) convertToRestRequest() (Request, error) {
-	baseUrl, queryParams, err := step.formatUrl()
+	baseUrl, queryParams, err := step.extractUrl()
 	if err != nil {
 		return Request{}, err
 	}
@@ -126,7 +133,7 @@ func (step *Step) convertToRestRequest() (Request, error) {
 	}, nil
 }
 
-func (step *Step) formatUrl() (string, map[string]string, error) {
+func (step *Step) extractUrl() (string, map[string]string, error) {
 	u, err := url.Parse(step.URL)
 	if err != nil {
 		return "", nil, err
@@ -142,9 +149,13 @@ func (step *Step) formatUrl() (string, map[string]string, error) {
 	return baseUrl, convertedQueryParams, nil
 }
 
-func assertResponse(response Response, assertions []Assertion) []resultAssertion {
-	fmt.Println("Assertions:")
-	var result []resultAssertion
+func assertResponse(response Response, assertions []Assertion) []ResultAssertion {
+
+	if len(assertions)>0 {
+		logrus.Info("Assertions:")
+	}
+
+	var result []ResultAssertion
 	for _, assertion := range assertions {
 		assertionResult := assertion.Assert(response)
 		result = append(result, assertionResult)
@@ -211,8 +222,23 @@ func attachVariablesToContext(response Response, vars []Variable) []ResultVariab
 	return result
 }
 
-func printVariables(variables []ResultVariable) {
-	for _, currentVar := range variables {
-		currentVar.Print()
+// Display Request
+func outputRequest(apiReq Request, appliedVar []ResultVariable ){
+	logrus.Infof("%s %s", apiReq.Method, apiReq.displayUrl())
+	if len(apiReq.Body) > 0 {
+		logrus.Debugf("Body: %v", string(apiReq.Body))
 	}
+	if len(apiReq.Headers) > 0{
+		logrus.Debug("Headers:")
+		for key, value := range apiReq.Headers {
+			logrus.Debugf("\t%s: %s", key, value)
+		}
+	}
+	if len(appliedVar) > 0 {
+		logrus.Info("Variables Used:")
+		for _, currentVar := range appliedVar {
+			currentVar.Print()
+		}
+	}
+	logrus.Infof("---")
 }

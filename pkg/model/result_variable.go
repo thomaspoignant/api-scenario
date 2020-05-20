@@ -2,14 +2,15 @@ package model
 
 import (
 	"fmt"
-	"github.com/fatih/color"
+	"github.com/sirupsen/logrus"
+	"github.com/thomaspoignant/api-scenario/pkg/log"
 )
 
 type ResultVariableType int
 
 //go:generate enumer -type=ResultVariableType -json -linecomment -output resultvariabletype_generated.go
 const (
-	Created ResultVariableType = iota //Request
+	Created ResultVariableType = iota //Variable
 	Used                              //Set
 )
 
@@ -21,17 +22,16 @@ type ResultVariable struct {
 }
 
 func (rv *ResultVariable) Print() {
+	explanation := ""
+	if rv.Type == Created {
+		explanation += fmt.Sprintf("%s '%s' is set to '%s'", rv.Type, rv.Key, rv.NewValue)
+	} else {
+		explanation += fmt.Sprintf("%s '%s' to '%s'", rv.Type, rv.Key, rv.NewValue)
+	}
+
 	if rv.Err == nil {
-		color.New(color.FgGreen).Print("\u2713\t")
-	} else {
-		color.New(color.FgRed).Print("X\t")
+		logrus.Infof(log.SuccessColor.Sprint("\u2713\t") + "%s", explanation)
+		return
 	}
-
-	fmt.Printf("%s '%s' set to '%s'", rv.Type, rv.Key, rv.NewValue)
-	if rv.Err != nil {
-		fmt.Printf(" - %s", rv.Err.Error())
-	} else {
-		fmt.Print("\n")
-	}
-
+	logrus.Errorf("X\t%s\n\t- %s",explanation, rv.Err.Error())
 }

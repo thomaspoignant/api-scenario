@@ -1,8 +1,11 @@
 package model
 
 import (
-	"github.com/fatih/color"
-	"log"
+	"encoding/json"
+	"fmt"
+	"io/ioutil"
+
+	"github.com/sirupsen/logrus"
 )
 
 type Scenario struct {
@@ -13,13 +16,6 @@ type Scenario struct {
 	Description string `json:"description"`
 }
 
-type ScenarioResult struct {
-	Name        string       `json:"name"`
-	Version     string       `json:"version"`
-	Description string       `json:"description"`
-	StepResults []ResultStep `json:step_results`
-}
-
 func (scenario *Scenario) Run() ScenarioResult {
 	result := ScenarioResult{
 		Name:        scenario.Name,
@@ -27,16 +23,50 @@ func (scenario *Scenario) Run() ScenarioResult {
 		Version:     scenario.Version,
 		StepResults: []ResultStep{},
 	}
-	color.Green("%s", scenario.Description)
+
+	logrus.Infof("Running api-scenario: %s (%s)", scenario.Name, scenario.Version)
+	logrus.Infof("%s\n", scenario.Description)
 
 	for _, step := range scenario.Steps {
-		stepRes, err := step.Apply()
+		stepRes, err := step.Run()
 		if err != nil {
-			log.Fatalf("impossible to execute the step: %v\n%v", err, step)
+			logrus.Fatalf("impossible to execute the step: %v\n%v", err, step)
 			break
 		}
 		result.StepResults = append(result.StepResults, stepRes)
 	}
 
 	return result
+}
+
+func InitScenarioFromFile(inputFile string) (Scenario, error) {
+	file, err := ioutil.ReadFile(inputFile)
+	if err != nil {
+		return Scenario{}, fmt.Errorf("Impossible to locate the file: %s\n Error: %v", inputFile, err)
+	}
+
+	// Unmarshall file to launch the scenario.
+	data := Scenario{}
+	err = json.Unmarshal([]byte(file), &data)
+	if err != nil {
+		return Scenario{}, fmt.Errorf("Impossible to read file: %s\n%v", inputFile, err)
+	}
+
+	return data, nil
+}
+
+type ScenarioResult struct {
+	Name        string       `json:"name"`
+	Version     string       `json:"version"`
+	Description string       `json:"description"`
+	StepResults []ResultStep `json:step_results`
+}
+
+func (scenario *ScenarioResult) IsSuccess() bool {
+	for _, stepResult := range scenario.StepResults {
+		if !stepResult.IsSuccess() {
+			return false
+		}
+	}
+	return true
 }

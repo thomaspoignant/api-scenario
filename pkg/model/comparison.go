@@ -60,7 +60,8 @@ var messages = map[Comparison]comparisonMessage{
 	NotEmpty: {
 		Success: "'%v' was not empty",
 		Failure: "'%v' was empty"},
-	Empty: {Success: "'%v' was empty",
+	Empty: {
+		Success: "'%v' was empty",
 		Failure: "'%v' was not empty"},
 	IsNull: {Success: "'%v' was null",
 		Failure: "'%v' was not null"},

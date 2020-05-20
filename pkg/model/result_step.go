@@ -13,7 +13,23 @@ type ResultStep struct {
 	// Specific for type request
 	request         Request
 	response        Response
-	Assertion       []resultAssertion
+	Assertion       []ResultAssertion
 	VariableApplied []ResultVariable
 	VariableCreated []ResultVariable
+}
+
+func (step *ResultStep) IsSuccess() bool {
+	for _, assert := range step.Assertion {
+		if !assert.Success {
+			return false
+		}
+	}
+
+	variables := append(step.VariableApplied, step.VariableCreated...)
+	for _, variable := range variables {
+		if variable.Err != nil {
+			return false
+		}
+	}
+	return true
 }

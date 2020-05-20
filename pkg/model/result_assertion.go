@@ -2,10 +2,12 @@ package model
 
 import (
 	"fmt"
-	"github.com/fatih/color"
+
+	"github.com/sirupsen/logrus"
+	"github.com/thomaspoignant/api-scenario/pkg/log"
 )
 
-type resultAssertion struct {
+type ResultAssertion struct {
 	Success  bool
 	Source   Source
 	Property string
@@ -13,7 +15,7 @@ type resultAssertion struct {
 	Message  string
 }
 
-func NewResultAssertion(comparison Comparison, success bool, v ...interface{}) resultAssertion {
+func NewResultAssertion(comparison Comparison, success bool, v ...interface{}) ResultAssertion {
 	msg := comparison.GetMessage()
 	var message string
 	if success {
@@ -21,7 +23,7 @@ func NewResultAssertion(comparison Comparison, success bool, v ...interface{}) r
 	} else {
 		message = fmt.Sprintf(msg.Failure, v...)
 	}
-	return resultAssertion{
+	return ResultAssertion{
 		Success: success,
 		Message: message,
 		Err:     nil,
@@ -32,22 +34,22 @@ var sourceDisplayName = map[Source]string{
 	ResponseJson:   "body",
 	ResponseTime:   "Response time",
 	ResponseStatus: "status",
+	ResponseHeader: "header",
 }
 
-func (ar *resultAssertion) Print() {
+func (ar *ResultAssertion) Print() {
 	source := sourceDisplayName[ar.Source]
 	if len(ar.Property) > 0 {
 		source += "." + ar.Property
 	}
+
 	if ar.Success {
-		color.New(color.FgGreen).Print("\u2713\t")
-	} else {
-		color.New(color.FgRed).Print("X\t")
+		logrus.Infof(log.SuccessColor.Sprint("\u2713\t") + "%s - %s", source, ar.Message)
+		return
 	}
-	fmt.Printf("%s", source)
-	if ar.Err != nil {
-		fmt.Printf(" - %s \n", ar.Err)
-	} else {
-		fmt.Printf(" - %s \n", ar.Message)
+
+	logrus.Errorf("X\t%s - %s", source, ar.Message)
+	if logrus.IsLevelEnabled(logrus.DebugLevel) && ar.Err != nil {
+		logrus.Debug(ar.Err)
 	}
 }

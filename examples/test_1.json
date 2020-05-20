@@ -1,155 +1,80 @@
 {
-  "trigger_url": "https://api.runscope.com/radar/542c3c9f-2fd0-4272-8869-3e7222ce9b01/trigger",
-  "name": "Okta SCIM 2.0 SPEC Test",
+  "name": "Simple API Test Example",
+  "description": "A full description ...",
   "version": "1.0",
-  "exported_at": 1502143364,
   "steps": [
     {
-      "duration": 1,
-      "step_type": "pause"
+      "step_type": "pause",
+      "duration": 1
     },
     {
-      "url": "http://www.mocky.io/v2/5e908eb9330000541827d8a0?mocky-delay={{random_int(1000,5000)}}ms",
+      "url": "https://reqres.in/api/users",
+      "method": "GET",
+      "step_type": "request",
+      "note": "Test user endpoint",
       "variables": [
         {
           "source": "response_json",
-          "property": "point",
-          "name": "active"
-        },
-        {
-          "source": "response_time",
-          "name": "sc"
+          "property": "data[0].id",
+          "name": "user_id"
         }
       ],
-      "step_type": "request",
-      "auth": {},
-      "note": "Required Test: Test Users endpoint",
       "headers": {
-        "Accept-Charset": [
-          "utf-8"
-        ],
-        "Content-Type": [
-          "application/scim+json; charset=utf-8{{timestamp}}"
-        ],
-        "Accept": [
-          "application/scim+json"
-        ],
-        "Authorization": [
-          "{{auth}}"
-        ],
-        "User-Agent": [
-          "OKTA SCIM Integration"
-        ]
+        "Content-Type": ["application/json"]
       },
       "assertions": [
         {
-          "comparison": "equal",
+          "comparison": "equal_number",
           "value": "200",
           "source": "response_status"
         },
         {
-          "comparison": "not_empty",
-          "property": "emails",
+          "comparison": "equal",
+          "property": "page",
+          "value": "1",
           "source": "response_json"
         },
         {
           "comparison": "equal",
-          "property": "id",
-          "value": "id_2",
-          "source": "response_json"
-        },
-        {
-          "comparison": "has_value",
-          "property": "schemas",
-          "value": "urn:ietf:params:scim:schemas:core:2.0:User",
-          "source": "response_json"
-        },
-        {
-          "comparison": "has_key",
-          "property": "schemas",
-          "source": "response_json"
-        },
-        {
-          "comparison": "is_greater_than",
-          "value": "2",
-          "source": "response_time"
+          "property": "content-type",
+          "value": "application/json; charset=utf-8",
+          "source": "response_header"
         }
-      ],
-      "scripts": [],
-      "before_scripts": [],
-      "method": "GET"
+      ]
     },
     {
-      "duration": 1,
-      "step_type": "pause"
+      "step_type": "pause",
+      "duration": 1
     },
     {
-      "url": "http://www.mocky.io/v2/{{active}}/{{sc}}/5e908eb9330000541827d8a0?mocky-delay={{random_int(1000,5000)}}ms",
-      "variables": [
-        {
-          "source": "response_json",
-          "property": "emails",
-          "name": "ISVUserid"
-        }
-      ],
+      "url": "https://reqres.in/api/users",
+      "method": "POST",
+      "body": "{\"data\":{\"name_{{timestamp}}\": \"paul rudd\",\"movies\":[\"I Love You Man\", \"Role Models\"]}}",
       "step_type": "request",
-      "auth": {},
-      "note": "Required Test: Test Users endpoint",
-      "headers": {
-        "Accept-Charset": [
-          "utf-8"
-        ],
-        "Content-Type": [
-          "application/scim+json; charset=utf-8{{timestamp}}"
-        ],
-        "Accept": [
-          "application/scim+json"
-        ],
-        "Authorization": [
-          "{{auth}}"
-        ],
-        "User-Agent": [
-          "OKTA SCIM Integration"
-        ]
-      },
+      "assertions": []
+    },
+    {
+      "step_type": "pause",
+      "duration": 1
+    },
+    {
+      "url": "https://reqres.in/api/users/{{user_id}}",
+      "method": "GET",
+      "step_type": "request",
+      "note": "Test first user",
       "assertions": [
         {
-          "comparison": "equal",
+          "comparison": "equal_number",
           "value": "200",
           "source": "response_status"
         },
         {
-          "comparison": "not_empty",
-          "property": "emails",
-          "source": "response_json"
-        },
-        {
-          "comparison": "equal",
-          "property": "id",
-          "value": "id_2",
-          "source": "response_json"
-        },
-        {
-          "comparison": "has_value",
-          "property": "schemas",
-          "value": "urn:ietf:params:scim:schemas:core:2.0:User",
-          "source": "response_json"
-        },
-        {
-          "comparison": "has_key",
-          "property": "schemas",
-          "source": "response_json"
-        },
-        {
           "comparison": "is_greater_than",
-          "value": "2",
-          "source": "response_time"
+          "property": "data.id",
+          "value": "0",
+          "source": "response_json"
         }
-      ],
-      "scripts": [],
-      "before_scripts": [],
-      "method": "GET"
+      ]
     }
-  ],
-  "description": "Basic tests to see if your SCIM server will work with Okta"
+  ]
 }
