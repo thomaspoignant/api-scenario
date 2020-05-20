@@ -62,7 +62,7 @@ For our first step we will create a basic call who verify that an API answer wit
 ```
 We manipulate different concepts here.
 - **step_type**: The type of the step, here we are using request because we want to test a rest 
-    API __(see [steps](#steps) to see the list of available step types)__.
+    API _(see [steps](#steps) to see the list of available step types)_.
 - **url**: The URL of our request, `{{baseUrl}}` will be replaced before the call.
 - **method**: The HTTP verb of our request.
 - **headers**: The list of headers we sent with the request.
@@ -72,7 +72,7 @@ We manipulate different concepts here.
     - **source**: On what part of the response we are looking, here we are checking the response status.
 
 
-Now the first scenario is build, we can run it __([see complete scenario](examples/first-test.json))__.
+Now the first scenario is build, we can run it _([see complete scenario](examples/first-test.json))_.
 ```shell script
 $ api-scenario run --scenario="examples/first-test.json" --variable="baseUrl:https://reqres.in"
 ```
