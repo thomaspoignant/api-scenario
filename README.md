@@ -63,7 +63,7 @@ For our first step we will create a basic call who verify that an API answer wit
 We manipulate different concepts here.
 - **step_type**: The type of the step, here we are using request because we want to test a rest 
     API _(see [steps](#steps) to see the list of available step types)_.
-- **url**: The URL of our request, `{{baseUrl}}` will be replaced before the call.
+- **url**: The URL of our request, `{{baseUrl}}` will be replaced before the call _([see Using Variables in Requests for details](#using-variables-in-requests))_
 - **method**: The HTTP verb of our request.
 - **headers**: The list of headers we sent with the request.
 - **assertions**: This is the list of checks we are doing when we have received the response.
