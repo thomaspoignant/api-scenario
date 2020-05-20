@@ -12,13 +12,48 @@ locally your development.
 
 ---
 # Why this project?
+Our goal is to have a simple command line tool that can run scenario to test your apis directly from the command line.
+You can create a scenario and start using it during development, but also use it in your
+ [CI/CD](https://en.wikipedia.org/wiki/CI/CD) to validate your deployment. 
+
+You can use variables in your scenario, so you are sure to run the same test suite on each environment and be sure of 
+your release.
+ 
+---
+# Creating Your First Test
+Creating a test is simple, you just have to write `json` file to describe you api calls, and describe assertions.
+
+### The basic structure of the file is:
+```json
+{
+  "name": "Simple API Test Example",
+  "description": "A full description of your test scenario",
+  "version": "1.0",
+  "steps": [
+    ...
+  ]
+}
+```
+
+This global fields allow to describe your scenario:
+- **name**: The name of your scenario
+- **description**: A complete description of what your scenario is doing
+- **version**: The version of your scenario
+- **steps**: Array of steps, it will describe all the steps of your scenario.
+
+
+
+
+
+
+
 
 ---
-
-
+# Request Chaining
 ## Using Variables to Pass Data Between Steps
 Request steps can define variables that extract data from HTTP responses returned when running the test.
-To create a variable, add a `variables` block to your step and specify the location of the data you'd like to extract from the response, and the **name** of this variable.
+To create a variable, add a `variables` block to your step and specify the location of the data you'd like to extract 
+from the response, and the **name** of this variable.
 
 ```json
 "variables": [
