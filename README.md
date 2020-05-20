@@ -12,20 +12,27 @@ locally your development.
 
 ---
 
+- [API-scenario](#api-scenario)
+  - [Scenario API testing from the command line.](#scenario-api-testing-from-the-command-line)
 - [Why this project?](#why-this-project)
 - [Creating Your First Test](#creating-your-first-test)
-    - [The basic structure of the file is](#the-basic-structure-of-the-file)
-    - [Our first step](#our-first-step)
+  - [The basic structure of the file](#the-basic-structure-of-the-file)
+  - [Our first step](#our-first-step)
 - [Steps](#steps)
-    - [Pause](#pause)
-    - [Request](#request)
+  - [Pause](#pause)
+  - [Request](#request)
+    - [Headers](#headers)
+    - [Assertions](#assertions)
+      - [An assertion is composed by:](#an-assertion-is-composed-by)
+      - [Example](#example)
+      - [Available comparison type](#available-comparison-type)
 - [Request Chaining](#request-chaining)
-    - [Using Variables to Pass Data Between Steps](#using-variables-to-pass-data-between-steps)
-    - [Extracting Data from JSON Body Content](#extracting-data-from-json-body-content)
-    - [Global Variables](#global-variables)
-    - [Add / Override headers](#add--override-headers)
-    - [Built-in Variables and Functions](#built-in-variables-and-functions)
-    - [Using Variables in Requests](#using-variables-in-requests)
+  - [Using Variables to Pass Data Between Steps](#using-variables-to-pass-data-between-steps)
+  - [Extracting Data from JSON Body Content](#extracting-data-from-json-body-content)
+  - [Global Variables](#global-variables)
+  - [Add / Override headers](#add--override-headers)
+  - [Built-in Variables and Functions](#built-in-variables-and-functions)
+  - [Using Variables in Requests](#using-variables-in-requests)
 
 ---
 # Why this project?
@@ -80,7 +87,7 @@ For our first step we will create a basic call who verify that an API answer wit
 We manipulate different concepts here.
 - **step_type**: The type of the step, here we are using request because we want to test a rest 
     API _(see [steps](#steps) to see the list of available step types)_.
-- **url**: The URL of our request, `{{baseUrl}}` will be replaced before the call _([see Using Variables in Requests for details](#using-variables-in-requests))_
+- **url**: The URL of our request, `{{baseUrl}}` will be replaced before the call _([see Using Variables in Requests for details](#using-variables-to-pass-data-between-steps))_
 - **method**: The HTTP verb of our request.
 - **headers**: The list of headers we sent with the request.
 - **assertions**: This is the list of checks we are doing when we have received the response.
@@ -106,10 +113,10 @@ we ignore the step._
 **`pause`** is simple, it is a step that wait X seconds.  
 This is useful when you have asynchronous API and allows waiting before calling the next API in the scenario.
 
-|Parameter      |Description  |
+|Parameters      |Description  |
 |---            |---
-|step_type      | `pause`
-|duration       | Number of seconds to wait.
+|**step_type**      | `pause`
+|**duration**       | Number of seconds to wait.
 
 **Example:** _Wait for 5 seconds_
 ```json
@@ -122,18 +129,82 @@ This is useful when you have asynchronous API and allows waiting before calling 
 ## Request
 **`request`** is the step who can call a REST Api.  
 
-|Parameter      |Description  |
+|Parameters      |Description  |
 |---            |---
-|step_type      | `request`
-|url            | URL of your endpoint
-|method         | HTTP verb of your request _(GET, POST, PUT, DELETE, OPTIONS, PATCH)_
-|variables      | Array of variables to extract from the response _([see Using Variables to Pass Data Between Steps for details](#using-variables-in-requests))_
-|headers        | Array of headers to attach to the request _([see how to add headers](#headers))_
-|assertions     | Array of assertions, this is the acceptance tests _([see how to create assertion tests](#headers))_
+|**step_type**      | `request`
+|**url**            | URL of your endpoint
+|**method**         | HTTP verb of your request _(GET, POST, PUT, DELETE, OPTIONS, PATCH)_
+|**variables**      | Array of variables to extract from the response _([see Using Variables to Pass Data Between Steps for details](#))_
+|**headers**        | Object who contains all the headers attach to the request _([see how to add headers](#headers))_
+|**assertions**     | Array of assertions, this is the acceptance tests _([see how to create assertion tests](#assertions))_
 
 ### Headers
+Headers are represented by an object containing all the headers to send.  
+Each header is has the name of the header for key and an array of strings as value.
 
-### assertions
+You can use variables in the headers, they will be replaced before sending the request _(see [Using Variables to Pass Data Between Steps](#using-variables-to-pass-data-between-steps) or [Global Variables](#global-variables))_.
+
+**Example:**
+```json
+{
+  "headers": {
+      "Accept-Charset": [
+        "utf-8"
+      ],
+      "Accept": [
+        "application/scim+json"
+      ],
+      "Authorization": [
+        "{{auth}}"
+      ]
+    }
+}
+```
+
+### Assertions
+Assertions are a big part of api-scenario, this is the acceptance tests of your request, it will allow you to simply write test to verify that you endpoint is doing what you want.
+
+#### An assertion is composed by:
+
+|Parameters      |Description  |
+|---            |---
+|**source**    | The location of the data to extract for comparison.<br>Authorized values are:<br><ul><li>response_status</li><li>response_time</li><li>response_json</li><li>response_header</li></ul>
+|**comparison**  | The type of operation to perform when comparing the extracted data with the target value.  _([see Available comparison type](#available-comparison-type))_.
+|**property**    | The property of the source data to retrieve.<br><ul><li>For **HTTP headers**, this is the name of the header.</li><li>Data from a **JSON** response body can be extracted by specifying the path of the data using standard JavaScript notation.</li><li>Unused for text content, status code, response time and response size.</li>
+|**value**    | The expected value used to compare against the actual value. 
+
+
+#### Example
+```json
+{
+  "comparison": "equals",
+  "property": "schemas",
+  "value": "User",
+  "source": "response_json"
+}
+```
+
+#### Available comparison type
+
+|Comparison   |Key      |Description  |
+|---          |---      |---
+|**is empty** 	    |`empty`|The actual value exists and is an empty string or null.
+|**is not empty** 	|`not_empty`|The actual value exists and is a value other than an empty string or null.
+|**equals** 	      |`equal`|A string comparison of the actual and expected value. Non-string values are cast to a string before comparing. For comparing non-integer numbers, use equals (number).
+|**does not equal** |`not_equal`|A string comparison of the actual and target value.
+|**contains** 	    |`contains`|The actual value contains the target value as a substring.
+|**does not contain** 	|`does_not_contains`|The target value is not found within the actual value.
+|**has key**        |`has_key`|Checks for the existence of the expected value within a dictionary's keys. The actual value must point to a dictionary (JSON only).
+|**has value** 	    |`has_value`|Checks a list or dictionary for the existence of the expected value in any of the list or dictionary values. The actual value must point to a JSON list or dictionary (JSON only).
+|**is null**        |`is_null`|Checks that a value for a given JSON key is null.
+|**is a number**    |`is_a_number`|Validates the actual value is (or can be cast to) a valid numeric value.
+|**less than** 	    |`is_less_than`|Validates the actual value is (or can be cast to) a number less than the target value.
+|**less than or equal** 	|`is_less_than_or_equals`|Validates the actual value is (or can be cast to) a number less than or equal to the target value.
+|**greater than** 	|`is_greater_than`|Validates the actual value is (or can be cast to) a number greater than the target value.
+|**greater than or equal** 	|`is_greater_than_or_equal`|Validates the actual value is (or can be cast to) a number greater than or equal to the target value.
+|**equals (number)** 	|`equal_number`|Validates the actual value is (or can be cast to) a number equal to the target value. This setting performs a numeric comparison: for example, "1.000" would be considered equal to "1".
+
+
 
 ---
 # Request Chaining
