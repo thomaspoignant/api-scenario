@@ -11,6 +11,22 @@ It is perfect to make end to end tests, you could use in your CI workflow to val
 locally your development.
 
 ---
+
+- [Why this project?](#why-this-project)
+- [Creating Your First Test](#creating-your-first-test)
+    - [The basic structure of the file is](#the-basic-structure-of-the-file)
+    - [Our first step](#our-first-step)
+- [Steps](#steps)
+    - [Step types](#step-types)
+- [Request Chaining](#request-chaining)
+    - [Using Variables to Pass Data Between Steps](#using-variables-to-pass-data-between-steps)
+    - [Extracting Data from JSON Body Content](#extracting-data-from-json-body-content)
+    - [Global Variables](#global-variables)
+    - [Add / Override headers](#add--override-headers)
+    - [Built-in Variables and Functions](#built-in-variables-and-functions)
+    - [Using Variables in Requests](#using-variables-in-requests)
+
+---
 # Why this project?
 Our goal is to have a simple command line tool that can run scenario to test your apis directly from the command line.
 You can create a scenario and start using it during development, but also use it in your
@@ -23,7 +39,7 @@ your release.
 # Creating Your First Test
 Creating a test is simple, you just have to write `json` file to describe you api calls, and describe assertions.
 
-## The basic structure of the file is:
+## The basic structure of the file
 ```
 {
   "name": "Simple API Test Example",
@@ -81,6 +97,9 @@ of `{{baseUrl}}` by `https://reqres.in`.
 
 ---
 # Steps
+
+## Step types
+There is 2 
 
 ---
 # Request Chaining
