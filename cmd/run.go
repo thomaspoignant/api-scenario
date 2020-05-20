@@ -4,9 +4,9 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/thomaspoignant/api-scenario/pkg/config_helper"
 	"github.com/thomaspoignant/api-scenario/pkg/model"
 	"github.com/thomaspoignant/api-scenario/pkg/model/context"
+	"github.com/thomaspoignant/api-scenario/pkg/util"
 	"os"
 	"strings"
 )
@@ -78,7 +78,7 @@ func formatHeadersForConfig(headers []string, token string) map[string]string{
 
 	// Authentication token
 	if len(token) > 0 {
-		res["Authorization"] = config_helper.FormatAuthorization(token)
+		res["Authorization"] = util.AddBearerPrefix(token)
 	}
 	return res
 }
