@@ -33,6 +33,7 @@ func Execute() {
 	}
 }
 
+// init setup the flags used by all command line.
 func init() {
 	cobra.OnInitialize(initConfig)
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.api-scenario.yaml)")
