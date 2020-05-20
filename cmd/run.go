@@ -1,13 +1,12 @@
 package cmd
 
 import (
-	"fmt"
-	"github.com/fatih/color"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
-	"github.com/thomaspoignant/api-scenario/pkg/config_helper"
 	"github.com/thomaspoignant/api-scenario/pkg/model"
 	"github.com/thomaspoignant/api-scenario/pkg/model/context"
+	"github.com/thomaspoignant/api-scenario/pkg/util"
 	"os"
 	"strings"
 )
@@ -15,6 +14,8 @@ var headers []string
 var variables []string
 var inputFile string
 var token string
+
+// init setup the flags used by the run command.
 func init() {
 	rootCmd.AddCommand(runCmd)
 	runCmd.Flags().StringVarP(&inputFile, "scenario", "s", "", "Input file for the scenario.")
@@ -27,17 +28,18 @@ func init() {
 var runCmd = &cobra.Command{
 	Use:   "run",
 	Short: "Execute your scenario",
-	Long:  `Execute your scenario`, //TODO: Change it for more details
+	Long:  `Execute your scenario`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// add variable to context
 		addVariableToContext(variables)
+
 		// format headers and add it to the config
 		viper.Set("headers", formatHeadersForConfig(headers, token))
 
 		// Parse the input file
 		scenario, err := model.InitScenarioFromFile(inputFile)
 		if err != nil {
-			color.Red(err.Error())
+			logrus.Error(err)
 			os.Exit(1)
 		}
 
@@ -49,26 +51,26 @@ var runCmd = &cobra.Command{
 	},
 }
 
+// addVariableToContext is adding a variable to the context to replace wildcard strings
 func addVariableToContext(variables []string) {
 	const separator  = ":"
 	for _, variable := range variables {
 		splitStr := strings.SplitN(variable, separator, 2)
 		if len(splitStr) <= 1 {
-			color.Red("Wrong format for parameter %s, it should be \"Key:value\", this parameter is ignored.", variable)
+			logrus.Errorf("Wrong format for parameter %s, it should be \"Key:value\", this parameter is ignored.", variable)
 			break
 		}
 		context.GetContext().Add(strings.TrimSpace(splitStr[0]), strings.TrimSpace(splitStr[1]))
 	}
 }
-
+// formatHeadersForConfig is formatting headers to put them in the config
 func formatHeadersForConfig(headers []string, token string) map[string]string{
 	const separator  = ":"
 	var res = map[string] string{}
 	for _, header := range headers {
-		fmt.Println(header)
 		splitStr := strings.SplitN(header, separator, 2)
 		if len(splitStr) <= 1 {
-			color.Red("Wrong format for parameter %s, it should be \"Key:value\", this parameter is ignored.", header)
+			logrus.Errorf("Wrong format for parameter %s, it should be \"Key:value\", this parameter is ignored.", header)
 			break
 		}
 		res[strings.TrimSpace(splitStr[0])] = strings.TrimSpace(splitStr[1])
@@ -76,7 +78,7 @@ func formatHeadersForConfig(headers []string, token string) map[string]string{
 
 	// Authentication token
 	if len(token) > 0 {
-		res["Authorization"] = config_helper.FormatAuthorization(token)
+		res["Authorization"] = util.AddBearerPrefix(token)
 	}
 	return res
 }

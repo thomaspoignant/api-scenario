@@ -1,11 +1,11 @@
-package config_helper
+package util
 
 import (
 	"strings"
 )
 
-func FormatAuthorization(param string) string {
-	// Check if param starts with "Bearer"
+// AddBearerPrefix is formatting a token to be sure to have the Bearer prefix
+func AddBearerPrefix(param string) string {
 	const bearer = "Bearer "
 	param = strings.TrimSpace(param)
 	if strings.HasPrefix(strings.ToLower(param), strings.ToLower(bearer)) {
