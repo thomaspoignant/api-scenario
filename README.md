@@ -24,7 +24,7 @@ your release.
 Creating a test is simple, you just have to write `json` file to describe you api calls, and describe assertions.
 
 ## The basic structure of the file is:
-```json
+```
 {
   "name": "Simple API Test Example",
   "description": "A full description of your test scenario",
@@ -90,13 +90,15 @@ To create a variable, add a `variables` block to your step and specify the locat
 from the response, and the **name** of this variable.
 
 ```json
-"variables": [
+{
+  "variables": [
     {
       "source": "response_json",
       "property": "point",
       "name": "active"
     }
   ]
+}
 ```
 **A variable is:**
 
