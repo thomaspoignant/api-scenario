@@ -67,10 +67,10 @@ There are several options you can use with this command:
 |`--scenario`            | `-s`          |✓         |Input file for the scenario.
 |`--authorization-token` | `-t`          |          |Authorization token send in the Authorization headers.
 |`--header`              | `-h`          |          |Header you want to override (format should be "**header_name:value**").<br>*You can have multiple values of this options*
-|`--variable`            | `-h`          |          |Value for a variable used in your scenario (format should be "variable_name:value").<br>*You can have multiple values of this options*
-|`--verbose`            | `-s`          |          |Run your scenario with debug information.
-|`--quiet`              | `-s`          |          |Run your scenario in quiet mode.
-|`--no-color`           |               |          |Do not display color on the output
+|`--variable`            | `-h`          |          |Value for a variable used in your scenario (format should be "**variable_name:value**").<br>*You can have multiple values of this options*
+|`--verbose`             | `-s`          |          |Run your scenario with debug information.
+|`--quiet`               | `-s`          |          |Run your scenario in quiet mode.
+|`--no-color`            |               |          |Do not display color on the output.
 
 ---
 # Creating Your First Test
