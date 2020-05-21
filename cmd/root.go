@@ -11,7 +11,6 @@ import (
 	"github.com/spf13/viper"
 )
 
-
 var cfgFile string
 var quiet bool
 var noColor bool
@@ -21,7 +20,7 @@ var verbose bool
 var rootCmd = &cobra.Command{
 	Use:   "api-scenario",
 	Short: "Scenario API testing from the command line.",
-	Long: `API-scenario is a simple command line tool that allow you to execute easily a scenario to test your APIs.`,
+	Long:  `API-scenario is a simple command line tool that allow you to execute easily a scenario to test your APIs.`,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -77,7 +76,7 @@ func initConfig() {
 	}
 
 	// Init log formatter
-	logFormatter := &log.OutputFormatter{ DisableColors: false }
+	logFormatter := &log.OutputFormatter{DisableColors: false}
 	if noColor {
 		logFormatter.DisableColors = true
 	}

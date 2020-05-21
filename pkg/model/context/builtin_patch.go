@@ -174,7 +174,7 @@ format options. Also accepts variables. E.g. {{format_timestamp({{timestamp}}, Y
     hh - 12 hour (e.g. 01 == 1pm)
     mm - minutes
     ss - seconds
- */
+*/
 func formatTimestamp(s string) string {
 	r := regexp.MustCompile(`{{format_timestamp\(([0-9]+),(.+)\)}}`)
 	for _, subMatch := range r.FindAllStringSubmatch(s, -1) {
@@ -187,7 +187,7 @@ func formatTimestamp(s string) string {
 		format = strings.ReplaceAll(format, "HH", "hh")
 
 		// ParseInt will work because regex extract an int
-		timestamp,_ := strconv.ParseInt(timestampStr, 10, 64)
+		timestamp, _ := strconv.ParseInt(timestampStr, 10, 64)
 		replaceValue := fmtdate.Format(format, time.Unix(timestamp, 0))
 		s = strings.Replace(s, variable, replaceValue, 1)
 	}

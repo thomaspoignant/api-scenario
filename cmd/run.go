@@ -10,6 +10,7 @@ import (
 	"os"
 	"strings"
 )
+
 var headers []string
 var variables []string
 var inputFile string
@@ -53,7 +54,7 @@ var runCmd = &cobra.Command{
 
 // addVariableToContext is adding a variable to the context to replace wildcard strings
 func addVariableToContext(variables []string) {
-	const separator  = ":"
+	const separator = ":"
 	for _, variable := range variables {
 		splitStr := strings.SplitN(variable, separator, 2)
 		if len(splitStr) <= 1 {
@@ -63,10 +64,11 @@ func addVariableToContext(variables []string) {
 		context.GetContext().Add(strings.TrimSpace(splitStr[0]), strings.TrimSpace(splitStr[1]))
 	}
 }
+
 // formatHeadersForConfig is formatting headers to put them in the config
-func formatHeadersForConfig(headers []string, token string) map[string]string{
-	const separator  = ":"
-	var res = map[string] string{}
+func formatHeadersForConfig(headers []string, token string) map[string]string {
+	const separator = ":"
+	var res = map[string]string{}
 	for _, header := range headers {
 		splitStr := strings.SplitN(header, separator, 2)
 		if len(splitStr) <= 1 {

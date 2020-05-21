@@ -151,7 +151,7 @@ func (step *Step) extractUrl() (string, map[string]string, error) {
 
 func assertResponse(response Response, assertions []Assertion) []ResultAssertion {
 
-	if len(assertions)>0 {
+	if len(assertions) > 0 {
 		logrus.Info("Assertions:")
 	}
 
@@ -223,12 +223,12 @@ func attachVariablesToContext(response Response, vars []Variable) []ResultVariab
 }
 
 // Display Request
-func outputRequest(apiReq Request, appliedVar []ResultVariable ){
+func outputRequest(apiReq Request, appliedVar []ResultVariable) {
 	logrus.Infof("%s %s", apiReq.Method, apiReq.displayUrl())
 	if len(apiReq.Body) > 0 {
 		logrus.Debugf("Body: %v", string(apiReq.Body))
 	}
-	if len(apiReq.Headers) > 0{
+	if len(apiReq.Headers) > 0 {
 		logrus.Debug("Headers:")
 		for key, value := range apiReq.Headers {
 			logrus.Debugf("\t%s: %s", key, value)

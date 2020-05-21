@@ -7,7 +7,6 @@ import (
 	"testing"
 )
 
-
 func Test_PrintResultAssertion_Success(t *testing.T) {
 	test.SetupLog()
 	want := "✓\tstatus - '1' was not equal to 20\n"

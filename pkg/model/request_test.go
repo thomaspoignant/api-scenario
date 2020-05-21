@@ -9,11 +9,10 @@ import (
 	"github.com/spf13/viper"
 )
 
-
 var req model.Request
 
 func initReq() {
-	req =  model.Request{
+	req = model.Request{
 		Request: &rest.Request{
 			Body:    []byte(`{"hello":"world_{{random_int(1,1)}}"}`),
 			BaseURL: "http://perdu.com/{{random_int(1,1)}}",
@@ -44,7 +43,7 @@ func Test_OverrideHeadersFromViper(t *testing.T) {
 	initReq()
 	want := map[string]string{
 		"Content-Type": "application/JSON",
-		"Accept": "application/JSON",
+		"Accept":       "application/JSON",
 	}
 	viper.Set("headers", want)
 	req.AddHeadersFromFlags()
@@ -56,8 +55,8 @@ func Test_OverrideHeadersFromViper(t *testing.T) {
 func Test_AddHeadersFromViper(t *testing.T) {
 	initReq()
 	want := map[string]string{
-		"Accept": "application/JSON",
-		"Content-Type":"other_test_{{random_int(1,1)}}",
+		"Accept":       "application/JSON",
+		"Content-Type": "other_test_{{random_int(1,1)}}",
 	}
 	viper.Set("headers", map[string]string{
 		"Accept": "application/JSON",

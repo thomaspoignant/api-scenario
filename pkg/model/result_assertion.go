@@ -44,7 +44,7 @@ func (ar *ResultAssertion) Print() {
 	}
 
 	if ar.Success {
-		logrus.Infof(log.SuccessColor.Sprint("\u2713\t") + "%s - %s", source, ar.Message)
+		logrus.Infof(log.SuccessColor.Sprint("\u2713\t")+"%s - %s", source, ar.Message)
 		return
 	}
 
