@@ -20,7 +20,7 @@ clean:
 
 clean-all: clean ## remove all generated artifacts and clean all build artifacts
 	rm -rf docs vendor $(COVERAGE_FOLDER) $(BINARY_NAME)
-	find . -name "*_enumer.go" -delete # remove generated files
+	find . -name "*_generated.go" -delete # remove generated files
 
 update-dependencies: ## update golang dependencies
 	go mod vendor
