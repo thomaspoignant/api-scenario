@@ -4,6 +4,7 @@ import (
 	"strings"
 	"sync"
 )
+
 // context is a key value store where we keep all the variable name and replacement string.
 type context struct {
 	variables map[string]string

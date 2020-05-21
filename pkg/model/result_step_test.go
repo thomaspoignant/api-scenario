@@ -29,10 +29,10 @@ func Test_ResultStepIsSuccess_Request_Success(t *testing.T) {
 	resStep := model.ResultStep{
 		StepType: model.RequestStep,
 		VariableCreated: []model.ResultVariable{
-			{ Err: nil },
+			{Err: nil},
 		},
 		VariableApplied: []model.ResultVariable{
-			{ Err: nil },
+			{Err: nil},
 		},
 		Assertion: []model.ResultAssertion{
 			{Success: true},
@@ -47,10 +47,10 @@ func Test_ResultStepIsSuccess_Request_AssertionFailed(t *testing.T) {
 	resStep := model.ResultStep{
 		StepType: model.RequestStep,
 		VariableCreated: []model.ResultVariable{
-			{ Err: nil },
+			{Err: nil},
 		},
 		VariableApplied: []model.ResultVariable{
-			{ Err: nil },
+			{Err: nil},
 		},
 		Assertion: []model.ResultAssertion{
 			{Success: false},
@@ -65,10 +65,10 @@ func Test_ResultStepIsSuccess_Request_VariableCreatedFailed(t *testing.T) {
 	resStep := model.ResultStep{
 		StepType: model.RequestStep,
 		VariableCreated: []model.ResultVariable{
-			{ Err: fmt.Errorf("random error") },
+			{Err: fmt.Errorf("random error")},
 		},
 		VariableApplied: []model.ResultVariable{
-			{ Err: nil },
+			{Err: nil},
 		},
 		Assertion: []model.ResultAssertion{
 			{Success: true},
@@ -83,11 +83,11 @@ func Test_ResultStepIsSuccess_Request_VariableAppliedFailed(t *testing.T) {
 	resStep := model.ResultStep{
 		StepType: model.RequestStep,
 		VariableCreated: []model.ResultVariable{
-			{ Err: nil },
+			{Err: nil},
 		},
 		VariableApplied: []model.ResultVariable{
 
-			{ Err: fmt.Errorf("random error") },
+			{Err: fmt.Errorf("random error")},
 		},
 		Assertion: []model.ResultAssertion{
 			{Success: true},

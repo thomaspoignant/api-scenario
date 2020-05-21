@@ -72,16 +72,15 @@ func (req *Request) AddHeadersFromFlags() {
 	}
 }
 
-
-func (req *Request) displayUrl() string{
+func (req *Request) displayUrl() string {
 	params := ""
 	for key, value := range req.QueryParams {
-		if len(params) == 0{
+		if len(params) == 0 {
 			params += "?"
 		} else {
 			params += "&"
 		}
-		params += fmt.Sprintf("%s=%s",key, value)
+		params += fmt.Sprintf("%s=%s", key, value)
 	}
 	return req.BaseURL + params
 }

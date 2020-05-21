@@ -29,4 +29,3 @@ func Test_ShouldTrimTokenWithBearer(t *testing.T) {
 	got := util.AddBearerPrefix("   Bearer Token123    ")
 	test.Equals(t, "Should trim before checking if started with Bearer", want, got)
 }
-
