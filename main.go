@@ -6,9 +6,9 @@ import (
 )
 
 // VersionString is the current version of the cli. It is override im the make file during the build.
-var version = "unset"
-var commit = "unset"
-var date = "unset"
+var version = "dev"
+var commit = "none"
+var date = "unknown"
 
 func main() {
 	viper.Set("version", version)

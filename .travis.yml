@@ -1,11 +1,18 @@
 language: go
 go:
-  - "1.14"
+- '1.14'
+
+env:
+  global:
+    # Github token
+    secure: IWhNZ+S7m6dBBTCi9r8wehOhOiY4QyGN17iuJZv2k8Cnq/npUmyQAGnXke2T8Rm3bdAZMzJcgl1t/ooHuhBfgIhmo284o+IL4KOm3Wigept1srRBNjDunuWXWYALD3/jANXyzPUfOHx4RR/oDcuNe5X1xtmXgroAEKgZApVtQasY8YbJjy73hB8GEevm0PPCoDS7OQaNCc13SGz3SqsLdDM4hLlbrCWfSqjHl2VvyUs6wxKmQH/4ecCwfKyCxY1IWe6thUpm62wcAhtUIqYTB97vSKV/rHLqrsZBzf3bNQEa0glf+K6Lkqf3aNC5qij/2//HGOj251POmoPnDyzip6DUh+q9OlaW61ub6esI1Ar0a4QsezF/Z21H2DQYY4HLFxnZCMGQyC5UckKWm8cm8q2YE3GKSYiid+Cc6gr+n4kFxtEKCm/+VeJGFzBFqqESC1Ihhe6NdNzjpE5dUq/dgCDnHINpj4RuTK0QZ+vTMHBc/K/YukPq4PGa1oCUaH+OTf24BV3oRsJZHWELpueBCNCdDiP0i6jOY8j6ZpJVRgSdsmoBnayFrEGYoghacGPMTANsN26X9rdri4463hHfqpLXnyz5rYjEbVQ4S3tZ09z6Em5hVg5D2IgdF0iU6euZz+m1pNQi6eUTJHpB+7/bp53r+sMWWjUrd/t+RUGTD88=
+
 before_install:
   - go get github.com/mattn/goveralls
   - go get golang.org/x/lint/golint
   - make update-dependencies
   - make generate
+
 script:
   - make coverage
   # - $GOPATH/bin/goveralls -coverprofile=.coverage/profile.cov -service=travis-ci
