@@ -14,6 +14,9 @@ locally your development.
 ---
 
 - [Why this project?](#why-this-project)
+- [Command line usage](#command-line-usage)
+  - [Version](#version)
+  - [Execute your scenario](#execute-your-scenario)
 - [Creating Your First Test](#creating-your-first-test)
   - [The basic structure of the file](#the-basic-structure-of-the-file)
   - [Our first step](#our-first-step)
@@ -41,6 +44,34 @@ You can create a scenario and start using it during development, but also use it
 You can use variables in your scenario, so you are sure to run the same test suite on each environment and be sure of 
 your release.
  
+---
+# Command line usage
+
+## Version
+```shell script
+$ api-scenario version
+# 0.1.0
+```
+
+## Execute your scenario
+To execute your scenario please use the `run` options and specify your scenario file.
+
+```shell script
+$ api-scenario run --scenario="./scenario.json"
+```
+
+There are several options you can use with this command:
+
+|Option                  |Short version  | Required |Description  |
+|---                     |---            |---       |---
+|`--scenario`            | `-s`          |✓         |Input file for the scenario.
+|`--authorization-token` | `-t`          |          |Authorization token send in the Authorization headers.
+|`--header`              | `-h`          |          |Header you want to override (format should be "**header_name:value**").<br>*You can have multiple values of this options*
+|`--variable`            | `-h`          |          |Value for a variable used in your scenario (format should be "variable_name:value").<br>*You can have multiple values of this options*
+|`--verbose`            | `-s`          |          |Run your scenario with debug information.
+|`--quiet`              | `-s`          |          |Run your scenario in quiet mode.
+|`--no-color`           |               |          |Do not display color on the output
+
 ---
 # Creating Your First Test
 Creating a test is simple, you just have to write `json` file to describe you api calls, and describe assertions.
