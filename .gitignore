@@ -33,4 +33,4 @@ api-scenario
 .coverage
 
 # release
-./dist
+dist/

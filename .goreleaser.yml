@@ -23,3 +23,15 @@ changelog:
     - '^docs:'
     - '^test:'
     - '^examples:'
+
+brews:
+  -
+    # Github repository to push the tap to.
+    github:
+      owner: thomaspoignant
+      name: homebrew-tap
+
+    caveats: "Run api-scenario --help to see usage."
+    homepage: "https://github.com/thomaspoignant/api-scenario"
+    description: "Scenario API testing from the command line."
+    skip_upload: auto
