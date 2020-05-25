@@ -3,7 +3,9 @@ package model
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/ghodss/yaml"
 	"io/ioutil"
+	"strings"
 
 	"github.com/sirupsen/logrus"
 )
@@ -47,11 +49,17 @@ func InitScenarioFromFile(inputFile string) (Scenario, error) {
 
 	// Unmarshall file to launch the scenario.
 	data := Scenario{}
-	err = json.Unmarshal([]byte(file), &data)
+
+	// Check if we have a yaml or json scenario
+	if strings.HasSuffix(inputFile, ".yml") ||strings.HasSuffix(inputFile, ".yaml") {
+		err = yaml.Unmarshal([]byte(file), &data)
+	} else {
+		err = json.Unmarshal([]byte(file), &data)
+	}
+
 	if err != nil {
 		return Scenario{}, fmt.Errorf("Impossible to read file: %s\n%v", inputFile, err)
 	}
-
 	return data, nil
 }
 
