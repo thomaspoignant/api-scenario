@@ -78,6 +78,18 @@ Creating a test is simple, you just have to write `json` or `yaml` file to descr
 
 ## The basic structure of the file
 <details>
+<summary><b>YAML</b></summary>
+  
+  ```yaml
+  name: Simple API Test Example
+ description: A full description ...
+ version: '1.0'
+ steps:
+     - ...
+  ```
+</details>
+
+<details>
  <summary><b>JSON</b></summary>
   
   ```json
@@ -92,20 +104,6 @@ Creating a test is simple, you just have to write `json` or `yaml` file to descr
   ```
 </details>
 
-<details>
-<summary><b>YAML</b></summary>
-  
-  ```yaml
-  name: Simple API Test Example
- description: A full description ...
- version: '1.0'
- steps:
-     - ...
-  ```
-</details>  
-
-
-
 This global fields allow to describe your scenario:
 - **name**: The name of your scenario
 - **description**: A complete description of what your scenario is doing
@@ -114,6 +112,23 @@ This global fields allow to describe your scenario:
 
 ## Our first step
 For our first step we will create a basic call who verify that an API answer with http code `200` when calling it.
+
+<details>
+<summary><b>YAML</b></summary>
+  
+  ```yaml
+  - step_type: request
+    url: {{baseUrl}}/api/users
+    method: GET
+    headers:
+      Content-Type:
+        - application/json
+    assertions:
+      - comparison: equal_number
+        value: '200'
+        source: response_status
+  ```
+</details>
 
 <details>
  <summary><b>JSON</b></summary>
@@ -134,23 +149,6 @@ For our first step we will create a basic call who verify that an API answer wit
       }
     ]
   }
-  ```
-</details>
-
-<details>
-<summary><b>YAML</b></summary>
-  
-  ```yaml
-  - step_type: request
-    url: {{baseUrl}}/api/users
-    method: GET
-    headers:
-      Content-Type:
-        - application/json
-    assertions:
-      - comparison: equal_number
-        value: '200'
-        source: response_status
   ```
 </details>
 
@@ -191,6 +189,15 @@ This is useful when you have asynchronous API and allows waiting before calling 
 
 **Example:** _Wait for 5 seconds_
 <details>
+<summary><b>YAML</b></summary>
+  
+  ```yaml
+  - step_type: pause
+    duration: 5
+  ```
+</details>
+
+<details>
  <summary><b>JSON</b></summary>
   
 ```json
@@ -199,15 +206,6 @@ This is useful when you have asynchronous API and allows waiting before calling 
   "duration": 5
 }
 ```
-</details>
-
-<details>
-<summary><b>YAML</b></summary>
-  
-  ```yaml
-  - step_type: pause
-    duration: 5
-  ```
 </details>
 
 ## Request
@@ -230,6 +228,20 @@ You can use variables in the headers, they will be replaced before sending the r
 
 **Example:**
 <details>
+<summary><b>YAML</b></summary>
+  
+  ```yaml
+headers:
+      Accept-Charset:
+        - utf-8
+      Accept: 
+        - application/scim+json
+      Authorization:
+        - "{{auth}}"
+  ```
+</details>
+
+<details>
  <summary><b>JSON</b></summary>
   
 ```json
@@ -249,20 +261,6 @@ You can use variables in the headers, they will be replaced before sending the r
 ```
 </details>
 
-<details>
-<summary><b>YAML</b></summary>
-  
-  ```yaml
-headers:
-      Accept-Charset:
-        - utf-8
-      Accept: 
-        - application/scim+json
-      Authorization:
-        - "{{auth}}"
-  ```
-</details>
-
 ### Assertions
 Assertions are a big part of api-scenario, this is the acceptance tests of your request, it will allow you to simply write test to verify that you endpoint is doing what you want.
 
@@ -278,6 +276,17 @@ Assertions are a big part of api-scenario, this is the acceptance tests of your 
 
 **Example:**
 <details>
+<summary><b>YAML</b></summary>
+  
+  ```yaml
+ - comparison: equals
+        property: schemas
+        value: User
+        source: response_json
+  ```
+</details>
+
+<details>
  <summary><b>JSON</b></summary>
   
 ```json
@@ -288,17 +297,6 @@ Assertions are a big part of api-scenario, this is the acceptance tests of your 
   "source": "response_json"
 }
 ```
-</details>
-
-<details>
-<summary><b>YAML</b></summary>
-  
-  ```yaml
- - comparison: equals
-        property: schemas
-        value: User
-        source: response_json
-  ```
 </details>
 
 #### Available comparison type
@@ -331,6 +329,17 @@ To create a variable, add a `variables` block to your step and specify the locat
 from the response, and the **name** of this variable.
 
 <details>
+<summary><b>YAML</b></summary>
+  
+  ```yaml
+    variables:
+      - source: response_json
+        property: point
+        name: active
+  ```
+</details>
+
+<details>
  <summary><b>JSON</b></summary>
   
 ```json
@@ -344,17 +353,6 @@ from the response, and the **name** of this variable.
   ]
 }
 ```
-</details>
-
-<details>
-<summary><b>YAML</b></summary>
-  
-  ```yaml
-    variables:
-      - source: response_json
-        property: point
-        name: active
-  ```
 </details>
 
 **A variable is:**
