@@ -77,7 +77,7 @@ There are several options you can use with this command:
 Creating a test is simple, you just have to write `json` or `yaml` file to describe you api calls, and describe assertions.
 
 ## The basic structure of the file
-<details>
+<details open>
 <summary><b>YAML</b></summary>
   
   ```yaml
@@ -113,7 +113,7 @@ This global fields allow to describe your scenario:
 ## Our first step
 For our first step we will create a basic call who verify that an API answer with http code `200` when calling it.
 
-<details>
+<details open>
 <summary><b>YAML</b></summary>
   
   ```yaml
@@ -188,7 +188,7 @@ This is useful when you have asynchronous API and allows waiting before calling 
 |**duration**       | Number of seconds to wait.
 
 **Example:** _Wait for 5 seconds_
-<details>
+<details open>
 <summary><b>YAML</b></summary>
   
   ```yaml
@@ -227,7 +227,7 @@ Each header is has the name of the header for key and an array of strings as val
 You can use variables in the headers, they will be replaced before sending the request _(see [Using Variables to Pass Data Between Steps](#using-variables-to-pass-data-between-steps) or [Global Variables](#global-variables))_.
 
 **Example:**
-<details>
+<details open>
 <summary><b>YAML</b></summary>
   
   ```yaml
@@ -275,7 +275,7 @@ Assertions are a big part of api-scenario, this is the acceptance tests of your 
 
 
 **Example:**
-<details>
+<details open>
 <summary><b>YAML</b></summary>
   
   ```yaml
@@ -328,7 +328,7 @@ Request steps can define variables that extract data from HTTP responses returne
 To create a variable, add a `variables` block to your step and specify the location of the data you'd like to extract 
 from the response, and the **name** of this variable.
 
-<details>
+<details open>
 <summary><b>YAML</b></summary>
   
   ```yaml
