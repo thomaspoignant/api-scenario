@@ -237,7 +237,7 @@ headers:
       Accept: 
         - application/scim+json
       Authorization:
-        - "{{auth}}"
+        - {{auth}}
   ```
 </details>
 
