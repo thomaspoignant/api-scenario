@@ -51,7 +51,7 @@ func InitScenarioFromFile(inputFile string) (Scenario, error) {
 	data := Scenario{}
 
 	// Check if we have a yaml or json scenario
-	if strings.HasSuffix(inputFile, ".yml") ||strings.HasSuffix(inputFile, ".yaml") {
+	if strings.HasSuffix(inputFile, ".yml") || strings.HasSuffix(inputFile, ".yaml") {
 		err = yaml.Unmarshal([]byte(file), &data)
 	} else {
 		err = json.Unmarshal([]byte(file), &data)

@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func Test_PauseStep (t *testing.T) {
+func Test_PauseStep(t *testing.T) {
 	step := model.Step{
 		StepType: model.Pause,
 		Duration: 1,
@@ -28,7 +28,7 @@ func Test_OutputPause(t *testing.T) {
 		Duration: 1,
 	}
 	want := "------------------------\nWaiting for 1s\n"
-	got := test.CaptureOutput(func(){
+	got := test.CaptureOutput(func() {
 		step.Run()
 	})
 	test.Equals(t, "Output messages are different", want, got)

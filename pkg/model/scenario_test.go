@@ -11,9 +11,9 @@ func TestInitScenarioFromFile(t *testing.T) {
 	}
 
 	expected := Scenario{
-		Name: "Simple API Test Example",
+		Name:        "Simple API Test Example",
 		Description: "A full description ...",
-		Version: "1.0",
+		Version:     "1.0",
 		Steps: []Step{
 			{
 				StepType: Pause,
@@ -21,13 +21,13 @@ func TestInitScenarioFromFile(t *testing.T) {
 			},
 			{
 				StepType: RequestStep,
-				Method: "GET",
-				URL: "https://reqres.in/api/users",
+				Method:   "GET",
+				URL:      "https://reqres.in/api/users",
 				Variables: []Variable{
 					{
-						Source: ResponseJson,
+						Source:   ResponseJson,
 						Property: "data[0].id",
-						Name: "user_id",
+						Name:     "user_id",
 					},
 				},
 				Headers: map[string][]string{
@@ -36,8 +36,8 @@ func TestInitScenarioFromFile(t *testing.T) {
 				Assertions: []Assertion{
 					{
 						Comparison: EqualNumber,
-						Value: "200",
-						Source: ResponseStatus,
+						Value:      "200",
+						Source:     ResponseStatus,
 					},
 				},
 			},
