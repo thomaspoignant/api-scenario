@@ -164,7 +164,7 @@ We manipulate different concepts here.
     - **source**: On what part of the response we are looking, here we are checking the response status.
 
 
-Now the first scenario is build, we can run it _([see complete scenario](examples/first-test.json))_.
+Now the first scenario is build, we can run it _(see complete scenario:  [YAML](examples/first-test.yml) / [JSON](examples/first-test.json))_.
 ```shell script
 $ api-scenario run --scenario="examples/first-test.json" --variable="baseUrl:https://reqres.in"
 ```
