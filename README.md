@@ -74,19 +74,35 @@ There are several options you can use with this command:
 
 ---
 # Creating Your First Test
-Creating a test is simple, you just have to write `json` file to describe you api calls, and describe assertions.
+Creating a test is simple, you just have to write `json` or `yaml` file to describe you api calls, and describe assertions.
 
 ## The basic structure of the file
-```
-{
-  "name": "Simple API Test Example",
-  "description": "A full description of your test scenario",
-  "version": "1.0",
-  "steps": [
-    ...
-  ]
-}
-```
+<details open>
+<summary><b>YAML</b></summary>
+  
+  ```yaml
+  name: Simple API Test Example
+ description: A full description ...
+ version: '1.0'
+ steps:
+     - ...
+  ```
+</details>
+
+<details>
+ <summary><b>JSON</b></summary>
+  
+  ```json
+  {
+   "name": "Simple API Test Example",
+   "description": "A full description of your test scenario",
+   "version": "1.0",
+   "steps": [
+     ...
+   ]
+ }
+  ```
+</details>
 
 This global fields allow to describe your scenario:
 - **name**: The name of your scenario
@@ -96,23 +112,46 @@ This global fields allow to describe your scenario:
 
 ## Our first step
 For our first step we will create a basic call who verify that an API answer with http code `200` when calling it.
-```json
-{
-  "step_type": "request",
-  "url": "{{baseUrl}}/api/users",
-  "method": "GET",
-  "headers": {
-    "Content-Type": ["application/json"]
-  },
-  "assertions": [
-    {
-      "comparison": "equal_number",
-      "value": "200",
-      "source": "response_status"
-    }
-  ]
-}
-```
+
+<details open>
+<summary><b>YAML</b></summary>
+  
+  ```yaml
+  - step_type: request
+    url: {{baseUrl}}/api/users
+    method: GET
+    headers:
+      Content-Type:
+        - application/json
+    assertions:
+      - comparison: equal_number
+        value: '200'
+        source: response_status
+  ```
+</details>
+
+<details>
+ <summary><b>JSON</b></summary>
+  
+  ```json
+  {
+    "step_type": "request",
+    "url": "{{baseUrl}}/api/users",
+    "method": "GET",
+    "headers": {
+      "Content-Type": ["application/json"]
+    },
+    "assertions": [
+      {
+        "comparison": "equal_number",
+        "value": "200",
+        "source": "response_status"
+      }
+    ]
+  }
+  ```
+</details>
+
 We manipulate different concepts here.
 - **step_type**: The type of the step, here we are using request because we want to test a rest 
     API _(see [steps](#steps) to see the list of available step types)_.
@@ -149,12 +188,25 @@ This is useful when you have asynchronous API and allows waiting before calling 
 |**duration**       | Number of seconds to wait.
 
 **Example:** _Wait for 5 seconds_
+<details open>
+<summary><b>YAML</b></summary>
+  
+  ```yaml
+  - step_type: pause
+    duration: 5
+  ```
+</details>
+
+<details>
+ <summary><b>JSON</b></summary>
+  
 ```json
 {
   "step_type": "pause",
   "duration": 5
 }
-```  
+```
+</details>
 
 ## Request
 **`request`** is the step who can call a REST Api.  
@@ -175,6 +227,23 @@ Each header is has the name of the header for key and an array of strings as val
 You can use variables in the headers, they will be replaced before sending the request _(see [Using Variables to Pass Data Between Steps](#using-variables-to-pass-data-between-steps) or [Global Variables](#global-variables))_.
 
 **Example:**
+<details open>
+<summary><b>YAML</b></summary>
+  
+  ```yaml
+headers:
+      Accept-Charset:
+        - utf-8
+      Accept: 
+        - application/scim+json
+      Authorization:
+        - "{{auth}}"
+  ```
+</details>
+
+<details>
+ <summary><b>JSON</b></summary>
+  
 ```json
 {
   "headers": {
@@ -190,6 +259,7 @@ You can use variables in the headers, they will be replaced before sending the r
     }
 }
 ```
+</details>
 
 ### Assertions
 Assertions are a big part of api-scenario, this is the acceptance tests of your request, it will allow you to simply write test to verify that you endpoint is doing what you want.
@@ -205,6 +275,20 @@ Assertions are a big part of api-scenario, this is the acceptance tests of your 
 
 
 **Example:**
+<details open>
+<summary><b>YAML</b></summary>
+  
+  ```yaml
+ - comparison: equals
+        property: schemas
+        value: User
+        source: response_json
+  ```
+</details>
+
+<details>
+ <summary><b>JSON</b></summary>
+  
 ```json
 {
   "comparison": "equals",
@@ -213,6 +297,7 @@ Assertions are a big part of api-scenario, this is the acceptance tests of your 
   "source": "response_json"
 }
 ```
+</details>
 
 #### Available comparison type
 
@@ -243,6 +328,20 @@ Request steps can define variables that extract data from HTTP responses returne
 To create a variable, add a `variables` block to your step and specify the location of the data you'd like to extract 
 from the response, and the **name** of this variable.
 
+<details open>
+<summary><b>YAML</b></summary>
+  
+  ```yaml
+    variables:
+      - source: response_json
+        property: point
+        name: active
+  ```
+</details>
+
+<details>
+ <summary><b>JSON</b></summary>
+  
 ```json
 {
   "variables": [
@@ -254,6 +353,8 @@ from the response, and the **name** of this variable.
   ]
 }
 ```
+</details>
+
 **A variable is:**
 
 |                   |  |

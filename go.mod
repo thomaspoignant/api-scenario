@@ -6,6 +6,7 @@ require (
 	github.com/alvaroloes/enumer v1.1.2 // indirect
 	github.com/fatih/color v1.9.0
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
+	github.com/ghodss/yaml v1.0.0
 	github.com/google/go-cmp v0.4.0
 	github.com/google/uuid v1.1.1
 	github.com/jmoiron/jsonq v0.0.0-20150511023944-e874b168d07e

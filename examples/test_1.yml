@@ -1,0 +1,51 @@
+---
+name: Simple API Test Example
+description: A full description ...
+version: '1.0'
+steps:
+  - step_type: pause
+    duration: 1
+  - url: https://reqres.in/api/users
+    method: GET
+    step_type: request
+    note: Test user endpoint
+    variables:
+      - source: response_json
+        property: data[0].id
+        name: user_id
+    headers:
+      Content-Type:
+        - application/json
+    assertions:
+      - comparison: equal_number
+        value: '200'
+        source: response_status
+      - comparison: equal
+        property: page
+        value: '1'
+        source: response_json
+      - comparison: equal
+        property: content-type
+        value: application/json; charset=utf-8
+        source: response_header
+  - step_type: pause
+    duration: 1
+  - url: https://reqres.in/api/users
+    method: POST
+    body: '{"data":{"name_{{timestamp}}": "paul rudd","movies":["I Love You Man", "Role
+    Models"]}}'
+    step_type: request
+    assertions: []
+  - step_type: pause
+    duration: 1
+  - url: https://reqres.in/api/users/{{user_id}}
+    method: GET
+    step_type: request
+    assertions:
+      - comparison: equal_number
+        value: '200'
+        source: response_status
+      - comparison: is_greater_than
+        property: data.id
+        value: '0'
+        source: response_json
