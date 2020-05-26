@@ -7,7 +7,7 @@ import (
 	"github.com/thomaspoignant/api-scenario/pkg/log"
 )
 
-type ResultAssertion struct {
+type  ResultAssertion struct {
 	Success  bool
 	Source   Source
 	Property string

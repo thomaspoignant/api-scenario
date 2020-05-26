@@ -6,8 +6,6 @@ import (
 	"github.com/ghodss/yaml"
 	"io/ioutil"
 	"strings"
-
-	"github.com/sirupsen/logrus"
 )
 
 type Scenario struct {
@@ -18,29 +16,7 @@ type Scenario struct {
 	Description string `json:"description"`
 }
 
-func (scenario *Scenario) Run() ScenarioResult {
-	result := ScenarioResult{
-		Name:        scenario.Name,
-		Description: scenario.Description,
-		Version:     scenario.Version,
-		StepResults: []ResultStep{},
-	}
-
-	logrus.Infof("Running api-scenario: %s (%s)", scenario.Name, scenario.Version)
-	logrus.Infof("%s\n", scenario.Description)
-
-	for _, step := range scenario.Steps {
-		stepRes, err := step.Run()
-		if err != nil {
-			logrus.Fatalf("impossible to execute the step: %v\n%v", err, step)
-			break
-		}
-		result.StepResults = append(result.StepResults, stepRes)
-	}
-
-	return result
-}
-
+// InitScenarioFromFile creates a scenario from the input file.
 func InitScenarioFromFile(inputFile string) (Scenario, error) {
 	file, err := ioutil.ReadFile(inputFile)
 	if err != nil {
@@ -61,20 +37,4 @@ func InitScenarioFromFile(inputFile string) (Scenario, error) {
 		return Scenario{}, fmt.Errorf("Impossible to read file: %s\n%v", inputFile, err)
 	}
 	return data, nil
-}
-
-type ScenarioResult struct {
-	Name        string       `json:"name"`
-	Version     string       `json:"version"`
-	Description string       `json:"description"`
-	StepResults []ResultStep `json:step_results`
-}
-
-func (scenario *ScenarioResult) IsSuccess() bool {
-	for _, stepResult := range scenario.StepResults {
-		if !stepResult.IsSuccess() {
-			return false
-		}
-	}
-	return true
 }

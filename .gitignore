@@ -21,6 +21,7 @@ vendor/
 # We don't want to commit generated files, we rebuild them on each build.
 *_enumer.go
 *_generated.go
+*_gen.go
 
 # OS X files
 .DS_Store
