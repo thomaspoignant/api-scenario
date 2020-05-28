@@ -5,6 +5,7 @@ import (
 	"github.com/thomaspoignant/api-scenario/pkg/controller"
 	"github.com/thomaspoignant/api-scenario/pkg/model"
 	"github.com/thomaspoignant/api-scenario/test"
+	"strings"
 	"testing"
 )
 
@@ -116,6 +117,6 @@ func Test_Scenario_Impossible(t *testing.T) {
 	test.Equals(t, "There is no error scenario should be a success", true, got.IsSuccess())
 	test.Equals(t, "Should not have step results cause it is ignored", 0, len(got.StepResults))
 
-	wantedOutput := "Running api-scenario: Test Scenario (1.0)\nThis is a test scenario\n\nimpossible to execute the step: RequestXXX is an invalid step_type\n{pause  [] [] {}  map[] []  5  {}}\n"
-	test.Equals(t, "Output should be equals", wantedOutput, output)
+	wantedPrefix := "Running api-scenario: Test Scenario (1.0)\nThis is a test scenario\n\nimpossible to execute the step: RequestXXX is an invalid step_type"
+	test.Assert(t, strings.HasPrefix(output, wantedPrefix), "Output should starts with %v and got %v", wantedPrefix, output)
 }
