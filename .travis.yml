@@ -9,4 +9,4 @@ before_install:
   - make generate
 script:
   - make coverage
-  # - $GOPATH/bin/goveralls -coverprofile=.coverage/profile.cov -service=travis-ci
+  - $GOPATH/bin/goveralls -coverprofile=.coverage/profile.cov -service=travis-ci
