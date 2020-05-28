@@ -6,6 +6,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/thomaspoignant/api-scenario/badge.svg)](https://coveralls.io/github/thomaspoignant/api-scenario)
 ![Release version](https://img.shields.io/github/v/release/thomaspoignant/api-scenario "Release version")
 ![Go version](https://img.shields.io/github/go-mod/go-version/thomaspoignant/api-scenario?logo=go%20version "Go Version")
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fthomaspoignant%2Fapi-scenario.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fthomaspoignant%2Fapi-scenario?ref=badge_shield)
  
 API-scenario is a simple command line tool that allow you to execute easily a scenario to test your APIs.  
 
