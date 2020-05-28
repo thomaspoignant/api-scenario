@@ -4,6 +4,7 @@ go:
 before_install:
   - go get github.com/mattn/goveralls
   - go get golang.org/x/lint/golint
+  - go get github.com/google/wire/cmd/wire
   - make update-dependencies
   - make generate
 script:
