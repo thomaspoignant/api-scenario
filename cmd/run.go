@@ -4,8 +4,9 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/thomaspoignant/api-scenario/pkg/context"
+	"github.com/thomaspoignant/api-scenario/pkg/controller"
 	"github.com/thomaspoignant/api-scenario/pkg/model"
-	"github.com/thomaspoignant/api-scenario/pkg/model/context"
 	"github.com/thomaspoignant/api-scenario/pkg/util"
 	"os"
 	"strings"
@@ -45,7 +46,13 @@ var runCmd = &cobra.Command{
 		}
 
 		// run the scenario
-		res := scenario.Run()
+		ctrl, err := controller.InitializeScenarioController()
+		if err != nil {
+			logrus.Error(err)
+			os.Exit(1)
+		}
+
+		res := ctrl.Run(scenario)
 		if !res.IsSuccess() {
 			os.Exit(1)
 		}

@@ -8,7 +8,7 @@ import (
 
 type ResultVariableType int
 
-//go:generate enumer -type=ResultVariableType -json -linecomment -output resultvariabletype_generated.go
+//go:generate enumer -type=ResultVariableType -json -linecomment -output resultvariabletype_gen.go
 const (
 	Created ResultVariableType = iota //Variable
 	Used                              //Set

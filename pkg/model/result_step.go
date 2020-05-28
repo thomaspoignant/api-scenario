@@ -1,6 +1,7 @@
 package model
 
 import (
+	"github.com/sendgrid/rest"
 	"time"
 )
 
@@ -11,8 +12,8 @@ type ResultStep struct {
 	Warning  string
 
 	// Specific for type request
-	request         Request
-	response        Response
+	Request         rest.Request
+	Response        Response
 	Assertion       []ResultAssertion
 	VariableApplied []ResultVariable
 	VariableCreated []ResultVariable
