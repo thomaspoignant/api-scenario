@@ -84,6 +84,11 @@ func Test_request_valid(t *testing.T) {
 				// if variable has no name we ignore it
 				Name: "",
 			},
+			{
+				Source: model.ResponseHeader,
+				Name: "response_header",
+				Property: "Content-Type",
+			},
 		},
 		Assertions: []model.Assertion{
 			{
@@ -118,5 +123,5 @@ func Test_request_valid(t *testing.T) {
 	test.Equals(t, "Should have 1 assertion", 1, len(got.Assertion))
 	test.Equals(t, "Should have valid assertion", true, got.Assertion[0].Success)
 	test.Equals(t, "Should have apply 4 variables", 4, len(got.VariableApplied))
-	test.Equals(t, "Should have create 5 variable", 5, len(got.VariableCreated))
+	test.Equals(t, "Should have create 6 variables", 6, len(got.VariableCreated))
 }

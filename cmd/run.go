@@ -66,7 +66,7 @@ func addVariableToContext(variables []string) {
 		splitStr := strings.SplitN(variable, separator, 2)
 		if len(splitStr) <= 1 {
 			logrus.Errorf("Wrong format for parameter %s, it should be \"Key:value\", this parameter is ignored.", variable)
-			break
+			continue
 		}
 		context.GetContext().Add(strings.TrimSpace(splitStr[0]), strings.TrimSpace(splitStr[1]))
 	}
@@ -80,7 +80,7 @@ func formatHeadersForConfig(headers []string, token string) map[string]string {
 		splitStr := strings.SplitN(header, separator, 2)
 		if len(splitStr) <= 1 {
 			logrus.Errorf("Wrong format for parameter %s, it should be \"Key:value\", this parameter is ignored.", header)
-			break
+			continue
 		}
 		res[strings.TrimSpace(splitStr[0])] = strings.TrimSpace(splitStr[1])
 	}

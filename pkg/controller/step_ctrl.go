@@ -138,7 +138,7 @@ func attachVariablesToContext(response model.Response, vars []model.Variable) []
 
 	for _, variable := range vars {
 		if len(variable.Name) == 0 {
-			break
+			continue
 		}
 
 		switch variable.Source {
@@ -152,6 +152,15 @@ func attachVariablesToContext(response model.Response, vars []model.Variable) []
 			value := fmt.Sprintf("%v", response.StatusCode)
 			context.GetContext().Add(variable.Name, value)
 			result = append(result, model.ResultVariable{Key: variable.Name, NewValue: value, Type:  model.Created})
+			break
+
+		case model.ResponseHeader:
+			header := response.Header[variable.Property]
+			if header != nil && len(header)>0 {
+				// TODO: Works fine if we have only one value for the header
+				context.GetContext().Add(variable.Name, header[0])
+				result = append(result, model.ResultVariable{Key: variable.Name, NewValue: header[0], Type:  model.Created})
+			}
 			break
 
 		case model.ResponseJson:
