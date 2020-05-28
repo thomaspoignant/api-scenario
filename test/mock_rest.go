@@ -12,7 +12,11 @@ func (c *ClientMock) Send(request rest.Request) (*rest.Response, error) {
 
 	if request.QueryParams["testNumber"] == "1" {
 		return &rest.Response{
-			Body: `{"hello":"world"}`,
+			Body: `{
+					"hello":"world",
+					"param1":true,
+					"param2":123
+					}`,
 			StatusCode: 200,
 			Headers: map[string][]string{
 				"Content-Type": {"application/json"},

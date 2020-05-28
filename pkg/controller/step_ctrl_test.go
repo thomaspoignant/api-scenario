@@ -42,7 +42,7 @@ func Test_OutputPause(t *testing.T) {
 }
 
 // Request
-func Test_request(t *testing.T) {
+func Test_request_valid(t *testing.T) {
 	test.SetupLog()
 	testNumber := "1"
 	sc := controller.NewStepController(&test.ClientMock{}, controller.NewAssertionController())
@@ -60,6 +60,29 @@ func Test_request(t *testing.T) {
 				Source: model.ResponseJson,
 				Property: "hello",
 				Name: "hello",
+			},
+			{
+				Source: model.ResponseJson,
+				Property: "param1",
+				Name: "param1",
+			},
+			{
+				Source: model.ResponseJson,
+				Property: "param2",
+				Name: "param2",
+			},
+			{
+				Source: model.ResponseStatus,
+				Name: "response_status",
+			},
+			{
+				Source: model.ResponseTime,
+				Name: "response_time",
+			},
+			{
+				Source: model.ResponseTime,
+				// if variable has no name we ignore it
+				Name: "",
 			},
 		},
 		Assertions: []model.Assertion{
@@ -95,5 +118,5 @@ func Test_request(t *testing.T) {
 	test.Equals(t, "Should have 1 assertion", 1, len(got.Assertion))
 	test.Equals(t, "Should have valid assertion", true, got.Assertion[0].Success)
 	test.Equals(t, "Should have apply 4 variables", 4, len(got.VariableApplied))
-	test.Equals(t, "Should have create 1 variable", 1, len(got.VariableCreated))
+	test.Equals(t, "Should have create 5 variable", 5, len(got.VariableCreated))
 }

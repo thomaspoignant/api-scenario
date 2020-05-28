@@ -33,7 +33,7 @@ func (s *scenarioControllerImpl) Run(scenario model.Scenario) model.ScenarioResu
 	for _, step := range scenario.Steps {
 		stepRes, err := s.stepController.Run(step)
 		if err != nil {
-			logrus.Fatalf("impossible to execute the step: %v\n%v", err, step)
+			logrus.Errorf("impossible to execute the step: %v\n%v", err, step)
 			break
 		}
 		result.StepResults = append(result.StepResults, stepRes)

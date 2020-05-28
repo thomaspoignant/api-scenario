@@ -42,6 +42,7 @@ func (sc *stepControllerImpl) Run(step model.Step) (model.ResultStep, error) {
 		return sc.request(step)
 
 	default:
+		// Cannot happen, all value tested
 		return model.ResultStep{}, fmt.Errorf("%s is an invalid step_type", step.StepType)
 	}
 }
@@ -197,7 +198,6 @@ func attachVariablesToContext(response model.Response, vars []model.Variable) []
 func convertAndPatchToHttpRequest(step model.Step) (rest.Request, []model.ResultVariable, error) {
 
 	var result []model.ResultVariable
-
 	baseUrl, queryParams, err := step.ExtractUrl()
 	if err != nil {
 		return rest.Request{}, result, err
