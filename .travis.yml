@@ -4,8 +4,9 @@ go:
 before_install:
   - go get github.com/mattn/goveralls
   - go get golang.org/x/lint/golint
+  - go get github.com/google/wire/cmd/wire
   - make update-dependencies
   - make generate
 script:
   - make coverage
-  # - $GOPATH/bin/goveralls -coverprofile=.coverage/profile.cov -service=travis-ci
+  - $GOPATH/bin/goveralls -coverprofile=.coverage/profile.cov -service=travis-ci
