@@ -3,6 +3,7 @@
 
 ![Work in progress](https://img.shields.io/badge/status-work%20in%20progress-red "Work in progress")
 [![Build Status](https://travis-ci.com/thomaspoignant/api-scenario.svg?token=sVd5BLjwtrGWjxxeoYSx&branch=master)](https://travis-ci.com/thomaspoignant/api-scenario)
+[![Coverage Status](https://coveralls.io/repos/github/thomaspoignant/api-scenario/badge.svg)](https://coveralls.io/github/thomaspoignant/api-scenario)
 ![Release version](https://img.shields.io/github/v/release/thomaspoignant/api-scenario "Release version")
 ![Go version](https://img.shields.io/github/go-mod/go-version/thomaspoignant/api-scenario?logo=go%20version "Go Version")
  
