@@ -24,12 +24,13 @@ script:
   - $GOPATH/bin/goveralls -coverprofile=.coverage/profile.cov -service=travis-ci
   - curl -sfL https://git.io/goreleaser | sh -s -- check # check goreleaser config for deprecations
 
+after_success:
+    - git reset --hard HEAD
+    - test -n "$TRAVIS_TAG" && docker login -u=thomaspoignant -p="$DOCKER_PASSWORD"
+
 deploy:
   - provider: script
     skip_cleanup: true
-    before_script:
-      - git reset --hard HEAD
-      - test -n "$TRAVIS_TAG" && docker login -u=thomaspoignant -p="$DOCKER_PASSWORD"
     script: curl -sL https://git.io/goreleaser | bash
     on:
       tags: true
