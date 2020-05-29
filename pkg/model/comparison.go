@@ -2,7 +2,7 @@ package model
 
 type Comparison int
 
-//go:generate enumer -type=Comparison -json -linecomment -output comparison_generated.go
+//go:generate enumer -type=Comparison -json -linecomment -output comparison_gen.go
 const (
 	EqualNumber          Comparison = iota //equal_number
 	Equal                                  //equal

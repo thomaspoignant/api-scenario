@@ -4,8 +4,9 @@ import (
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"github.com/thomaspoignant/api-scenario/pkg/context"
+	"github.com/thomaspoignant/api-scenario/pkg/controller"
 	"github.com/thomaspoignant/api-scenario/pkg/model"
-	"github.com/thomaspoignant/api-scenario/pkg/model/context"
 	"github.com/thomaspoignant/api-scenario/pkg/util"
 	"os"
 	"strings"
@@ -45,7 +46,13 @@ var runCmd = &cobra.Command{
 		}
 
 		// run the scenario
-		res := scenario.Run()
+		ctrl, err := controller.InitializeScenarioController()
+		if err != nil {
+			logrus.Error(err)
+			os.Exit(1)
+		}
+
+		res := ctrl.Run(scenario)
 		if !res.IsSuccess() {
 			os.Exit(1)
 		}
@@ -59,7 +66,7 @@ func addVariableToContext(variables []string) {
 		splitStr := strings.SplitN(variable, separator, 2)
 		if len(splitStr) <= 1 {
 			logrus.Errorf("Wrong format for parameter %s, it should be \"Key:value\", this parameter is ignored.", variable)
-			break
+			continue
 		}
 		context.GetContext().Add(strings.TrimSpace(splitStr[0]), strings.TrimSpace(splitStr[1]))
 	}
@@ -73,7 +80,7 @@ func formatHeadersForConfig(headers []string, token string) map[string]string {
 		splitStr := strings.SplitN(header, separator, 2)
 		if len(splitStr) <= 1 {
 			logrus.Errorf("Wrong format for parameter %s, it should be \"Key:value\", this parameter is ignored.", header)
-			break
+			continue
 		}
 		res[strings.TrimSpace(splitStr[0])] = strings.TrimSpace(splitStr[1])
 	}

@@ -20,6 +20,7 @@ clean:
 
 clean-all: clean ## remove all generated artifacts and clean all build artifacts
 	rm -rf docs vendor $(COVERAGE_FOLDER) $(BINARY_NAME)
+	find . -name "*_gen.go" -delete # remove generated files
 	find . -name "*_generated.go" -delete # remove generated files
 
 update-dependencies: ## update golang dependencies
@@ -28,6 +29,7 @@ update-dependencies: ## update golang dependencies
 generate:
 	$(GOGET) github.com/alvaroloes/enumer
 	$(GOCMD) generate ./...
+	wire ./...
 
 test: update-dependencies generate
 	$(GOTEST) -short -mod=vendor ./...
@@ -38,7 +40,7 @@ build: update-dependencies generate
 coverage:
 	mkdir -p .coverage/
 	$(GOTEST) -short -mod=vendor -coverprofile=.coverage/profile.cov.tmp ./...
-	cat .coverage/profile.cov.tmp | grep -v "_generated.go" > .coverage/profile.cov
+	cat .coverage/profile.cov.tmp | grep -v "_gen.go"> .coverage/profile.cov
 
 lint:
 	$(GOGET) golang.org/x/lint/golint

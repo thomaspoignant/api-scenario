@@ -1,0 +1,22 @@
+{
+  "name": "Simple API Test Example",
+  "description": "A full description of your test scenario",
+  "version": "1.0",
+  "steps": [
+    {
+      "step_type": "request",
+      "url": "{{baseUrl}}/api/users",
+      "method": "GET",
+      "headers": {
+        "Content-Type": ["application/json"]
+      },
+      "assertions": [
+        {
+          "comparison": "equal_number",
+          "value": "200",
+          "source": "response_status"
+        }
+      ]
+    }
+  ]
+}

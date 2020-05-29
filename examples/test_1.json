@@ -49,7 +49,7 @@
     {
       "url": "https://reqres.in/api/users",
       "method": "POST",
-      "body": "{\"data\":{\"name_{{timestamp}}\": \"paul rudd\",\"movies\":[\"I Love You Man\", \"Role Models\"]}}",
+      "body": "{\"data\":{\"name_{{timestamp}}_{{user_id}}\": \"paul rudd\",\"movies\":[\"I Love You Man\", \"Role Models\"]}}",
       "step_type": "request",
       "assertions": []
     },

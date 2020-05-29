@@ -38,7 +38,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.api-scenario.yaml)")
 	runCmd.PersistentFlags().BoolVarP(&quiet, "quiet", "q", false, "Run your scenario in quiet mode")
 	runCmd.PersistentFlags().BoolVar(&noColor, "no-color", false, "Do not display color on the output")
-	runCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Run your scenario in quiet mode")
+	runCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "Run your scenario with debug information")
 }
 
 // initConfig reads in config file and ENV variables if set.

@@ -1,6 +1,7 @@
 package model
 
 import (
+	"github.com/sendgrid/rest"
 	"time"
 )
 
@@ -8,11 +9,10 @@ type ResultStep struct {
 	// Common result for every step types
 	StepType StepType
 	StepTime time.Duration
-	Warning  string
 
 	// Specific for type request
-	request         Request
-	response        Response
+	Request         rest.Request
+	Response        Response
 	Assertion       []ResultAssertion
 	VariableApplied []ResultVariable
 	VariableCreated []ResultVariable
