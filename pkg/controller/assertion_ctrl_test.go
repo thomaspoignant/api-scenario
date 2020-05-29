@@ -2,6 +2,7 @@ package controller_test
 
 import (
 	"fmt"
+	"github.com/thomaspoignant/api-scenario/pkg/controller"
 	"github.com/thomaspoignant/api-scenario/pkg/model"
 	"github.com/thomaspoignant/api-scenario/pkg/util"
 	"github.com/thomaspoignant/api-scenario/test"
@@ -19,7 +20,7 @@ type expectedResult struct {
 }
 
 func te(t *testing.T, assertion model.Assertion, response model.Response, expected expectedResult) {
-	ctrl := NewAssertionController()
+	ctrl := controller.NewAssertionController()
 	got := ctrl.Assert(assertion, response)
 
 	if expected.err {
