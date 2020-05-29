@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"os"
+	"strings"
+
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
@@ -8,8 +11,6 @@ import (
 	"github.com/thomaspoignant/api-scenario/pkg/controller"
 	"github.com/thomaspoignant/api-scenario/pkg/model"
 	"github.com/thomaspoignant/api-scenario/pkg/util"
-	"os"
-	"strings"
 )
 
 var headers []string
@@ -24,7 +25,9 @@ func init() {
 	runCmd.Flags().StringArrayVarP(&headers, "header", "H", []string{}, "Header you want to override (format should be \"header_name:value\").")
 	runCmd.Flags().StringArrayVarP(&variables, "variable", "V", []string{}, "Value for a variable used in your scenario (format should be \"variable_name:value\").")
 	runCmd.Flags().StringVarP(&token, "authorization-token", "t", "", "Authorization token send in the Authorization headers.")
-	runCmd.MarkFlagRequired("scenario")
+	if err := runCmd.MarkFlagRequired("scenario"); err != nil {
+		panic(err)
+	}
 }
 
 var runCmd = &cobra.Command{

@@ -1,8 +1,9 @@
 package util_test
 
 import (
-	"github.com/thomaspoignant/api-scenario/pkg/util"
 	"testing"
+
+	"github.com/thomaspoignant/api-scenario/pkg/util"
 )
 
 func TestIsNumeric(t *testing.T) {

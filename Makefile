@@ -28,6 +28,7 @@ update-dependencies: ## update golang dependencies
 
 generate:
 	$(GOGET) github.com/alvaroloes/enumer
+	$(GOGET) github.com/google/wire/cmd/wire
 	$(GOCMD) generate ./...
 	wire ./...
 
@@ -43,5 +44,4 @@ coverage:
 	cat .coverage/profile.cov.tmp | grep -v "_gen.go"> .coverage/profile.cov
 
 lint:
-	$(GOGET) golang.org/x/lint/golint
-	$(GOLINT) -set_exit_status $($(GOCMD) list ./... | grep -v /vendor/)
+	golangci-lint run --config ./.golangci.yml

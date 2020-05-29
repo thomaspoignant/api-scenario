@@ -3,6 +3,10 @@ package controller
 import (
 	"errors"
 	"fmt"
+	"reflect"
+	"strconv"
+	"time"
+
 	"github.com/jmoiron/jsonq"
 	"github.com/sendgrid/rest"
 	"github.com/sirupsen/logrus"
@@ -10,9 +14,6 @@ import (
 	"github.com/thomaspoignant/api-scenario/pkg/context"
 	"github.com/thomaspoignant/api-scenario/pkg/model"
 	"github.com/thomaspoignant/api-scenario/pkg/util"
-	"reflect"
-	"strconv"
-	"time"
 )
 
 type StepController interface {
@@ -20,13 +21,13 @@ type StepController interface {
 }
 
 type stepControllerImpl struct {
-	client RestClient
+	client        RestClient
 	assertionCtrl AssertionController
 }
 
-func NewStepController(client RestClient, assertionCtrl AssertionController) StepController{
+func NewStepController(client RestClient, assertionCtrl AssertionController) StepController {
 	return &stepControllerImpl{
-		client: client,
+		client:        client,
 		assertionCtrl: assertionCtrl,
 	}
 }
@@ -58,7 +59,7 @@ func (sc *stepControllerImpl) pause(numberOfSecond int) (model.ResultStep, error
 
 	result := model.ResultStep{
 		StepType: model.Pause,
-		StepTime: time.Now().Sub(start),
+		StepTime: time.Since(start),
 	}
 	return result, nil
 }
@@ -75,7 +76,7 @@ func (sc *stepControllerImpl) request(step model.Step) (model.ResultStep, error)
 	// init the result
 	result := model.ResultStep{
 		StepType: model.RequestStep,
-		Request: req,
+		Request:  req,
 	}
 
 	// apply variable on the request
@@ -87,12 +88,11 @@ func (sc *stepControllerImpl) request(step model.Step) (model.ResultStep, error)
 	// call the API
 	start := time.Now()
 	res, err := sc.client.Send(req)
-	elapsed := time.Now().Sub(start)
+	elapsed := time.Since(start)
 	result.StepTime = elapsed
 	if err != nil {
 		return result, err
 	}
-
 	logrus.Infof("Time elapsed: %v", elapsed)
 
 	// Create a response
@@ -145,23 +145,20 @@ func attachVariablesToContext(response model.Response, vars []model.Variable) []
 		case model.ResponseTime:
 			value := strconv.FormatInt(int64(response.TimeElapsed.Round(time.Millisecond)/time.Millisecond), 10)
 			context.GetContext().Add(variable.Name, value)
-			result = append(result, model.ResultVariable{Key: variable.Name, NewValue: value, Type:  model.Created})
-			break
+			result = append(result, model.ResultVariable{Key: variable.Name, NewValue: value, Type: model.Created})
 
 		case model.ResponseStatus:
 			value := fmt.Sprintf("%v", response.StatusCode)
 			context.GetContext().Add(variable.Name, value)
-			result = append(result, model.ResultVariable{Key: variable.Name, NewValue: value, Type:  model.Created})
-			break
+			result = append(result, model.ResultVariable{Key: variable.Name, NewValue: value, Type: model.Created})
 
 		case model.ResponseHeader:
 			header := response.Header[variable.Property]
-			if header != nil && len(header)>0 {
+			if len(header) > 0 {
 				// TODO: Works fine if we have only one value for the header
 				context.GetContext().Add(variable.Name, header[0])
-				result = append(result, model.ResultVariable{Key: variable.Name, NewValue: header[0], Type:  model.Created})
+				result = append(result, model.ResultVariable{Key: variable.Name, NewValue: header[0], Type: model.Created})
 			}
-			break
 
 		case model.ResponseJson:
 			// Convert key name
@@ -169,34 +166,30 @@ func attachVariablesToContext(response model.Response, vars []model.Variable) []
 			jq := jsonq.NewQuery(response.Body)
 			extractedKey, err := jq.Interface(jqPath[:]...)
 			if err != nil {
-				result = append(result, model.ResultVariable{Key: variable.Name, Err: err, Type:  model.Created})
+				result = append(result, model.ResultVariable{Key: variable.Name, Err: err, Type: model.Created})
 			}
 
 			switch value := extractedKey.(type) {
 			case string:
 				context.GetContext().Add(variable.Name, value)
-				result = append(result, model.ResultVariable{Key: variable.Name, NewValue: value, Type:  model.Created})
-				break
+				result = append(result, model.ResultVariable{Key: variable.Name, NewValue: value, Type: model.Created})
 
 			case bool:
 				castValue := strconv.FormatBool(value)
 				context.GetContext().Add(variable.Name, castValue)
-				result = append(result, model.ResultVariable{Key: variable.Name, NewValue: castValue, Type:  model.Created})
-				break
+				result = append(result, model.ResultVariable{Key: variable.Name, NewValue: castValue, Type: model.Created})
 
 			case float64:
 				castValue := fmt.Sprintf("%g", value)
 				context.GetContext().Add(variable.Name, castValue)
-				result = append(result, model.ResultVariable{Key: variable.Name, NewValue: castValue, Type:  model.Created})
-				break
+				result = append(result, model.ResultVariable{Key: variable.Name, NewValue: castValue, Type: model.Created})
 
 			default:
 				result = append(result, model.ResultVariable{
 					Key:  variable.Name,
 					Err:  fmt.Errorf("type %s not valid type to export as a variable", reflect.TypeOf(extractedKey)),
-					Type:  model.Created,
+					Type: model.Created,
 				})
-				break
 			}
 		}
 	}
@@ -237,12 +230,12 @@ func convertAndPatchToHttpRequest(step model.Step) (rest.Request, []model.Result
 	}
 
 	return rest.Request{
-			Method:      rest.Method(step.Method),
-			Headers:     headers,
-			QueryParams: queryParams,
-			Body:        []byte(bodyPatched),
-			BaseURL:     urlPatched,
-		},  result, nil
+		Method:      rest.Method(step.Method),
+		Headers:     headers,
+		QueryParams: queryParams,
+		Body:        []byte(bodyPatched),
+		BaseURL:     urlPatched,
+	}, result, nil
 }
 
 // patch is applying a patch with the context on the "initial" string and also
@@ -253,9 +246,9 @@ func patch(initial string, name string, variables *[]model.ResultVariable) strin
 
 	if initialValue != patchedValue {
 		*variables = append(*variables, model.ResultVariable{
-			Type: model.Used,
+			Type:     model.Used,
 			NewValue: patchedValue,
-			Key: name,
+			Key:      name,
 		})
 	}
 

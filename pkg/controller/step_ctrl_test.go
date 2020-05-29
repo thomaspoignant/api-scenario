@@ -1,12 +1,13 @@
 package controller_test
 
 import (
+	"testing"
+	"time"
+
 	"github.com/sendgrid/rest"
 	"github.com/thomaspoignant/api-scenario/pkg/controller"
 	"github.com/thomaspoignant/api-scenario/pkg/model"
 	"github.com/thomaspoignant/api-scenario/test"
-	"testing"
-	"time"
 )
 
 // Pause
@@ -18,7 +19,9 @@ func Test_step_pause(t *testing.T) {
 	}
 
 	start := time.Now()
-	sc.Run(step)
+	if _, err := sc.Run(step); err != nil {
+		t.Fatalf("Unexpected error %v", err)
+	}
 	end := time.Now()
 
 	if start.Add(1 * time.Second).After(end) {
@@ -36,7 +39,9 @@ func Test_OutputPause(t *testing.T) {
 
 	want := "------------------------\nWaiting for 1s\n"
 	got := test.CaptureOutput(func() {
-		sc.Run(step)
+		if _, err := sc.Run(step); err != nil {
+			t.Fatalf("unexpected error: %v", err)
+		}
 	})
 	test.Equals(t, "Output messages are different", want, got)
 }
@@ -49,35 +54,35 @@ func Test_request_valid(t *testing.T) {
 
 	step := model.Step{
 		Body: `{"hello":"world_{{random_int(1,1)}}"}`,
-		URL: "http://test.com/1/{{random_int(1,1)}}?param1=param1_{{random_int(1,1)}}&testNumber="+testNumber,
+		URL:  "http://test.com/1/{{random_int(1,1)}}?param1=param1_{{random_int(1,1)}}&testNumber=" + testNumber,
 		Headers: map[string][]string{
 			"Content-Type": {"other_test_{{random_int(1,1)}}"},
 		},
-		Method: "GET",
+		Method:   "GET",
 		StepType: model.RequestStep,
 		Variables: []model.Variable{
 			{
-				Source: model.ResponseJson,
+				Source:   model.ResponseJson,
 				Property: "hello",
-				Name: "hello",
+				Name:     "hello",
 			},
 			{
-				Source: model.ResponseJson,
+				Source:   model.ResponseJson,
 				Property: "param1",
-				Name: "param1",
+				Name:     "param1",
 			},
 			{
-				Source: model.ResponseJson,
+				Source:   model.ResponseJson,
 				Property: "param2",
-				Name: "param2",
+				Name:     "param2",
 			},
 			{
 				Source: model.ResponseStatus,
-				Name: "response_status",
+				Name:   "response_status",
 			},
 			{
 				Source: model.ResponseTime,
-				Name: "response_time",
+				Name:   "response_time",
 			},
 			{
 				Source: model.ResponseTime,
@@ -85,16 +90,16 @@ func Test_request_valid(t *testing.T) {
 				Name: "",
 			},
 			{
-				Source: model.ResponseHeader,
-				Name: "response_header",
+				Source:   model.ResponseHeader,
+				Name:     "response_header",
 				Property: "Content-Type",
 			},
 		},
 		Assertions: []model.Assertion{
 			{
 				Comparison: model.Equal,
-				Value: "200",
-				Source: model.ResponseStatus,
+				Value:      "200",
+				Source:     model.ResponseStatus,
 			},
 		},
 	}
@@ -106,13 +111,13 @@ func Test_request_valid(t *testing.T) {
 	// Check patch on request
 	test.Equals(t, "Should have patch URL", "http://test.com/1/1", got.Request.BaseURL)
 	test.Equals(t, "Should return method", rest.Get, got.Request.Method)
-	wantHeaders := map[string]string {
-		"Content-Type":"other_test_1",
+	wantHeaders := map[string]string{
+		"Content-Type": "other_test_1",
 	}
 	test.Equals(t, "Should have patch headers", wantHeaders, got.Request.Headers)
-	wantParams := map[string]string {
-		"param1":"param1_1",
-		"testNumber":"1",
+	wantParams := map[string]string{
+		"param1":     "param1_1",
+		"testNumber": "1",
 	}
 	test.Equals(t, "Should have patch params", wantParams, got.Request.QueryParams)
 	test.Equals(t, "Should have patch body", `{"hello":"world_1"}`, string(got.Request.Body))

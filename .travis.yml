@@ -1,6 +1,6 @@
 language: go
 go:
-- '1.14'
+  - "1.14"
 
 services:
   - docker
@@ -23,10 +23,13 @@ script:
   - make coverage
   - $GOPATH/bin/goveralls -coverprofile=.coverage/profile.cov -service=travis-ci
   - curl -sfL https://git.io/goreleaser | sh -s -- check # check goreleaser config for deprecations
+  # install golang-ci to GOPATH/bin
+  - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.27.0
+  - make lint
 
 after_success:
-    - git reset --hard HEAD
-    - test -n "$TRAVIS_TAG" && docker login -u=thomaspoignant -p="$DOCKER_PASSWORD"
+  - git reset --hard HEAD
+  - test -n "$TRAVIS_TAG" && docker login -u=thomaspoignant -p="$DOCKER_PASSWORD"
 
 deploy:
   - provider: script
