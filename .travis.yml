@@ -5,7 +5,9 @@ go:
 env:
   global:
     # Github token
-    secure: IWhNZ+S7m6dBBTCi9r8wehOhOiY4QyGN17iuJZv2k8Cnq/npUmyQAGnXke2T8Rm3bdAZMzJcgl1t/ooHuhBfgIhmo284o+IL4KOm3Wigept1srRBNjDunuWXWYALD3/jANXyzPUfOHx4RR/oDcuNe5X1xtmXgroAEKgZApVtQasY8YbJjy73hB8GEevm0PPCoDS7OQaNCc13SGz3SqsLdDM4hLlbrCWfSqjHl2VvyUs6wxKmQH/4ecCwfKyCxY1IWe6thUpm62wcAhtUIqYTB97vSKV/rHLqrsZBzf3bNQEa0glf+K6Lkqf3aNC5qij/2//HGOj251POmoPnDyzip6DUh+q9OlaW61ub6esI1Ar0a4QsezF/Z21H2DQYY4HLFxnZCMGQyC5UckKWm8cm8q2YE3GKSYiid+Cc6gr+n4kFxtEKCm/+VeJGFzBFqqESC1Ihhe6NdNzjpE5dUq/dgCDnHINpj4RuTK0QZ+vTMHBc/K/YukPq4PGa1oCUaH+OTf24BV3oRsJZHWELpueBCNCdDiP0i6jOY8j6ZpJVRgSdsmoBnayFrEGYoghacGPMTANsN26X9rdri4463hHfqpLXnyz5rYjEbVQ4S3tZ09z6Em5hVg5D2IgdF0iU6euZz+m1pNQi6eUTJHpB+7/bp53r+sMWWjUrd/t+RUGTD88=
+    - secure: IWhNZ+S7m6dBBTCi9r8wehOhOiY4QyGN17iuJZv2k8Cnq/npUmyQAGnXke2T8Rm3bdAZMzJcgl1t/ooHuhBfgIhmo284o+IL4KOm3Wigept1srRBNjDunuWXWYALD3/jANXyzPUfOHx4RR/oDcuNe5X1xtmXgroAEKgZApVtQasY8YbJjy73hB8GEevm0PPCoDS7OQaNCc13SGz3SqsLdDM4hLlbrCWfSqjHl2VvyUs6wxKmQH/4ecCwfKyCxY1IWe6thUpm62wcAhtUIqYTB97vSKV/rHLqrsZBzf3bNQEa0glf+K6Lkqf3aNC5qij/2//HGOj251POmoPnDyzip6DUh+q9OlaW61ub6esI1Ar0a4QsezF/Z21H2DQYY4HLFxnZCMGQyC5UckKWm8cm8q2YE3GKSYiid+Cc6gr+n4kFxtEKCm/+VeJGFzBFqqESC1Ihhe6NdNzjpE5dUq/dgCDnHINpj4RuTK0QZ+vTMHBc/K/YukPq4PGa1oCUaH+OTf24BV3oRsJZHWELpueBCNCdDiP0i6jOY8j6ZpJVRgSdsmoBnayFrEGYoghacGPMTANsN26X9rdri4463hHfqpLXnyz5rYjEbVQ4S3tZ09z6Em5hVg5D2IgdF0iU6euZz+m1pNQi6eUTJHpB+7/bp53r+sMWWjUrd/t+RUGTD88=
+    # Docker password
+    - secure: s0FOeUhQJaseXPcgguWT5sn1muZs8cjElUgP8cqN+fljLWqptE4lz9p4furzehgbIsND2YyAnE+84U/tpvYenAhFWbSOw1wY5FXck/r5S5C+nPI3F4Bjy4nQTn72hgeYUed4bhxPt/A6uZTMd98Fk+p3XrkVOHngELUnlbcG9RXROtbqKTT4gCF13JR/VrSnes6PQYAwfzOwERq4zmFXIGTKRLflve+h5zJgWMrcj5ruCP2tx2sjzD1sZrqIF5IBxE/8UC6GAPqEHcLq1F6GPNOLj7uCARW0j/DDP6CmTnm+fCiYx7THdNJue6qyQTqkcnukF6bnGO8/+pubPxdgGIPIYoNnfUVvMRVh2cOCiq3IuPBv3I+Ixw3hwszpJ3Y3sVxlPDr5cWIlSA7KIif8WYfWOpNqJ0jpSixjCuSFG39i9GxW5eiR2wl4az+xAvxPqZRVVveiWbO6CcM3YZj4pAvCrK542T0IvbrOVcHUoxw2TkbV/M7fMhdcru9zywVHjtmJebF/YONoUed6En/XCSXYmaaUdd8yijw3AksC2PCY8va4bDZRrFD2uD01NDEuWrw8cJkRtNoxcB3pUkflq7d5KQZ1ZChdlS5p05QUflu++fDL2v5nz+7hiL1SfAcKQ5tb4tC+2NCJ20w33Iz/KAq13sIbLLlX/OtA2rF2APc=
 
 before_install:
   - go get github.com/mattn/goveralls
@@ -21,6 +23,7 @@ script:
 deploy:
   - provider: script
     skip_cleanup: true
+    before_script: docker login -u thomaspoignant -p $DOCKER_PASSWORD
     script: curl -sL https://git.io/goreleaser | bash
     on:
       tags: true

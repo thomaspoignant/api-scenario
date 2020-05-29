@@ -3,8 +3,18 @@ before:
     - make update-dependencies
     - make generate
 builds:
-- env:
-  - CGO_ENABLED=0
+  -
+    goos:
+      - freebsd
+      - windows
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm
+      - arm64
+      - 386
+
 archives:
 - replacements:
     darwin: Darwin
@@ -12,10 +22,13 @@ archives:
     windows: Windows
     386: i386
     amd64: x86_64
+
 checksum:
   name_template: 'checksums.txt'
+
 snapshot:
   name_template: "{{ .Tag }}-next"
+
 changelog:
   sort: asc
   filters:
@@ -24,6 +37,14 @@ changelog:
     - '^test:'
     - '^examples:'
 
+dockers:
+  -
+    goos: linux
+    image_templates:
+      - thomaspoignant/{{.ProjectName}}:latest
+      - thomaspoignant/{{.ProjectName}}:{{ .Tag }}
+      - thomaspoignant/{{.ProjectName}}:v{{ .Major }}
+      - thomaspoignant/{{.ProjectName}}:v{{ .Major }}.{{ .Minor }}
 brews:
   -
     # Github repository to push the tap to.
@@ -35,3 +56,50 @@ brews:
     homepage: "https://github.com/thomaspoignant/api-scenario"
     description: "Scenario API testing from the command line."
     skip_upload: auto
+
+scoop:
+  # Template for the url which is determined by the given Token (github or gitlab)
+  url_template: "http://github.com/thomaspoignant/api-scenario/releases/{{ .Tag }}/{{ .ArtifactName }}"
+
+  # Repository to push the app manifest to.
+  bucket:
+    owner: thomaspoignant
+    name: scoop
+  # The project name and current git tag are used in the format string.
+  commit_msg_template: "Scoop update for {{ .ProjectName }} version {{ .Tag }}"
+  # Your app's homepage.
+  homepage: "https://github.com/thomaspoignant/api-scenario#api-scenario"
+  # Your app's description.
+  description: "Scenario API testing from the command line."
+  # Your app's license
+  license: Unlicence
+
+nfpms:
+  -
+    # Replacements for GOOS and GOARCH in the package name.
+    # Keys should be valid GOOSs or GOARCHs.
+    # Values are the respective replacements.
+    replacements:
+      amd64: 64-bit
+      386: 32-bit
+      darwin: macOS
+      linux: Tux
+
+    # Your app's vendor.
+    vendor: API-Scenario.
+    # Your app's homepage.
+    homepage: https://github.com/thomaspoignant/api-scenario#api-scenario
+
+    # Your app's maintainer (probably you).
+    maintainer: Thomas Poignant <thomas.poignant@gmail.com>
+
+    # Your app's description.
+    description: Scenario API testing from the command line.
+
+    # Your app's license.
+    license: Unlicence
+
+    # Formats to be generated.
+    formats:
+      - deb
+      - rpm
