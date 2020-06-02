@@ -59,7 +59,7 @@ brews:
 
 scoop:
   # Template for the url which is determined by the given Token (github or gitlab)
-  url_template: "http://github.com/thomaspoignant/api-scenario/releases/{{ .Tag }}/{{ .ArtifactName }}"
+  url_template: "http://github.com/thomaspoignant/api-scenario/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
 
   # Repository to push the app manifest to.
   bucket:
