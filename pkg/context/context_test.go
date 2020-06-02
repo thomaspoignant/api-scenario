@@ -15,7 +15,7 @@ func resetContext() {
 	context.GetContext().ResetContext()
 }
 
-func Test_PatchOneElement(t *testing.T) {
+func TestPatchOneElement(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	ctx.Add("SCIMBaseURL", "http://google.fr")
@@ -27,7 +27,7 @@ func Test_PatchOneElement(t *testing.T) {
 	test.Equals(t, "Should patch on variables", want, got)
 }
 
-func Test_NothingToPatch(t *testing.T) {
+func TestNothingToPatch(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	ctx.Add("SCIMBaseURL", "http://google.fr")
@@ -39,7 +39,7 @@ func Test_NothingToPatch(t *testing.T) {
 	test.Equals(t, "Should not changed anything", want, got)
 }
 
-func Test_MultipleElementsWithSameKey(t *testing.T) {
+func TestMultipleElementsWithSameKey(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	ctx.Add("SCIMBaseURL", "http://google.fr")
@@ -51,7 +51,7 @@ func Test_MultipleElementsWithSameKey(t *testing.T) {
 	test.Equals(t, "Should replace multiple time the same variables", want, got)
 }
 
-func Test_MultipleElementsWithMultipeKeys(t *testing.T) {
+func TestMultipleElementsWithMultipleKeys(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	ctx.Add("SCIMBaseURL", "http://google.fr")
@@ -64,7 +64,7 @@ func Test_MultipleElementsWithMultipeKeys(t *testing.T) {
 	test.Equals(t, "Should replace multiple variables", want, got)
 }
 
-func Test_ContextNotInit(t *testing.T) {
+func TestContextNotInit(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 
@@ -75,7 +75,7 @@ func Test_ContextNotInit(t *testing.T) {
 	test.Equals(t, "Should replace multiple variables", want, got)
 }
 
-func Test_builtin_timestamp(t *testing.T) {
+func TestBuiltinTimestamp(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	input := "{{timestamp}}"
@@ -87,7 +87,7 @@ func Test_builtin_timestamp(t *testing.T) {
 	}
 }
 
-func Test_builtin_utc(t *testing.T) {
+func TestBuiltinUTC(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	input := "{{utc_datetime}}"
@@ -98,7 +98,7 @@ func Test_builtin_utc(t *testing.T) {
 	}
 }
 
-func Test_builtin_randomInt(t *testing.T) {
+func TestBuiltinRandomInt(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	input := "{{random_int}}"
@@ -110,7 +110,7 @@ func Test_builtin_randomInt(t *testing.T) {
 	}
 }
 
-func Test_builtin_uuid(t *testing.T) {
+func TestBuiltinUUID(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	input := "{{uuid}}"
@@ -122,7 +122,7 @@ func Test_builtin_uuid(t *testing.T) {
 	}
 }
 
-func Test_builtin_randomIntWithRange(t *testing.T) {
+func TestBuiltinRandomIntWithRange(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	input := "{{random_int(0,100)}};{{random_int(123,11)}};{{random_int(0,100)}}"
@@ -140,7 +140,7 @@ func Test_builtin_randomIntWithRange(t *testing.T) {
 	}
 }
 
-func Test_builtin_randomIntWithRange_negative(t *testing.T) {
+func TestBuiltinRandomIntWithRangeNegative(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	input := "{{random_int(-100,-1)}}"
@@ -151,7 +151,7 @@ func Test_builtin_randomIntWithRange_negative(t *testing.T) {
 	}
 }
 
-func Test_builtin_randomString(t *testing.T) {
+func TestBuiltinRandomString(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	input := "{{random_string(10)}};{{random_string(123,11)}};{{random_string()}}"
@@ -165,7 +165,7 @@ func Test_builtin_randomString(t *testing.T) {
 	test.Equals(t, "should have replace the first pattern", res[2], "{{random_string()}}")
 }
 
-func Test_builtin_md5(t *testing.T) {
+func TestBuiltinMd5(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	input := "{{md5(TOTO)}}"
@@ -175,7 +175,7 @@ func Test_builtin_md5(t *testing.T) {
 	test.Equals(t, "MD5 should be equals", want, got)
 }
 
-func Test_builtin_encodeBase64(t *testing.T) {
+func TestBuiltinEncodeBase64(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	input := "{{encode_base64(TOTO)}}"
@@ -185,7 +185,7 @@ func Test_builtin_encodeBase64(t *testing.T) {
 	test.Equals(t, "Base64 should be equals", want, got)
 }
 
-func Test_builtin_sha1(t *testing.T) {
+func TestBuiltinSha1(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	input := "{{sha1(TOTO)}}"
@@ -195,7 +195,7 @@ func Test_builtin_sha1(t *testing.T) {
 	test.Equals(t, "SHA1 should be equals", want, got)
 }
 
-func Test_builtin_sha256(t *testing.T) {
+func TestBuiltinSha256(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	input := "{{sha256(TOTO)}}"
@@ -205,7 +205,7 @@ func Test_builtin_sha256(t *testing.T) {
 	test.Equals(t, "SHA256 should be equals", want, got)
 }
 
-func Test_builtin_urlEncode(t *testing.T) {
+func TestBuiltinUrlEncode(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	input := "{{url_encode(TOTO?TITI)}}"
@@ -215,7 +215,7 @@ func Test_builtin_urlEncode(t *testing.T) {
 	test.Equals(t, "SHA256 should be equals", want, got)
 }
 
-func Test_builtin_hmacSha1(t *testing.T) {
+func TestBuiltinHmacSha1(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	input := "{{hmac_sha1(TOTO, TITI)}}"
@@ -225,7 +225,7 @@ func Test_builtin_hmacSha1(t *testing.T) {
 	test.Equals(t, "HMAC_SHA1 should be equals", want, got)
 }
 
-func Test_builtin_hmacSha256(t *testing.T) {
+func TestBuiltinHmacSha256(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	input := "{{hmac_sha256(TOTO, TITI)}}"
@@ -235,7 +235,7 @@ func Test_builtin_hmacSha256(t *testing.T) {
 	test.Equals(t, "HMAC_SHA256 should be equals", want, got)
 }
 
-func Test_builtin_timestampFormat(t *testing.T) {
+func TestBuiltinTimestampFormat(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	t1 := time.Date(2020, time.April, 16, 21, 8, 17, 0, time.Local)
@@ -248,7 +248,7 @@ func Test_builtin_timestampFormat(t *testing.T) {
 	test.Equals(t, "timestamp format should equals", want, got)
 }
 
-func Test_builtin_timestampOffset_positive(t *testing.T) {
+func TestBuiltinTimestampOffsetPositive(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	input := "{{timestamp_offset(5)}}"
@@ -265,7 +265,7 @@ func Test_builtin_timestampOffset_positive(t *testing.T) {
 	}
 }
 
-func Test_builtin_timestampOffset_negative(t *testing.T) {
+func TestBuiltinTimestampOffsetNegative(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	input := "{{timestamp_offset(-5)}}"
@@ -282,7 +282,7 @@ func Test_builtin_timestampOffset_negative(t *testing.T) {
 	}
 }
 
-func Test_builtin_timestampOffset_wrongType(t *testing.T) {
+func TestBuiltinTimestampOffsetWrongType(t *testing.T) {
 	resetContext()
 	ctx := context.GetContext()
 	input := "{{timestamp_offset(T)}}"

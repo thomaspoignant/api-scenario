@@ -7,7 +7,7 @@ import (
 	"testing"
 )
 
-func Test_ResultStepIsSuccess_Pause(t *testing.T) {
+func TestResultStepIsSuccessPause(t *testing.T) {
 	resStep := model.ResultStep{
 		StepType: model.Pause,
 	}
@@ -16,7 +16,7 @@ func Test_ResultStepIsSuccess_Pause(t *testing.T) {
 	test.Equals(t, "Pause should always be success", true, got)
 }
 
-func Test_ResultStepIsSuccess_Request_SuccessEmpty(t *testing.T) {
+func TestResultStepIsSuccessRequestSuccessEmpty(t *testing.T) {
 	resStep := model.ResultStep{
 		StepType: model.RequestStep,
 	}
@@ -25,7 +25,7 @@ func Test_ResultStepIsSuccess_Request_SuccessEmpty(t *testing.T) {
 	test.Equals(t, "Empty request should always be success", true, got)
 }
 
-func Test_ResultStepIsSuccess_Request_Success(t *testing.T) {
+func TestResultStepIsSuccessRequestSuccess(t *testing.T) {
 	resStep := model.ResultStep{
 		StepType: model.RequestStep,
 		VariableCreated: []model.ResultVariable{
@@ -43,7 +43,7 @@ func Test_ResultStepIsSuccess_Request_Success(t *testing.T) {
 	test.Equals(t, "No error should be success", true, got)
 }
 
-func Test_ResultStepIsSuccess_Request_AssertionFailed(t *testing.T) {
+func TestResultStepIsSuccessRequestAssertionFailed(t *testing.T) {
 	resStep := model.ResultStep{
 		StepType: model.RequestStep,
 		VariableCreated: []model.ResultVariable{
@@ -61,7 +61,7 @@ func Test_ResultStepIsSuccess_Request_AssertionFailed(t *testing.T) {
 	test.Equals(t, "No error should be success", false, got)
 }
 
-func Test_ResultStepIsSuccess_Request_VariableCreatedFailed(t *testing.T) {
+func TestResultStepIsSuccessRequestVariableCreatedFailed(t *testing.T) {
 	resStep := model.ResultStep{
 		StepType: model.RequestStep,
 		VariableCreated: []model.ResultVariable{
@@ -79,7 +79,7 @@ func Test_ResultStepIsSuccess_Request_VariableCreatedFailed(t *testing.T) {
 	test.Equals(t, "VariableCreated error should be on error", false, got)
 }
 
-func Test_ResultStepIsSuccess_Request_VariableAppliedFailed(t *testing.T) {
+func TestResultStepIsSuccessRequestVariableAppliedFailed(t *testing.T) {
 	resStep := model.ResultStep{
 		StepType: model.RequestStep,
 		VariableCreated: []model.ResultVariable{

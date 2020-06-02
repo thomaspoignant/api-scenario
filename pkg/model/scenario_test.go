@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func Test_InitScenarioFromFile(t *testing.T) {
+func TestInitScenarioFromFile(t *testing.T) {
 	type args struct {
 		inputFile string
 	}

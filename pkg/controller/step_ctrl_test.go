@@ -10,7 +10,7 @@ import (
 )
 
 // Pause
-func Test_step_pause(t *testing.T) {
+func TestStepPause(t *testing.T) {
 	sc := controller.NewStepController(&test.ClientMock{}, controller.NewAssertionController())
 	step := model.Step{
 		StepType: model.Pause,
@@ -26,7 +26,7 @@ func Test_step_pause(t *testing.T) {
 	}
 }
 
-func Test_OutputPause(t *testing.T) {
+func TestOutputPause(t *testing.T) {
 	test.SetupLog()
 	sc := controller.NewStepController(&test.ClientMock{}, controller.NewAssertionController())
 	step := model.Step{
@@ -42,7 +42,7 @@ func Test_OutputPause(t *testing.T) {
 }
 
 // Request
-func Test_request_valid(t *testing.T) {
+func TestRequestValid(t *testing.T) {
 	test.SetupLog()
 	testNumber := "1"
 	sc := controller.NewStepController(&test.ClientMock{}, controller.NewAssertionController())

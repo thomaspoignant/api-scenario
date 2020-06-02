@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func Test_OutputFormatter(t *testing.T) {
+func TestOutputFormatter(t *testing.T) {
 	tf := &log.OutputFormatter{DisableColors: true}
 	testCases := []struct {
 		value    logrus.Entry
