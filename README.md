@@ -77,14 +77,14 @@ scoop install api-scenario
 If you prefer to use directly the `.deb` file to install in your debian like linux distribution.  
 _Don't forget to set the correct version number._
 ```shell script
-wget https://github.com/thomaspoignant/api-scenario/releases/download/v0.0.1/api-scenario_X.X.X_Tux_64-bit.deb && dpkg -i api-scenario_*.deb
+wget https://github.com/thomaspoignant/api-scenario/releases/download/vX.X.X/api-scenario_X.X.X_Tux_64-bit.deb && dpkg -i api-scenario_*.deb
 ```
 
 ## Install using .rpm file (linux)
 If you prefer to use directly the `.rpm` file to install in your centos/fedora like linux distribution.  
 _Don't forget to set the correct version number._
 ```shell script
-wget https://github.com/thomaspoignant/api-scenario/releases/download/v0.0.1/api-scenario_X.X.X_Tux_64-bit.rpm && rpm -i api-scenario_*.rpm
+wget https://github.com/thomaspoignant/api-scenario/releases/download/vX.X.X/api-scenario_X.X.X_Tux_64-bit.rpm && rpm -i api-scenario_*.rpm
 ```
 
 ## Use docker image
