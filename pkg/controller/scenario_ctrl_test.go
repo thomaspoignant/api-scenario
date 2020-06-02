@@ -35,7 +35,7 @@ func (m MockStepController) Run(step model.Step) (model.ResultStep, error) {
 	return model.ResultStep{}, nil
 }
 
-func Test_Scenario_Error(t *testing.T) {
+func TestScenarioError(t *testing.T) {
 
 	test.SetupLog()
 	scenario := model.Scenario{
@@ -64,7 +64,7 @@ func Test_Scenario_Error(t *testing.T) {
  	test.Equals(t, "Output should be equals", wantedOutput, output)
 }
 
-func Test_Scenario_Success(t *testing.T) {
+func TestScenarioSuccess(t *testing.T) {
 
 	test.SetupLog()
 	scenario := model.Scenario{
@@ -93,7 +93,7 @@ func Test_Scenario_Success(t *testing.T) {
 	test.Equals(t, "Output should be equals", wantedOutput, output)
 }
 
-func Test_Scenario_Impossible(t *testing.T) {
+func TestScenarioImpossible(t *testing.T) {
 
 	test.SetupLog()
 	scenario := model.Scenario{

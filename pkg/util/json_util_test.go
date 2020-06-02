@@ -7,13 +7,13 @@ import (
 	"testing"
 )
 
-func Test_IsJson_empyDocument(t *testing.T) {
+func TestIsJsonEmptyDocument(t *testing.T) {
 	want := true
 	got := util.IsJson("{}")
 	test.Equals(t, "wrong assertion result", want, got)
 }
 
-func Test_IsJson_valid(t *testing.T) {
+func TestIsJsonValid(t *testing.T) {
 	want := true
 	got := util.IsJson(`{
 		"hello": "world"
@@ -21,13 +21,13 @@ func Test_IsJson_valid(t *testing.T) {
 	test.Equals(t, "wrong assertion result", want, got)
 }
 
-func Test_IsJson_emptyString(t *testing.T) {
+func TestIsJsonEmptyString(t *testing.T) {
 	want := false
 	got := util.IsJson("")
 	test.Equals(t, "wrong assertion result", want, got)
 }
 
-func Test_IsJson_invalidJson(t *testing.T) {
+func TestIsJsonInvalidJson(t *testing.T) {
 	want := false
 	got := util.IsJson(`{
 		"hello": "world"
@@ -36,7 +36,7 @@ func Test_IsJson_invalidJson(t *testing.T) {
 	test.Equals(t, "wrong assertion result", want, got)
 }
 
-func Test_JsonConvertKeyName_valid(t *testing.T) {
+func TestJsonConvertKeyNameValid(t *testing.T) {
 	want := []string{"emails", "0", "value"}
 	got := util.JsonConvertKeyName("emails[0].value")
 
@@ -45,7 +45,7 @@ func Test_JsonConvertKeyName_valid(t *testing.T) {
 	}
 }
 
-func Test_StringToJson_valid(t *testing.T) {
+func TestStringToJsonValid(t *testing.T) {
 	input := `{
 		"hello": "world",
 		"world": ["hello"]
@@ -66,7 +66,7 @@ func Test_StringToJson_valid(t *testing.T) {
 	}
 }
 
-func Test_StringToJson_empty(t *testing.T) {
+func TestStringToJsonEmpty(t *testing.T) {
 	input := ""
 	got, err := util.StringToJson(input)
 	test.Ok(t, err)

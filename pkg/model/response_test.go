@@ -9,7 +9,7 @@ import (
 	"github.com/thomaspoignant/api-scenario/test"
 )
 
-func Test_NewResponse_CreateAValidResponse(t *testing.T) {
+func TestNewResponseCreateAValidResponse(t *testing.T) {
 	restResp := rest.Response{
 		StatusCode: 200,
 		Body:       `{ "hello": "world"}`,
@@ -28,7 +28,7 @@ func Test_NewResponse_CreateAValidResponse(t *testing.T) {
 	test.Equals(t, "Invalid body", expectedBody, response.Body)
 }
 
-func Test_NewResponse_InvalidBody(t *testing.T) {
+func TestNewResponseInvalidBody(t *testing.T) {
 	restResp := rest.Response{
 		StatusCode: 200,
 		Body:       `{ "hello": "world"`,
@@ -42,7 +42,7 @@ func Test_NewResponse_InvalidBody(t *testing.T) {
 	test.Ko(t, err)
 }
 
-func Test_NewResponse_EmptyBody(t *testing.T) {
+func TestNewResponseEmptyBody(t *testing.T) {
 	restResp := rest.Response{
 		StatusCode: 200,
 		Body:       "",

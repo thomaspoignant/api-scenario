@@ -36,7 +36,8 @@ func te(t *testing.T, assertion model.Assertion, response model.Response, expect
 }
 
 // response_status
-func Test_ResponseStatus_isANumber_valid(t *testing.T) {
+
+func TestResponseStatusIsANumberValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsANumber, Value: "200", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusOK}
 	te(t, assertion, response, expectedResult{
@@ -47,7 +48,8 @@ func Test_ResponseStatus_isANumber_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseStatus_EqualNumber_valid(t *testing.T) {
+
+func TestResponseStatusEqualNumberValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.EqualNumber, Value: "200", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusOK}
 	te(t, assertion, response, expectedResult{
@@ -58,7 +60,8 @@ func Test_ResponseStatus_EqualNumber_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseStatus_EqualNumber_notAnNumber(t *testing.T) {
+
+func TestResponseStatusEqualNumberNotAnNumber(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.EqualNumber, Value: "qwerty", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusOK}
 	te(t, assertion, response, expectedResult{
@@ -70,7 +73,8 @@ func Test_ResponseStatus_EqualNumber_notAnNumber(t *testing.T) {
 	})
 
 }
-func Test_ResponseStatus_EqualNumber_notExpected(t *testing.T) {
+
+func TestResponseStatusEqualNumberNotExpected(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.EqualNumber, Value: "200", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusAccepted}
 	te(t, assertion, response, expectedResult{
@@ -81,7 +85,8 @@ func Test_ResponseStatus_EqualNumber_notExpected(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseStatus_Equal_valid(t *testing.T) {
+
+func TestResponseStatusEqualValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Equal, Value: "200", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusOK}
 	te(t, assertion, response, expectedResult{
@@ -92,7 +97,8 @@ func Test_ResponseStatus_Equal_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseStatus_Equal_invalid(t *testing.T) {
+
+func TestResponseStatusEqualInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Equal, Value: "200", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusAccepted}
 	te(t, assertion, response, expectedResult{
@@ -103,7 +109,8 @@ func Test_ResponseStatus_Equal_invalid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseStatus_IsLessThan_valid(t *testing.T) {
+
+func TestResponseStatusIsLessThanValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsLessThan, Value: "400", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusSeeOther}
 	te(t, assertion, response, expectedResult{
@@ -114,7 +121,8 @@ func Test_ResponseStatus_IsLessThan_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseStatus_IsLessThan_notANumber(t *testing.T) {
+
+func TestResponseStatusIsLessThanNotANumber(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsLessThan, Value: "qwerty", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusSeeOther}
 	te(t, assertion, response, expectedResult{
@@ -125,7 +133,8 @@ func Test_ResponseStatus_IsLessThan_notANumber(t *testing.T) {
 		err:      true,
 	})
 }
-func Test_ResponseStatus_IsLessThan_invalidWhenValueEquals(t *testing.T) {
+
+func TestResponseStatusIsLessThanInvalidWhenValueEquals(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsLessThan, Value: "400", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusBadRequest}
 	te(t, assertion, response, expectedResult{
@@ -136,7 +145,8 @@ func Test_ResponseStatus_IsLessThan_invalidWhenValueEquals(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseStatus_IsLessThan_invalidWhenValueOver(t *testing.T) {
+
+func TestResponseStatusIsLessThanInvalidWhenValueOver(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsLessThan, Value: "200", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusBadRequest}
 	te(t, assertion, response, expectedResult{
@@ -147,7 +157,8 @@ func Test_ResponseStatus_IsLessThan_invalidWhenValueOver(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseStatus_IsLessThanOrEqual_valid(t *testing.T) {
+
+func TestResponseStatusIsLessThanOrEqualValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsLessThanOrEqual, Value: "400", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusSeeOther}
 	te(t, assertion, response, expectedResult{
@@ -158,7 +169,8 @@ func Test_ResponseStatus_IsLessThanOrEqual_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseStatus_IsLessThanOrEqual_equal(t *testing.T) {
+
+func TestResponseStatusIsLessThanOrEqualEquals(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsLessThanOrEqual, Value: "400", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusBadRequest}
 	te(t, assertion, response, expectedResult{
@@ -169,7 +181,8 @@ func Test_ResponseStatus_IsLessThanOrEqual_equal(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseStatus_IsLessThanOrEqual_notANumber(t *testing.T) {
+
+func TestResponseStatusIsLessThanOrEqualNotANumber(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsLessThanOrEqual, Value: "qwerty", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusSeeOther}
 	te(t, assertion, response, expectedResult{
@@ -180,7 +193,8 @@ func Test_ResponseStatus_IsLessThanOrEqual_notANumber(t *testing.T) {
 		err:      true,
 	})
 }
-func Test_ResponseStatus_IsLessThanOrEqual_invalidWhenValueOver(t *testing.T) {
+
+func TestResponseStatusIsLessThanOrEqualInvalidWhenValueOver(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsLessThanOrEqual, Value: "200", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusBadRequest}
 	te(t, assertion, response, expectedResult{
@@ -191,7 +205,8 @@ func Test_ResponseStatus_IsLessThanOrEqual_invalidWhenValueOver(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseStatus_IsGreaterThan_invalidWhenValueEquals(t *testing.T) {
+
+func TestResponseStatusIsGreaterThanInvalidWhenValueEquals(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsGreaterThan, Value: "400", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusBadRequest}
 	te(t, assertion, response, expectedResult{
@@ -202,7 +217,8 @@ func Test_ResponseStatus_IsGreaterThan_invalidWhenValueEquals(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseStatus_IsGreaterThan_invalidWhenValueOver(t *testing.T) {
+
+func TestResponseStatusIsGreaterThanInvalidWhenValueOver(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsGreaterThan, Value: "400", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusOK}
 	te(t, assertion, response, expectedResult{
@@ -213,7 +229,8 @@ func Test_ResponseStatus_IsGreaterThan_invalidWhenValueOver(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseStatus_IsGreaterThan_valid(t *testing.T) {
+
+func TestResponseStatusIsGreaterThanValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsGreaterThan, Value: "400", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusBadGateway}
 	te(t, assertion, response, expectedResult{
@@ -224,7 +241,8 @@ func Test_ResponseStatus_IsGreaterThan_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseStatus_IsGreaterThan_notANumber(t *testing.T) {
+
+func TestResponseStatusIsGreaterThanNotANumber(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsGreaterThan, Value: "qwerty", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusSeeOther}
 	te(t, assertion, response, expectedResult{
@@ -235,7 +253,8 @@ func Test_ResponseStatus_IsGreaterThan_notANumber(t *testing.T) {
 		err:      true,
 	})
 }
-func Test_ResponseStatus_IsGreaterThanOrEqual_valid(t *testing.T) {
+
+func TestResponseStatusIsGreaterThanOrEqualValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsGreaterThanOrEqual, Value: "400", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusBadGateway}
 	te(t, assertion, response, expectedResult{
@@ -246,7 +265,8 @@ func Test_ResponseStatus_IsGreaterThanOrEqual_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseStatus_IsGreaterThanOrEqual_equal(t *testing.T) {
+
+func TestResponseStatusIsGreaterThanOrEqualEquals(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsGreaterThanOrEqual, Value: "400", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusBadRequest}
 	te(t, assertion, response, expectedResult{
@@ -257,7 +277,8 @@ func Test_ResponseStatus_IsGreaterThanOrEqual_equal(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseStatus_IsGreaterThanOrEqual_notANumber(t *testing.T) {
+
+func TestResponseStatusIsGreaterThanOrEqualNotANumber(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsGreaterThanOrEqual, Value: "qwerty", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusSeeOther}
 	te(t, assertion, response, expectedResult{
@@ -268,7 +289,8 @@ func Test_ResponseStatus_IsGreaterThanOrEqual_notANumber(t *testing.T) {
 		err:      true,
 	})
 }
-func Test_ResponseStatus_IsGreaterThanOrEqual_invalidWhenValueOver(t *testing.T) {
+
+func TestResponseStatusIsGreaterThanOrEqualInvalidWhenValueOver(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsGreaterThanOrEqual, Value: "400", Source: model.ResponseStatus}
 	response := model.Response{StatusCode: http.StatusOK}
 	te(t, assertion, response, expectedResult{
@@ -279,7 +301,8 @@ func Test_ResponseStatus_IsGreaterThanOrEqual_invalidWhenValueOver(t *testing.T)
 		err:      false,
 	})
 }
-func Test_ResponseStatusNotSupportedComparison(t *testing.T) {
+
+func TestResponseStatusNotSupportedComparison(t *testing.T) {
 	unexpectedComparison := []model.Comparison{
 		model.Contains, model.DoesNotContain, model.NotEmpty, model.Empty, model.IsNull, model.HasValue, model.HasKey,
 	}
@@ -298,7 +321,8 @@ func Test_ResponseStatusNotSupportedComparison(t *testing.T) {
 }
 
 // response_time
-func Test_ResponseTime_EqualNumber_valid(t *testing.T) {
+
+func TestResponseTimeEqualNumberValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.EqualNumber, Value: "1", Source: model.ResponseTime}
 	response := model.Response{TimeElapsed: 1 * time.Second}
 	te(t, assertion, response, expectedResult{
@@ -309,7 +333,8 @@ func Test_ResponseTime_EqualNumber_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseTime_EqualNumber_compareAsFloat(t *testing.T) {
+
+func TestResponseTimeEqualNumberCompareAsFloat(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.EqualNumber, Value: "1.1000", Source: model.ResponseTime}
 	response := model.Response{TimeElapsed: time.Duration(1.1 * 1000 * 1000 * 1000)}
 	te(t, assertion, response, expectedResult{
@@ -320,7 +345,8 @@ func Test_ResponseTime_EqualNumber_compareAsFloat(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseTime_EqualNumber_invalid(t *testing.T) {
+
+func TestResponseTimeEqualNumberInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.EqualNumber, Value: "1", Source: model.ResponseTime}
 	response := model.Response{TimeElapsed: 2 * time.Second}
 	te(t, assertion, response, expectedResult{
@@ -331,7 +357,8 @@ func Test_ResponseTime_EqualNumber_invalid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseTime_Equal_valid(t *testing.T) {
+
+func TestResponseTimeEqualValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Equal, Value: "1", Source: model.ResponseTime}
 	response := model.Response{TimeElapsed: 1 * time.Second}
 	te(t, assertion, response, expectedResult{
@@ -342,7 +369,8 @@ func Test_ResponseTime_Equal_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseTime_Equal_invalid(t *testing.T) {
+
+func TestResponseTimeEqualInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Equal, Value: "1", Source: model.ResponseTime}
 	response := model.Response{TimeElapsed: 2 * time.Second}
 	te(t, assertion, response, expectedResult{
@@ -353,7 +381,8 @@ func Test_ResponseTime_Equal_invalid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseTime_Equal_compareAsString(t *testing.T) {
+
+func TestResponseTimeEqualCompareAsString(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Equal, Value: "1.1000", Source: model.ResponseTime}
 	response := model.Response{TimeElapsed: time.Duration(1.1 * 1000 * 1000 * 1000)}
 	te(t, assertion, response, expectedResult{
@@ -364,7 +393,8 @@ func Test_ResponseTime_Equal_compareAsString(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseTime_IsLessThan_invalidWhenValueEquals(t *testing.T) {
+
+func TestResponseTimeIsLessThanInvalidWhenValueEquals(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsLessThan, Value: "1", Source: model.ResponseTime}
 	response := model.Response{TimeElapsed: 1 * time.Second}
 	te(t, assertion, response, expectedResult{
@@ -375,7 +405,8 @@ func Test_ResponseTime_IsLessThan_invalidWhenValueEquals(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseTime_IsLessThan_invalidWhenValueOver(t *testing.T) {
+
+func TestResponseTimeIsLessThanInvalidWhenValueOver(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsLessThan, Value: "1", Source: model.ResponseTime}
 	response := model.Response{TimeElapsed: 2 * time.Second}
 	te(t, assertion, response, expectedResult{
@@ -386,7 +417,8 @@ func Test_ResponseTime_IsLessThan_invalidWhenValueOver(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseTime_IsLessThan_valid(t *testing.T) {
+
+func TestResponseTimeIsLessThanValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsLessThan, Value: "2", Source: model.ResponseTime}
 	response := model.Response{TimeElapsed: 1 * time.Second}
 	te(t, assertion, response, expectedResult{
@@ -397,7 +429,8 @@ func Test_ResponseTime_IsLessThan_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseTime_IsMoreThan_invalidWhenValueEquals(t *testing.T) {
+
+func TestResponseTimeIsMoreThanInvalidWhenValueEquals(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsGreaterThan, Value: "1", Source: model.ResponseTime}
 	response := model.Response{TimeElapsed: 1 * time.Second}
 
@@ -409,7 +442,8 @@ func Test_ResponseTime_IsMoreThan_invalidWhenValueEquals(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseTime_IsMoreThan_invalidWhenValueOver(t *testing.T) {
+
+func TestResponseTimeIsMoreThanInvalidWhenValueOver(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsGreaterThan, Value: "2", Source: model.ResponseTime}
 	response := model.Response{TimeElapsed: 1 * time.Second}
 	te(t, assertion, response, expectedResult{
@@ -420,7 +454,8 @@ func Test_ResponseTime_IsMoreThan_invalidWhenValueOver(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseTime_IsMoreThan_valid(t *testing.T) {
+
+func TestResponseTimeIsMoreThanValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsGreaterThan, Value: "2", Source: model.ResponseTime}
 	response := model.Response{TimeElapsed: 3 * time.Second}
 	te(t, assertion, response, expectedResult{
@@ -431,7 +466,8 @@ func Test_ResponseTime_IsMoreThan_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseTime_NotSupportedComparison(t *testing.T) {
+
+func TestResponseTimeNotSupportedComparison(t *testing.T) {
 	unexpectedComparison := []model.Comparison{
 		model.Contains, model.DoesNotContain, model.NotEmpty, model.Empty, model.IsNull, model.HasValue, model.HasKey,
 	}
@@ -484,7 +520,7 @@ var response = model.Response{
 	Body: body,
 }
 
-func Test_ResponseJson_equals_string_valid(t *testing.T) {
+func TestResponseJsonEqualsStringValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Equal, Value: "Anidter", Property: "name.familyName", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -494,7 +530,8 @@ func Test_ResponseJson_equals_string_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_equals_string_complexPath(t *testing.T) {
+
+func TestResponseJsonEqualsStringComplexPath(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Equal, Value: "indigo.anidter.ykxmid@test.com", Property: "emails[0].value", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -504,7 +541,8 @@ func Test_ResponseJson_equals_string_complexPath(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_equals_string_invalid(t *testing.T) {
+
+func TestResponseJsonEqualsStringInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Equal, Value: "Anidter1", Property: "name.familyName", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -514,7 +552,8 @@ func Test_ResponseJson_equals_string_invalid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_equals_number_valid(t *testing.T) {
+
+func TestResponseJsonEqualsNumberValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Equal, Value: "1500", Property: "point", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -524,7 +563,8 @@ func Test_ResponseJson_equals_number_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_notEquals_number_valid(t *testing.T) {
+
+func TestResponseJsonNotEqualsNumberValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.NotEqual, Value: "1501", Property: "point", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -534,7 +574,8 @@ func Test_ResponseJson_notEquals_number_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_notEquals_number_invalid(t *testing.T) {
+
+func TestResponseJsonNotEqualsNumberInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.NotEqual, Value: "1500", Property: "point", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -544,7 +585,8 @@ func Test_ResponseJson_notEquals_number_invalid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_notEquals_string_valid(t *testing.T) {
+
+func TestResponseJsonNotEqualsStringValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.NotEqual, Value: "not valid name", Property: "name.familyName", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -554,7 +596,8 @@ func Test_ResponseJson_notEquals_string_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_notEquals_string_invalid(t *testing.T) {
+
+func TestResponseJsonNotEqualsStringInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.NotEqual, Value: "Anidter", Property: "name.familyName", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -565,7 +608,7 @@ func Test_ResponseJson_notEquals_string_invalid(t *testing.T) {
 	})
 }
 
-func Test_ResponseJson_contains_string_invalid(t *testing.T) {
+func TestResponseJsonContainsStringInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Contains, Value: "not", Property: "name.familyName", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -575,7 +618,8 @@ func Test_ResponseJson_contains_string_invalid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_contains_string_valid(t *testing.T) {
+
+func TestResponseJsonContainsStringValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Contains, Value: "idt", Property: "name.familyName", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -586,7 +630,7 @@ func Test_ResponseJson_contains_string_valid(t *testing.T) {
 	})
 }
 
-func Test_ResponseJson_doesNotContain_string_valid(t *testing.T) {
+func TestResponseJsonDoesNotContainStringValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.DoesNotContain, Value: "not", Property: "name.familyName", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -596,7 +640,8 @@ func Test_ResponseJson_doesNotContain_string_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_doesNotContain_string_invalid(t *testing.T) {
+
+func TestResponseJsonDoesNotContainStringInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.DoesNotContain, Value: "idt", Property: "name.familyName", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -607,7 +652,7 @@ func Test_ResponseJson_doesNotContain_string_invalid(t *testing.T) {
 	})
 }
 
-func Test_ResponseJson_isANumber_string_valid(t *testing.T) {
+func TestResponseJsonIsANumberStringValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsANumber, Property: "pointStr", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -617,7 +662,8 @@ func Test_ResponseJson_isANumber_string_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_isANumber_string_invalid(t *testing.T) {
+
+func TestResponseJsonIsANumberStringInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsANumber, Property: "id", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -628,7 +674,7 @@ func Test_ResponseJson_isANumber_string_invalid(t *testing.T) {
 	})
 }
 
-func Test_ResponseJson_equalNumber_string_valid(t *testing.T) {
+func TestResponseJsonEqualNumberStringValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.EqualNumber, Property: "pointStr", Value: "1500.00", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -638,7 +684,8 @@ func Test_ResponseJson_equalNumber_string_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_equalNumber_string_invalid(t *testing.T) {
+
+func TestResponseJsonEqualNumberStringInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.EqualNumber, Property: "pointStr", Value: "1501", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -648,7 +695,8 @@ func Test_ResponseJson_equalNumber_string_invalid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_equalNumber_string_notANumber(t *testing.T) {
+
+func TestResponseJsonEqualNumberStringNotANumber(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.EqualNumber, Property: "id", Value: "1501", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -658,7 +706,8 @@ func Test_ResponseJson_equalNumber_string_notANumber(t *testing.T) {
 		err:      true,
 	})
 }
-func Test_ResponseJson_equalNumber_string_invalidAssertion(t *testing.T) {
+
+func TestResponseJsonEqualNumberStringInvalidAssertion(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.EqualNumber, Property: "pointStr", Value: "toto", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -669,7 +718,7 @@ func Test_ResponseJson_equalNumber_string_invalidAssertion(t *testing.T) {
 	})
 }
 
-func Test_ResponseJson_isLessThan_string_valid(t *testing.T) {
+func TestResponseJsonIsLessThanStringValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsLessThan, Property: "pointStr", Value: "1501.00", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -679,7 +728,8 @@ func Test_ResponseJson_isLessThan_string_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_isLessThan_string_invalid(t *testing.T) {
+
+func TestResponseJsonIsLessThanStringInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsLessThan, Property: "pointStr", Value: "1499", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -689,7 +739,8 @@ func Test_ResponseJson_isLessThan_string_invalid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_isLessThan_string_notANumber(t *testing.T) {
+
+func TestResponseJsonIsLessThanStringNotANumber(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsLessThan, Property: "id", Value: "1501", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -699,7 +750,8 @@ func Test_ResponseJson_isLessThan_string_notANumber(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_isLessThan_string_invalidAssertion(t *testing.T) {
+
+func TestResponseJsonIsLessThanStringInvalidAssertion(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsLessThan, Property: "pointStr", Value: "toto", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -710,7 +762,7 @@ func Test_ResponseJson_isLessThan_string_invalidAssertion(t *testing.T) {
 	})
 }
 
-func Test_ResponseJson_isGreaterThan_string_valid(t *testing.T) {
+func TestResponseJsonIsGreaterThanStringValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsGreaterThan, Property: "pointStr", Value: "1499.00", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -720,7 +772,8 @@ func Test_ResponseJson_isGreaterThan_string_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_isGreaterThan_string_invalid(t *testing.T) {
+
+func TestResponseJsonIsGreaterThanStringInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsGreaterThan, Property: "pointStr", Value: "1500", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -730,7 +783,8 @@ func Test_ResponseJson_isGreaterThan_string_invalid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_isGreaterThan_string_notANumber(t *testing.T) {
+
+func TestResponseJsonIsGreaterThanStringNotANumber(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsGreaterThan, Property: "id", Value: "1501", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -740,7 +794,8 @@ func Test_ResponseJson_isGreaterThan_string_notANumber(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_isGreaterThan_string_invalidAssertion(t *testing.T) {
+
+func TestResponseJsonIsGreaterThanStringInvalidAssertion(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsGreaterThan, Property: "pointStr", Value: "toto", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -751,7 +806,7 @@ func Test_ResponseJson_isGreaterThan_string_invalidAssertion(t *testing.T) {
 	})
 }
 
-func Test_ResponseJson_isLessThanOrEqual_string_valid(t *testing.T) {
+func TestResponseJsonIsLessThanOrEqualStringValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsLessThanOrEqual, Property: "pointStr", Value: "1501.00", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -761,7 +816,8 @@ func Test_ResponseJson_isLessThanOrEqual_string_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_isLessThanOrEqual_string_equal(t *testing.T) {
+
+func TestResponseJsonIsLessThanOrEqualStringEqual(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsLessThanOrEqual, Property: "pointStr", Value: "1500.00", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -771,7 +827,8 @@ func Test_ResponseJson_isLessThanOrEqual_string_equal(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_isLessThanOrEqual_string_invalid(t *testing.T) {
+
+func TestResponseJsonIsLessThanOrEqualStringInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsLessThanOrEqual, Property: "pointStr", Value: "1499", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -781,7 +838,8 @@ func Test_ResponseJson_isLessThanOrEqual_string_invalid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_isLessThanOrEqual_string_notANumber(t *testing.T) {
+
+func TestResponseJsonIsLessThanOrEqualStringNotANumber(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsLessThanOrEqual, Property: "id", Value: "1501", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -792,7 +850,7 @@ func Test_ResponseJson_isLessThanOrEqual_string_notANumber(t *testing.T) {
 	})
 }
 
-func Test_ResponseJson_isGreaterThanOrEqual_string_valid(t *testing.T) {
+func TestResponseJsonIsGreaterThanOrEqualStringValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsGreaterThanOrEqual, Property: "pointStr", Value: "1499.00", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -802,7 +860,8 @@ func Test_ResponseJson_isGreaterThanOrEqual_string_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_isGreaterThanOrEqual_string_notANumber(t *testing.T) {
+
+func TestResponseJsonIsGreaterThanOrEqualStringNotANumber(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsGreaterThanOrEqual, Property: "id", Value: "1501", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -812,7 +871,8 @@ func Test_ResponseJson_isGreaterThanOrEqual_string_notANumber(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_isGreaterThanOrEqual_string_invalidAssertion(t *testing.T) {
+
+func TestResponseJsonIsGreaterThanOrEqualStringInvalidAssertion(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsGreaterThanOrEqual, Property: "pointStr", Value: "toto", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -823,7 +883,7 @@ func Test_ResponseJson_isGreaterThanOrEqual_string_invalidAssertion(t *testing.T
 	})
 }
 
-func Test_ResponseJson_empty_string_valid(t *testing.T) {
+func TestResponseJsonEmptyStringValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Empty, Property: "companyName", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -833,7 +893,8 @@ func Test_ResponseJson_empty_string_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_empty_string_invalid(t *testing.T) {
+
+func TestResponseJsonEmptyStringInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Empty, Property: "id", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -844,7 +905,7 @@ func Test_ResponseJson_empty_string_invalid(t *testing.T) {
 	})
 }
 
-func Test_ResponseJson_notEmpty_string_valid(t *testing.T) {
+func TestResponseJsonNotEmptyStringValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.NotEmpty, Property: "id", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -854,7 +915,8 @@ func Test_ResponseJson_notEmpty_string_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_notEmpty_string_invalid(t *testing.T) {
+
+func TestResponseJsonNotEmptyStringInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.NotEmpty, Property: "companyName", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -865,7 +927,7 @@ func Test_ResponseJson_notEmpty_string_invalid(t *testing.T) {
 	})
 }
 
-func Test_ResponseJson_equalsNumber_number_valid(t *testing.T) {
+func TestResponseJsonEqualsNumberNumberValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.EqualNumber, Value: "1500", Property: "point", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -875,7 +937,8 @@ func Test_ResponseJson_equalsNumber_number_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_equalsNumber_number_invalid(t *testing.T) {
+
+func TestResponseJsonEqualsNumberNumberInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.EqualNumber, Value: "1501", Property: "point", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -886,7 +949,7 @@ func Test_ResponseJson_equalsNumber_number_invalid(t *testing.T) {
 	})
 }
 
-func Test_ResponseJson_notEquals_bool_invalid(t *testing.T) {
+func TestResponseJsonNotEqualsBoolInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.NotEqual, Value: "false", Property: "active", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -896,7 +959,8 @@ func Test_ResponseJson_notEquals_bool_invalid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_notEquals_bool_valid(t *testing.T) {
+
+func TestResponseJsonNotEqualsBoolValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.NotEqual, Value: "true", Property: "active", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -907,7 +971,7 @@ func Test_ResponseJson_notEquals_bool_valid(t *testing.T) {
 	})
 }
 
-func Test_ResponseJson_equals_bool_valid(t *testing.T) {
+func TestResponseJsonEqualsBoolValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Equal, Value: "true", Property: "active", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -917,7 +981,8 @@ func Test_ResponseJson_equals_bool_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_isANumber_bool(t *testing.T) {
+
+func TestResponseJsonIsANumberBool(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsANumber, Value: "true", Property: "active", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -927,7 +992,8 @@ func Test_ResponseJson_isANumber_bool(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_equals_bool_invalid(t *testing.T) {
+
+func TestResponseJsonEqualsBoolInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Equal, Value: "false", Property: "active", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -938,7 +1004,7 @@ func Test_ResponseJson_equals_bool_invalid(t *testing.T) {
 	})
 }
 
-func Test_ResponseJson_notEmpty_valid(t *testing.T) {
+func TestResponseJsonNotEmptyValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.NotEmpty, Property: "emails", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -948,7 +1014,8 @@ func Test_ResponseJson_notEmpty_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_notEmpty_invalid(t *testing.T) {
+
+func TestResponseJsonNotEmptyInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.NotEmpty, Property: "roles", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -958,7 +1025,8 @@ func Test_ResponseJson_notEmpty_invalid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_notEmpty_notEmptyObject(t *testing.T) {
+
+func TestResponseJsonNotEmptyNotEmptyObject(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.NotEmpty, Property: "meta", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -969,7 +1037,7 @@ func Test_ResponseJson_notEmpty_notEmptyObject(t *testing.T) {
 	})
 }
 
-func Test_ResponseJson_empty_valid(t *testing.T) {
+func TestResponseJsonEmptyValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Empty, Property: "roles", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -979,7 +1047,8 @@ func Test_ResponseJson_empty_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_empty_invalid(t *testing.T) {
+
+func TestResponseJsonEmptyInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Empty, Property: "emails", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -989,7 +1058,8 @@ func Test_ResponseJson_empty_invalid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_empty_emptyObject(t *testing.T) {
+
+func TestResponseJsonEmptyEmptyObject(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Empty, Property: "company", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -1000,7 +1070,7 @@ func Test_ResponseJson_empty_emptyObject(t *testing.T) {
 	})
 }
 
-func Test_ResponseJson_HasValue_valid(t *testing.T) {
+func TestResponseJsonHasSchemaValueValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.HasValue, Value: "urn:ietf:params:scim:schemas:core:2.0:User", Property: "schemas", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -1010,7 +1080,8 @@ func Test_ResponseJson_HasValue_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_HasValue_invalid(t *testing.T) {
+
+func TestResponseJsonHasSchemaValueInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.HasValue, Value: "test", Property: "schemas", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -1020,7 +1091,8 @@ func Test_ResponseJson_HasValue_invalid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_isNumber(t *testing.T) {
+
+func TestResponseJsonIsNumber(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsANumber, Property: "name", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -1030,7 +1102,8 @@ func Test_ResponseJson_isNumber(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_isNull_nullObject(t *testing.T) {
+
+func TestResponseJsonIsNullNullObject(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsNull, Property: "building", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -1040,7 +1113,8 @@ func Test_ResponseJson_isNull_nullObject(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_isNull_invalid(t *testing.T) {
+
+func TestResponseJsonIsNullInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsNull, Property: "emails", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -1051,7 +1125,7 @@ func Test_ResponseJson_isNull_invalid(t *testing.T) {
 	})
 }
 
-func Test_ResponseJson_hasKey_valid(t *testing.T) {
+func TestResponseJsonHasKeyValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.HasKey, Property: "meta", Value: "resourceType", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -1061,7 +1135,8 @@ func Test_ResponseJson_hasKey_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_hasKey_invalid(t *testing.T) {
+
+func TestResponseJsonHasKeyInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.HasKey, Property: "meta", Value: "invalidKey", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -1072,7 +1147,7 @@ func Test_ResponseJson_hasKey_invalid(t *testing.T) {
 	})
 }
 
-func Test_ResponseJson_hasValue_valid(t *testing.T) {
+func TestResponseJsonHasValueValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.HasValue, Property: "meta", Value: "User", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -1082,7 +1157,8 @@ func Test_ResponseJson_hasValue_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_hasValue_invalid(t *testing.T) {
+
+func TestResponseJsonHasValueInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.HasValue, Property: "meta", Value: "invalidValue", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -1093,7 +1169,7 @@ func Test_ResponseJson_hasValue_invalid(t *testing.T) {
 	})
 }
 
-func Test_ResponseJson_isANumber_valid(t *testing.T) {
+func TestResponseJsonIsANumberValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsANumber, Property: "point", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -1103,7 +1179,8 @@ func Test_ResponseJson_isANumber_valid(t *testing.T) {
 		err:      false,
 	})
 }
-func Test_ResponseJson_isANumber_invalid(t *testing.T) {
+
+func TestResponseJsonIsANumberInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsANumber, Property: "emails", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -1114,7 +1191,7 @@ func Test_ResponseJson_isANumber_invalid(t *testing.T) {
 	})
 }
 
-func Test_ResponseJson_inexistantKey(t *testing.T) {
+func TestResponseJsonNoKey(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsANumber, Property: "inexistant", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -1125,18 +1202,7 @@ func Test_ResponseJson_inexistantKey(t *testing.T) {
 	})
 }
 
-func Test_ResponseJson_emptyJson(t *testing.T) {
-	assertion := model.Assertion{Comparison: model.IsANumber, Property: "inexistant", Source: model.ResponseJson}
-	te(t, assertion, response, expectedResult{
-		source:   model.ResponseJson,
-		message:  "Unable to locate inexistant property in path 'inexistant' in JSON",
-		property: assertion.Property,
-		success:  false,
-		err:      true,
-	})
-}
-
-func Test_ResponseJson_equals_bool_compareWithSomethingElse(t *testing.T) {
+func TestResponseJsonEqualsBoolCompareWithSomethingElse(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Equal, Value: "toto", Property: "active", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -1156,7 +1222,7 @@ var responseH = model.Response{
 	Header: header,
 }
 
-func Test_ResponseHeader_equals(t *testing.T) {
+func TestResponseHeaderEquals(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Equal, Value: "application/json; charset=utf-8", Property: "Content-Type", Source: model.ResponseHeader}
 	te(t, assertion, responseH, expectedResult{
 		source:   model.ResponseHeader,
@@ -1167,7 +1233,7 @@ func Test_ResponseHeader_equals(t *testing.T) {
 	})
 }
 
-func Test_ResponseHeader_equals_non_canonical_format(t *testing.T) {
+func TestResponseHeaderEqualsNonCanonicalFormat(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Equal, Value: "application/json; charset=utf-8", Property: "content-type", Source: model.ResponseHeader}
 	te(t, assertion, responseH, expectedResult{
 		source:   model.ResponseHeader,
@@ -1178,7 +1244,7 @@ func Test_ResponseHeader_equals_non_canonical_format(t *testing.T) {
 	})
 }
 
-func Test_ResponseHeader_HasKey(t *testing.T) {
+func TestResponseHeaderHasKey(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.HasKey, Value: "", Property: "Content-Type", Source: model.ResponseHeader}
 	te(t, assertion, responseH, expectedResult{
 		source:   model.ResponseHeader,
@@ -1189,7 +1255,7 @@ func Test_ResponseHeader_HasKey(t *testing.T) {
 	})
 }
 
-func Test_ResponseHeader_IsNull(t *testing.T) {
+func TestResponseHeaderIsNull(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsNull, Value: "", Property: "unkown-key", Source: model.ResponseHeader}
 	te(t, assertion, responseH, expectedResult{
 		source:   model.ResponseHeader,
@@ -1200,7 +1266,7 @@ func Test_ResponseHeader_IsNull(t *testing.T) {
 	})
 }
 
-func Test_ResponseHeader_error_NotFount(t *testing.T) {
+func TestResponseHeaderErrorNotFound(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Equal, Value: "toto", Property: "unkown-key", Source: model.ResponseHeader}
 	te(t, assertion, responseH, expectedResult{
 		source:   model.ResponseHeader,
