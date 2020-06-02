@@ -45,7 +45,7 @@ coverage:
 	$(GOTEST) -short -mod=vendor -coverprofile=.coverage/profile.cov.tmp ./...
 	cat .coverage/profile.cov.tmp | grep -v "_gen.go"> .coverage/profile.cov
 ifeq ($(CI), true)
-	go get github.com/mattn/goveralls
+	GO111MODULE=off $(GOGET) github.com/mattn/goveralls
 	goveralls -coverprofile=.coverage/profile.cov -service=travis-ci
 endif
 
