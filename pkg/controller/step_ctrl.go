@@ -200,7 +200,8 @@ func attachVariablesToContext(response model.Response, vars []model.Variable) []
 func convertAndPatchToHttpRequest(step model.Step) (rest.Request, []model.ResultVariable, error) {
 
 	var result []model.ResultVariable
-	baseUrl, queryParams, err := step.ExtractUrl()
+	step.URL = patch(step.URL, "URL", &result)
+	urlPatched, queryParams, err := step.ExtractUrl()
 	if err != nil {
 		return rest.Request{}, result, err
 	}
@@ -221,7 +222,6 @@ func convertAndPatchToHttpRequest(step model.Step) (rest.Request, []model.Result
 
 	// Patches
 	bodyPatched := patch(step.Body, "body", &result)
-	urlPatched := patch(baseUrl, "URL", &result)
 	for key, value := range queryParams {
 		queryParams[key] = patch(value, "params["+key+"]", &result)
 	}
