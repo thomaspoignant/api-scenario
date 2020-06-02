@@ -1,10 +1,11 @@
 package util_test
 
 import (
+	"testing"
+
 	"github.com/google/go-cmp/cmp"
 	"github.com/thomaspoignant/api-scenario/pkg/util"
 	"github.com/thomaspoignant/api-scenario/test"
-	"testing"
 )
 
 func Test_IsJson_empyDocument(t *testing.T) {
@@ -75,4 +76,10 @@ func Test_StringToJson_empty(t *testing.T) {
 	if !cmp.Equal(want, got) {
 		t.Errorf("want %v, got %v", want, got)
 	}
+}
+
+func Test_StringToJson_err(t *testing.T) {
+	input := "ko"
+	_, err := util.StringToJson(input)
+	test.Ko(t, err)
 }

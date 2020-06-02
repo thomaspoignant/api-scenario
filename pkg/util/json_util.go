@@ -2,7 +2,6 @@ package util
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"regexp"
 	"strings"
@@ -26,9 +25,5 @@ func StringToJson(s string) (map[string]interface{}, error) {
 		return data, err
 	}
 
-	//TODO: si data est vide cela veut dire qu'on a pas reussi a le parser
-	if data == nil {
-		return nil, fmt.Errorf("impossible to parse result, invalid JSON")
-	}
 	return data, nil
 }
