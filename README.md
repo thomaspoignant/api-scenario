@@ -16,6 +16,12 @@ locally your development.
 ---
 
 - [Why this project?](#why-this-project)
+- [Installation](#installation)
+  - [Install using Homebrew (mac and linux)](#install-using-homebrew-mac-and-linux)
+  - [Install using Scoop (windows)](#install-using-scoop-windows)
+  - [Install using .deb file (linux)](#install-using-deb-file-linux)
+  - [Install using .rpm file (linux)](#install-using-rpm-file-linux)
+  - [Use docker image](#use-docker-image)
 - [Command line usage](#command-line-usage)
   - [Version](#version)
   - [Execute your scenario](#execute-your-scenario)
@@ -45,7 +51,55 @@ You can create a scenario and start using it during development, but also use it
 
 You can use variables in your scenario, so you are sure to run the same test suite on each environment and be sure of 
 your release.
+---
+
+# Installation
+All the binaries are available in the [release](https://github.com/thomaspoignant/api-scenario/releases).
+
+## Install using Homebrew (mac and linux)
+If you are using Homebrew package manager, you can install api-scenario with Homebrew. 
  
+```shell script
+brew tap thomaspoignant/homebrew-tap
+brew install api-scenario
+```
+
+## Install using Scoop (windows)
+
+If you are on Windows and using scoop package manager, you can install api-scenario with [Scoop](https://scoop.sh/).
+```shell script
+scoop bucket add org https://github.com/thomaspoignant/scoop.git
+scoop install api-scenario
+```
+
+## Install using .deb file (linux)
+If you prefer to use directly the `.deb` file to install in your debian like linux distribution.  
+_Don't forget to set the correct version number._
+```shell script
+wget https://github.com/thomaspoignant/api-scenario/releases/download/v0.0.1/api-scenario_X.X.X_Tux_64-bit.deb && dpkg -i api-scenario_*.deb
+```
+
+## Install using .rpm file (linux)
+If you prefer to use directly the `.rpm` file to install in your centos/fedora like linux distribution.  
+_Don't forget to set the correct version number._
+```shell script
+wget https://github.com/thomaspoignant/api-scenario/releases/download/v0.0.1/api-scenario_X.X.X_Tux_64-bit.rpm && rpm -i api-scenario_*.rpm
+```
+
+## Use docker image
+To use the last version of our docker image you can pull `thomaspoignant/api-scenario:latest`.
+
+```shell script
+docker pull thomaspoignant/api-scenario:latest
+```
+
+You can also pull all the version directly but also directly a major version.  
+Available images are:
+- `docker pull thomaspoignant/api-scenario:latest` _(target the latest version)_
+- `docker pull thomaspoignant/api-scenario:vX` _(target the major version)_
+- `docker pull thomaspoignant/api-scenario:vX.X` _(target the minor version)_
+- `docker pull thomaspoignant/api-scenario:vX.X.X` _(target a specific version)_
+
 ---
 # Command line usage
 
