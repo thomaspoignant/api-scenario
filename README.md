@@ -51,6 +51,7 @@ You can create a scenario and start using it during development, but also use it
 
 You can use variables in your scenario, so you are sure to run the same test suite on each environment and be sure of 
 your release.
+
 ---
 
 # Installation
