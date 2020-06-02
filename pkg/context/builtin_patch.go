@@ -8,9 +8,6 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"fmt"
-	"github.com/google/uuid"
-	"github.com/metakeule/fmtdate"
-	"github.com/thanhpk/randstr"
 	hash2 "hash"
 	"math/rand"
 	"net/url"
@@ -18,6 +15,10 @@ import (
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/google/uuid"
+	"github.com/metakeule/fmtdate"
+	"github.com/thanhpk/randstr"
 )
 
 // randomInt replace {{random_int}} by a Random integer between 0 and 18446744073709551615
@@ -109,23 +110,14 @@ func hash(s string) string {
 		switch algorithm {
 		case "md5":
 			replaceValue = fmt.Sprintf("%x", md5.Sum([]byte(itemToHash)))
-			break
-
 		case "encode_base64":
 			replaceValue = base64.StdEncoding.EncodeToString([]byte(itemToHash))
-			break
-
 		case "sha1":
 			replaceValue = fmt.Sprintf("%x", sha1.Sum([]byte(itemToHash)))
-			break
-
 		case "sha256":
 			replaceValue = fmt.Sprintf("%x", sha256.Sum256([]byte(itemToHash)))
-			break
-
 		case "url_encode":
 			replaceValue = url.QueryEscape(itemToHash)
-			break
 		}
 		s = strings.Replace(s, variable, replaceValue, 1)
 	}
@@ -145,13 +137,12 @@ func hmacSha(s string) string {
 		switch algorithm {
 		case "hmac_sha1":
 			mac = hmac.New(sha1.New, []byte(key))
-			break
-
 		case "hmac_sha256":
 			mac = hmac.New(sha256.New, []byte(key))
-			break
 		}
-		mac.Write([]byte(value))
+		if _, err := mac.Write([]byte(value)); err != nil {
+			panic(fmt.Sprintf("hmac of %q: %v", s, err))
+		}
 		expectedMAC := mac.Sum(nil)
 		replaceValue := hex.EncodeToString(expectedMAC)
 		s = strings.Replace(s, variable, replaceValue, 1)

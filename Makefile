@@ -7,11 +7,12 @@ GOGET=$(GOCMD) get
 GOVET=$(GOCMD) vet
 
 GOFMT=gofmt
-GOLINT=golint
+GOLINT=golangci-lint
 BINARY_NAME=api-scenario
 CMD_FOLDER=cmd
 COVERAGE_FOLDER=.coverage
 RELEASE_VERSION?=unset
+GOLANGCI_VERSION=v1.27.0
 
 all: generate build lint test
 
@@ -28,8 +29,10 @@ update-dependencies: ## update golang dependencies
 
 generate:
 	$(GOGET) github.com/alvaroloes/enumer
+	$(GOGET) github.com/google/wire/cmd/wire
 	$(GOCMD) generate ./...
 	wire ./...
+	
 
 test: update-dependencies generate
 	$(GOTEST) -short -mod=vendor ./...
@@ -41,7 +44,13 @@ coverage:
 	mkdir -p .coverage/
 	$(GOTEST) -short -mod=vendor -coverprofile=.coverage/profile.cov.tmp ./...
 	cat .coverage/profile.cov.tmp | grep -v "_gen.go"> .coverage/profile.cov
+ifeq ($(CI), true)
+	GO111MODULE=off $(GOGET) github.com/mattn/goveralls
+	goveralls -coverprofile=.coverage/profile.cov -service=travis-ci
+endif
 
 lint:
-	$(GOGET) golang.org/x/lint/golint
-	$(GOLINT) -set_exit_status $($(GOCMD) list ./... | grep -v /vendor/)
+ifeq ($(CI), true)
+	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin $(GOLANGCI_VERSION)
+endif
+	$(GOLINT) run --config ./.golangci.yml

@@ -1,11 +1,12 @@
 package model_test
 
 import (
+	"testing"
+	"time"
+
 	"github.com/sendgrid/rest"
 	"github.com/thomaspoignant/api-scenario/pkg/model"
 	"github.com/thomaspoignant/api-scenario/test"
-	"testing"
-	"time"
 )
 
 func Test_NewResponse_CreateAValidResponse(t *testing.T) {
