@@ -7,6 +7,7 @@ type ScenarioResult struct {
 	StepResults []ResultStep `json:"stepResults"`
 }
 
+// IsSuccess check if the scenario was success.
 func (scenario *ScenarioResult) IsSuccess() bool {
 	for _, stepResult := range scenario.StepResults {
 		if !stepResult.IsSuccess() {
