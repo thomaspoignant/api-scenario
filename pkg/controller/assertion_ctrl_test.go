@@ -1030,7 +1030,7 @@ func TestResponseJsonIsNumber(t *testing.T) {
 		err:      false,
 	})
 }
-func TestResponseJsonIsNull_nullObject(t *testing.T) {
+func TestResponseJsonIsNullNullObject(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsNull, Property: "building", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
@@ -1115,17 +1115,6 @@ func TestResponseJsonIsANumberInvalid(t *testing.T) {
 }
 
 func TestResponseJsonNoKey(t *testing.T) {
-	assertion := model.Assertion{Comparison: model.IsANumber, Property: "inexistant", Source: model.ResponseJson}
-	te(t, assertion, response, expectedResult{
-		source:   model.ResponseJson,
-		message:  "Unable to locate inexistant property in path 'inexistant' in JSON",
-		property: assertion.Property,
-		success:  false,
-		err:      true,
-	})
-}
-
-func TestResponseJsonEmptyJson(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsANumber, Property: "inexistant", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
