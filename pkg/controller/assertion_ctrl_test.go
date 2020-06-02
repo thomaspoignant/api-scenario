@@ -1070,6 +1070,28 @@ func TestResponseJsonEmptyEmptyObject(t *testing.T) {
 	})
 }
 
+func TestResponseJsonHasSchemaValueValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.HasValue, Value: "urn:ietf:params:scim:schemas:core:2.0:User", Property: "schemas", Source: model.ResponseJson}
+	te(t, assertion, response, expectedResult{
+		source:   model.ResponseJson,
+		message:  "'schemas' had value",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseJsonHasSchemaValueInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.HasValue, Value: "test", Property: "schemas", Source: model.ResponseJson}
+	te(t, assertion, response, expectedResult{
+		source:   model.ResponseJson,
+		message:  "'schemas' had no value",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
 func TestResponseJsonIsNumber(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsANumber, Property: "name", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
