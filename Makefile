@@ -44,13 +44,16 @@ coverage:
 	mkdir -p .coverage/
 	$(GOTEST) -short -mod=vendor -coverprofile=.coverage/profile.cov.tmp ./...
 	cat .coverage/profile.cov.tmp | grep -v "_gen.go"> .coverage/profile.cov
-ifeq ($(CI), true)
-	GO111MODULE=off $(GOGET) github.com/mattn/goveralls
-	goveralls -coverprofile=.coverage/profile.cov -service=travis-ci
-endif
+	ifeq ($(CI), true)
+		GO111MODULE=off $(GOGET) github.com/mattn/goveralls
+		goveralls -coverprofile=.coverage/profile.cov -service=travis-ci
+	endif
 
 lint:
 ifeq ($(CI), true)
 	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin $(GOLANGCI_VERSION)
 endif
 	$(GOLINT) run --config ./.golangci.yml
+
+# Setup your environment
+setup: update-dependencies generate
