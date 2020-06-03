@@ -49,7 +49,7 @@ Pull requests are the best way to propose changes to the codebase. We actively w
 7. Verify that all CI checks passed on your PR.
 
 # Licence
-Any contributions you make will be under the Unlicence Software License.
+Any contributions you make will be under the [Unlicence](https://github.com/thomaspoignant/api-scenario/blob/master/LICENSE).
 
 In short, when you submit code changes, your submissions are understood to be under the same Unlicence that covers the project. Feel free to contact the maintainers if that's a concern.
 
