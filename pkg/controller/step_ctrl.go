@@ -3,6 +3,7 @@ package controller
 import (
 	"errors"
 	"fmt"
+	"net/url"
 	"reflect"
 	"strconv"
 	"time"
@@ -196,12 +197,14 @@ func attachVariablesToContext(response model.Response, vars []model.Variable) []
 	return result
 }
 
+
+
 // convertAndPatchToHttpRequest create the HTTP request to call.
 func convertAndPatchToHttpRequest(step model.Step) (rest.Request, []model.ResultVariable, error) {
 
 	var result []model.ResultVariable
-	step.URL = patch(step.URL, "URL", &result)
-	urlPatched, queryParams, err := step.ExtractUrl()
+	urlPatched := context.GetContext().Patch(step.URL)
+	baseUrl, queryParams, err := extractUrl(urlPatched)
 	if err != nil {
 		return rest.Request{}, result, err
 	}
@@ -221,12 +224,9 @@ func convertAndPatchToHttpRequest(step model.Step) (rest.Request, []model.Result
 	}
 
 	// Patches
-	bodyPatched := patch(step.Body, "body", &result)
-	for key, value := range queryParams {
-		queryParams[key] = patch(value, "params["+key+"]", &result)
-	}
+	bodyPatched := patchVariable(step.Body, "body", &result)
 	for key, value := range headers {
-		headers[key] = patch(value, "headers."+key, &result)
+		headers[key] = patchVariable(value, "headers."+key, &result)
 	}
 
 	return rest.Request{
@@ -234,13 +234,30 @@ func convertAndPatchToHttpRequest(step model.Step) (rest.Request, []model.Result
 		Headers:     headers,
 		QueryParams: queryParams,
 		Body:        []byte(bodyPatched),
-		BaseURL:     urlPatched,
+		BaseURL:     baseUrl,
 	}, result, nil
 }
 
-// patch is applying a patch with the context on the "initial" string and also
+// extractUrl extract URL and params to have URL and params in 2 variables.
+func extractUrl(urlToParse string) (string, map[string]string, error) {
+	u, err := url.Parse(urlToParse)
+	if err != nil {
+		return "", nil, err
+	}
+
+	baseUrl := u.Scheme + "://" + u.Host + u.Path
+	convertedQueryParams := make(map[string]string)
+	for key, value := range u.Query() {
+		if len(value) > 0 {
+			convertedQueryParams[key] = value[0]
+		}
+	}
+	return baseUrl, convertedQueryParams, nil
+}
+
+// patchVariable is applying a patch with the context on the "initial" string and also
 // update the slice of 'variables"
-func patch(initial string, name string, variables *[]model.ResultVariable) string {
+func patchVariable(initial string, name string, variables *[]model.ResultVariable) string {
 	initialValue := string(initial)
 	patchedValue := context.GetContext().Patch(initial)
 
