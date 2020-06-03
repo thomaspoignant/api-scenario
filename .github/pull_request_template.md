@@ -4,13 +4,13 @@ Please add a description of what your pull request is doing.
  - What was the problem?
  - How it is resolved?
  - How can we test the change?
- - If there is breaking changes, please describe them in details and why we cannot avoid them.
+ - If there are breaking changes, please describe them in detail and why we cannot avoid them.
 -->
 
 # Changes include
 - [ ] Bugfix (non-breaking change that solves an issue)
 - [ ] New feature (non-breaking change that adds functionality)
-- [ ] Breaking changes (change that is not backwards-comptible and/or changes current functionality)
+- [ ] Breaking changes (change that is not backward-comptible and/or changes current functionality)
 
 # Closes issue(s)
 <!-- 
