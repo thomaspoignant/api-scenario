@@ -7,12 +7,12 @@ import (
 	"github.com/thomaspoignant/api-scenario/pkg/log"
 )
 
-type  ResultAssertion struct {
-	Success  bool
-	Source   Source
-	Property string
-	Err      error
-	Message  string
+type ResultAssertion struct {
+	Success  bool   `json:"success"`
+	Source   Source `json:"source,omitempty"`
+	Property string `json:"property,omitempty"`
+	Err      error  `json:"error,omitempty"`
+	Message  string `json:"message,omitempty"`
 }
 
 func NewResultAssertion(comparison Comparison, success bool, v ...interface{}) ResultAssertion {

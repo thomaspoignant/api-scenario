@@ -1,6 +1,6 @@
 package model
 
-// An Assertion defines one expected result
+// An Assertions defines one expected result
 type Assertion struct {
 	Comparison Comparison `json:"comparison"`
 	Value      string     `json:"value"`

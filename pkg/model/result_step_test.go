@@ -28,13 +28,13 @@ func TestResultStepIsSuccessRequestSuccessEmpty(t *testing.T) {
 func TestResultStepIsSuccessRequestSuccess(t *testing.T) {
 	resStep := model.ResultStep{
 		StepType: model.RequestStep,
-		VariableCreated: []model.ResultVariable{
+		VariablesCreated: []model.ResultVariable{
 			{Err: nil},
 		},
-		VariableApplied: []model.ResultVariable{
+		VariablesApplied: []model.ResultVariable{
 			{Err: nil},
 		},
-		Assertion: []model.ResultAssertion{
+		Assertions: []model.ResultAssertion{
 			{Success: true},
 		},
 	}
@@ -46,13 +46,13 @@ func TestResultStepIsSuccessRequestSuccess(t *testing.T) {
 func TestResultStepIsSuccessRequestAssertionFailed(t *testing.T) {
 	resStep := model.ResultStep{
 		StepType: model.RequestStep,
-		VariableCreated: []model.ResultVariable{
+		VariablesCreated: []model.ResultVariable{
 			{Err: nil},
 		},
-		VariableApplied: []model.ResultVariable{
+		VariablesApplied: []model.ResultVariable{
 			{Err: nil},
 		},
-		Assertion: []model.ResultAssertion{
+		Assertions: []model.ResultAssertion{
 			{Success: false},
 		},
 	}
@@ -64,36 +64,36 @@ func TestResultStepIsSuccessRequestAssertionFailed(t *testing.T) {
 func TestResultStepIsSuccessRequestVariableCreatedFailed(t *testing.T) {
 	resStep := model.ResultStep{
 		StepType: model.RequestStep,
-		VariableCreated: []model.ResultVariable{
+		VariablesCreated: []model.ResultVariable{
 			{Err: fmt.Errorf("random error")},
 		},
-		VariableApplied: []model.ResultVariable{
+		VariablesApplied: []model.ResultVariable{
 			{Err: nil},
 		},
-		Assertion: []model.ResultAssertion{
+		Assertions: []model.ResultAssertion{
 			{Success: true},
 		},
 	}
 
 	got := resStep.IsSuccess()
-	test.Equals(t, "VariableCreated error should be on error", false, got)
+	test.Equals(t, "VariablesCreated error should be on error", false, got)
 }
 
 func TestResultStepIsSuccessRequestVariableAppliedFailed(t *testing.T) {
 	resStep := model.ResultStep{
 		StepType: model.RequestStep,
-		VariableCreated: []model.ResultVariable{
+		VariablesCreated: []model.ResultVariable{
 			{Err: nil},
 		},
-		VariableApplied: []model.ResultVariable{
+		VariablesApplied: []model.ResultVariable{
 
 			{Err: fmt.Errorf("random error")},
 		},
-		Assertion: []model.ResultAssertion{
+		Assertions: []model.ResultAssertion{
 			{Success: true},
 		},
 	}
 
 	got := resStep.IsSuccess()
-	test.Equals(t, "VariableApplied error should be on error", false, got)
+	test.Equals(t, "VariablesApplied error should be on error", false, got)
 }

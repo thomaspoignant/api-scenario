@@ -26,6 +26,7 @@ locally your development.
 - [Command line usage](#command-line-usage)
   - [Version](#version)
   - [Execute your scenario](#execute-your-scenario)
+    - [Save result into file](#save-result-into-file)
 - [Creating Your First Test](#creating-your-first-test)
   - [The basic structure of the file](#the-basic-structure-of-the-file)
   - [Our first step](#our-first-step)
@@ -129,6 +130,18 @@ There are several options you can use with this command:
 |`--verbose`             | `-s`          |          |Run your scenario with debug information.
 |`--quiet`               | `-s`          |          |Run your scenario in quiet mode.
 |`--no-color`            |               |          |Do not display color on the output.
+|`--output-file`         | `-f`          |          |Output file where to save the result _(use `--output-format` to specify if you want `JSON` or `YAML` output)_.
+|`--output-format`       |               |          |Format of the output file, available values are `JSON` and `YAML` _(ignored if `--output-file` is not set, default value is `JSON`)_.
+
+### Save result into file
+To keep history of your scenario execution you can export the results into a file.
+You just have to add the option `--output-file="<your file location>"` and it will save the result into a `JSON` file 
+_(If you prefer `YAML` result add `--output-format=YAML`)_.
+
+**Example:**
+```shell script
+$ api-scenario run --scenario="./scenario.json" --output-file="<your file location>" --output-format=YAML
+```
 
 ---
 # Creating Your First Test

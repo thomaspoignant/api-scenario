@@ -119,7 +119,7 @@ func TestRequestValid(t *testing.T) {
 	test.Equals(t, "Should return method", rest.Get, got.Request.Method)
 	wantHeaders := map[string]string{
 		"Content-Type": "other_test_1",
-		"Accept":"application/json",
+		"Accept":       "application/json",
 	}
 	test.Equals(t, "Should have patch headers", wantHeaders, got.Request.Headers)
 	wantParams := map[string]string{
@@ -132,8 +132,8 @@ func TestRequestValid(t *testing.T) {
 	// Check response
 	test.Assert(t, got.Response.TimeElapsed > 0, "TimeElapsed should be positive")
 	test.Equals(t, "Should have response status = 200", 200, got.Response.StatusCode)
-	test.Equals(t, "Should have 1 assertion", 1, len(got.Assertion))
-	test.Equals(t, "Should have valid assertion", true, got.Assertion[0].Success)
-	test.Equals(t, "Should have patch 2 elements of the request", 2, len(got.VariableApplied))
-	test.Equals(t, "Should have create 6 variables", 6, len(got.VariableCreated))
+	test.Equals(t, "Should have 1 assertion", 1, len(got.Assertions))
+	test.Equals(t, "Should have valid assertion", true, got.Assertions[0].Success)
+	test.Equals(t, "Should have patch 2 elements of the request", 2, len(got.VariablesApplied))
+	test.Equals(t, "Should have create 6 variables", 6, len(got.VariablesCreated))
 }

@@ -15,10 +15,10 @@ const (
 )
 
 type ResultVariable struct {
-	Key      string
-	NewValue string
-	Err      error
-	Type     ResultVariableType
+	Key      string             `json:"name,omitempty"`
+	NewValue string             `json:"value,omitempty"`
+	Err      error              `json:"error,omitempty"`
+	Type     ResultVariableType `json:"-"`
 }
 
 func (rv *ResultVariable) Print() {

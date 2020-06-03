@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"encoding/json"
+	"github.com/ghodss/yaml"
+	"io/ioutil"
 	"os"
 	"strings"
 
@@ -17,6 +20,8 @@ var headers []string
 var variables []string
 var inputFile string
 var token string
+var outputFile string
+var outputFormat string
 
 // init setup the flags used by the run command.
 func init() {
@@ -25,6 +30,8 @@ func init() {
 	runCmd.Flags().StringArrayVarP(&headers, "header", "H", []string{}, "Header you want to override (format should be \"header_name:value\").")
 	runCmd.Flags().StringArrayVarP(&variables, "variable", "V", []string{}, "Value for a variable used in your scenario (format should be \"variable_name:value\").")
 	runCmd.Flags().StringVarP(&token, "authorization-token", "t", "", "Authorization token send in the Authorization headers.")
+	runCmd.Flags().StringVarP(&outputFile, "output-file", "f", "", "Output file where to save the result (use --output-format to specify if you want JSON or YAML output).")
+	runCmd.Flags().StringVar(&outputFormat, "output-format", "JSON", "Format of the output file, available values are JSON and YAML (ignored if --output-file is not set).")
 	if err := runCmd.MarkFlagRequired("scenario"); err != nil {
 		panic(err)
 	}
@@ -43,19 +50,14 @@ var runCmd = &cobra.Command{
 
 		// Parse the input file
 		scenario, err := model.InitScenarioFromFile(inputFile)
-		if err != nil {
-			logrus.Error(err)
-			os.Exit(1)
-		}
+		util.ExitIfErr(err)
 
 		// run the scenario
 		ctrl, err := controller.InitializeScenarioController()
-		if err != nil {
-			logrus.Error(err)
-			os.Exit(1)
-		}
+		util.ExitIfErr(err)
 
 		res := ctrl.Run(scenario)
+		saveResultInFile(res)
 		if !res.IsSuccess() {
 			os.Exit(1)
 		}
@@ -93,4 +95,27 @@ func formatHeadersForConfig(headers []string, token string) map[string]string {
 		res["Authorization"] = util.AddBearerPrefix(token)
 	}
 	return res
+}
+
+// save result in a file
+func saveResultInFile(result model.ScenarioResult) {
+
+	if len(outputFile) == 0 {
+		return
+	}
+
+	var s []byte
+	var err error
+	// Marshal in the choosing format
+	if strings.ToUpper(outputFormat) == "YAML" || strings.ToUpper(outputFormat) == "YML" {
+		s, err = yaml.Marshal(result)
+	} else {
+		s, err = json.Marshal(result)
+	}
+	util.ExitIfErr(err)
+
+	err = ioutil.WriteFile(outputFile, s, 0644)
+	util.ExitIfErr(err)
+
+	logrus.Infof("Output file %s saved", outputFile)
 }
