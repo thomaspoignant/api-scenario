@@ -81,10 +81,10 @@ func (sc *stepControllerImpl) request(step model.Step) (model.ResultStep, error)
 	}
 
 	// apply variable on the request
-	result.VariableApplied = variables
+	result.VariablesApplied = variables
 
 	// Display request
-	printRestRequest(req, result.VariableApplied)
+	printRestRequest(req, result.VariablesApplied)
 
 	// call the API
 	start := time.Now()
@@ -104,14 +104,14 @@ func (sc *stepControllerImpl) request(step model.Step) (model.ResultStep, error)
 	result.Response = response
 
 	// Check the assertions
-	result.Assertion = sc.assertResponse(response, step.Assertions)
+	result.Assertions = sc.assertResponse(response, step.Assertions)
 
 	// Add variables to context
-	result.VariableCreated = attachVariablesToContext(response, step.Variables)
+	result.VariablesCreated = attachVariablesToContext(response, step.Variables)
 
-	if len(result.VariableCreated) > 0 {
+	if len(result.VariablesCreated) > 0 {
 		logrus.Info("Variables  created:")
-		for _, currentVar := range result.VariableCreated {
+		for _, currentVar := range result.VariablesCreated {
 			currentVar.Print()
 		}
 	}

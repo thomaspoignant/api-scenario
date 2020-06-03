@@ -266,13 +266,13 @@ func (ctrl *assertionControllerImpl) assertString(assertion model.Assertion, api
 }
 
 // assertBool is testing the value "apiValue" with the comparison on boolean.
-func (ctrl *assertionControllerImpl) assertBool(assertion model.Assertion, apiValue bool)  model.ResultAssertion {
+func (ctrl *assertionControllerImpl) assertBool(assertion model.Assertion, apiValue bool) model.ResultAssertion {
 
 	comparison := assertion.Comparison
 	assertionValue := assertion.Value
 	propertyName := assertion.Property
 
-	// Parse the Assertion value to have the bool value
+	// Parse the Assertions value to have the bool value
 	testValue, err := strconv.ParseBool(assertionValue)
 	if err != nil {
 		message := fmt.Sprintf("'%s' was not comparable with a boolean value %t", assertionValue, apiValue)
@@ -380,5 +380,3 @@ func (ctrl *assertionControllerImpl) assertMap(assertion model.Assertion, apiVal
 		return model.ResultAssertion{Success: false, Message: message, Err: errors.New(message)}
 	}
 }
-
-

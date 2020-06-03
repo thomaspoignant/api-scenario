@@ -32,7 +32,7 @@ func te(t *testing.T, assertion model.Assertion, response model.Response, expect
 	test.Equals(t, "invalid source", expected.source, got.Source)
 	test.Equals(t, "invalid message", expected.message, got.Message)
 	test.Equals(t, "should not have property for response_status source", expected.property, got.Property)
-	test.Equals(t, "wrong model.Assertion result", expected.success, got.Success)
+	test.Equals(t, "wrong model.Assertions result", expected.success, got.Success)
 }
 
 // response_status

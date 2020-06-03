@@ -4,7 +4,7 @@ description: A full description of your test scenario
 version: '1.0'
 steps:
   - step_type: request
-    url: "{{baseUrl}}/api/users"
+    url: "http://{{baseUrl}}/api/users"
     method: GET
     headers:
       Content-Type:

@@ -1,10 +1,10 @@
 package model
 
 type ScenarioResult struct {
-	Name        string       `json:"name"`
-	Version     string       `json:"version"`
-	Description string       `json:"description"`
-	StepResults []ResultStep `json:"stepResults"`
+	Name        string       `json:"name,omitempty"`
+	Version     string       `json:"version,omitempty"`
+	Description string       `json:"description,omitempty"`
+	StepResults []ResultStep `json:"step_results,omitempty"`
 }
 
 // IsSuccess check if the scenario was success.

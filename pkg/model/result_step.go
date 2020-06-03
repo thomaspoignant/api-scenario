@@ -7,25 +7,26 @@ import (
 
 type ResultStep struct {
 	// Common result for every step types
-	StepType StepType
-	StepTime time.Duration
+	StepType StepType      `json:"step_type"`
+	StepTime time.Duration `json:"step_time,omitempty"`
 
 	// Specific for type request
-	Request         rest.Request
-	Response        Response
-	Assertion       []ResultAssertion
-	VariableApplied []ResultVariable
-	VariableCreated []ResultVariable
+	Request          rest.Request      `json:"request,omitempty"`
+	Response         Response          `json:"response,omitempty"`
+	Assertions       []ResultAssertion `json:"assertions,omitempty"`
+	VariablesApplied []ResultVariable  `json:"variables_applied,omitempty"`
+	VariablesCreated []ResultVariable  `json:"variables_created,omitempty"`
 }
 
+// IsSuccess check if the step was a success or not.
 func (step *ResultStep) IsSuccess() bool {
-	for _, assert := range step.Assertion {
+	for _, assert := range step.Assertions {
 		if !assert.Success {
 			return false
 		}
 	}
 
-	variables := append(step.VariableApplied, step.VariableCreated...)
+	variables := append(step.VariablesApplied, step.VariablesCreated...)
 	for _, variable := range variables {
 		if variable.Err != nil {
 			return false

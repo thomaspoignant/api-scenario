@@ -6,7 +6,7 @@ type RestClient interface {
 	Send(request rest.Request) (*rest.Response, error)
 }
 
-func NewRestClient() RestClient{
+func NewRestClient() RestClient {
 	return &RestClientImpl{}
 }
 

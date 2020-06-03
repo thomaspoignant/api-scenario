@@ -9,7 +9,6 @@ type ClientMock struct {
 
 func (c *ClientMock) Send(request rest.Request) (*rest.Response, error) {
 
-
 	if request.QueryParams["testNumber"] == "1" {
 		return &rest.Response{
 			Body: `{
@@ -23,8 +22,6 @@ func (c *ClientMock) Send(request rest.Request) (*rest.Response, error) {
 			},
 		}, nil
 	}
-
-
 
 	return &rest.Response{}, nil
 }
