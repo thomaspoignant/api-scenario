@@ -1,6 +1,8 @@
 package controller_test
 
 import (
+	"github.com/spf13/viper"
+	"github.com/thomaspoignant/api-scenario/pkg/context"
 	"testing"
 	"time"
 
@@ -52,9 +54,13 @@ func TestRequestValid(t *testing.T) {
 	testNumber := "1"
 	sc := controller.NewStepController(&test.ClientMock{}, controller.NewAssertionController())
 
+	context.GetContext().Add("baseUrl", "test.com")
+	viper.Set("headers", map[string]string{
+		"Accept": "application/json",
+	})
 	step := model.Step{
 		Body: `{"hello":"world_{{random_int(1,1)}}"}`,
-		URL:  "http://test.com/1/{{random_int(1,1)}}?param1=param1_{{random_int(1,1)}}&testNumber=" + testNumber,
+		URL:  "http://{{baseUrl}}/1/{{random_int(1,1)}}?param1=param1_{{random_int(1,1)}}&testNumber=" + testNumber,
 		Headers: map[string][]string{
 			"Content-Type": {"other_test_{{random_int(1,1)}}"},
 		},
@@ -113,6 +119,7 @@ func TestRequestValid(t *testing.T) {
 	test.Equals(t, "Should return method", rest.Get, got.Request.Method)
 	wantHeaders := map[string]string{
 		"Content-Type": "other_test_1",
+		"Accept":"application/json",
 	}
 	test.Equals(t, "Should have patch headers", wantHeaders, got.Request.Headers)
 	wantParams := map[string]string{
@@ -127,6 +134,6 @@ func TestRequestValid(t *testing.T) {
 	test.Equals(t, "Should have response status = 200", 200, got.Response.StatusCode)
 	test.Equals(t, "Should have 1 assertion", 1, len(got.Assertion))
 	test.Equals(t, "Should have valid assertion", true, got.Assertion[0].Success)
-	test.Equals(t, "Should have apply 4 variables", 4, len(got.VariableApplied))
+	test.Equals(t, "Should have patch 2 elements of the request", 2, len(got.VariableApplied))
 	test.Equals(t, "Should have create 6 variables", 6, len(got.VariableCreated))
 }
