@@ -6,7 +6,6 @@
 [![Build Status](https://travis-ci.com/thomaspoignant/api-scenario.svg?token=sVd5BLjwtrGWjxxeoYSx&branch=master)](https://travis-ci.com/thomaspoignant/api-scenario)
 [![Coverage Status](https://coveralls.io/repos/github/thomaspoignant/api-scenario/badge.svg)](https://coveralls.io/github/thomaspoignant/api-scenario)
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=thomaspoignant_api-scenario&metric=alert_status)](https://sonarcloud.io/dashboard?id=thomaspoignant_api-scenario)
-
 ![Go version](https://img.shields.io/github/go-mod/go-version/thomaspoignant/api-scenario?logo=go%20version "Go Version")
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fthomaspoignant%2Fapi-scenario.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fthomaspoignant%2Fapi-scenario?ref=badge_shield)
  
