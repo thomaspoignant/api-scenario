@@ -5,7 +5,7 @@ import (
 	"github.com/thomaspoignant/api-scenario/cmd"
 )
 
-// VersionString is the current version of the cli. It is override im the make file during the build.
+// version, commit, date are override by goreleaser during the build.
 var version = "dev"
 var commit = "none"
 var date = "unknown"
