@@ -50,11 +50,11 @@ var runCmd = &cobra.Command{
 
 		// Parse the input file
 		scenario, err := model.InitScenarioFromFile(inputFile)
-		check(err)
+		util.ExitIfErr(err)
 
 		// run the scenario
 		ctrl, err := controller.InitializeScenarioController()
-		check(err)
+		util.ExitIfErr(err)
 
 		res := ctrl.Run(scenario)
 		saveResultInFile(res)
@@ -112,17 +112,10 @@ func saveResultInFile(result model.ScenarioResult) {
 	} else {
 		s, err = json.Marshal(result)
 	}
-	check(err)
+	util.ExitIfErr(err)
 
 	err = ioutil.WriteFile(outputFile, s, 0644)
-	check(err)
+	util.ExitIfErr(err)
 
 	logrus.Infof("Output file %s saved", outputFile)
-}
-
-func check(err error) {
-	if err != nil {
-		logrus.Error(err)
-		os.Exit(1)
-	}
 }

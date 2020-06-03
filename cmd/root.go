@@ -2,13 +2,12 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/mitchellh/go-homedir"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/thomaspoignant/api-scenario/pkg/log"
-	"os"
-
-	"github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
+	"github.com/thomaspoignant/api-scenario/pkg/log"
+	"github.com/thomaspoignant/api-scenario/pkg/util"
 )
 
 var cfgFile string
@@ -26,10 +25,8 @@ var rootCmd = &cobra.Command{
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
+	err := rootCmd.Execute()
+	util.ExitIfErr(err)
 }
 
 // init setup the flags used by all command line.
@@ -49,10 +46,7 @@ func initConfig() {
 	} else {
 		// Find home directory.
 		home, err := homedir.Dir()
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
+		util.ExitIfErr(err)
 
 		// Search config in home directory with name ".newApp" (without extension).
 		viper.AddConfigPath(home)

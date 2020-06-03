@@ -197,8 +197,6 @@ func attachVariablesToContext(response model.Response, vars []model.Variable) []
 	return result
 }
 
-
-
 // convertAndPatchToHttpRequest create the HTTP request to call.
 func convertAndPatchToHttpRequest(step model.Step) (rest.Request, []model.ResultVariable, error) {
 

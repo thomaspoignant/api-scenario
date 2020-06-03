@@ -119,7 +119,7 @@ func TestRequestValid(t *testing.T) {
 	test.Equals(t, "Should return method", rest.Get, got.Request.Method)
 	wantHeaders := map[string]string{
 		"Content-Type": "other_test_1",
-		"Accept":"application/json",
+		"Accept":       "application/json",
 	}
 	test.Equals(t, "Should have patch headers", wantHeaders, got.Request.Headers)
 	wantParams := map[string]string{
