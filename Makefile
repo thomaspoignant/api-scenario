@@ -54,3 +54,6 @@ ifeq ($(CI), true)
 	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(shell go env GOPATH)/bin $(GOLANGCI_VERSION)
 endif
 	$(GOLINT) run --config ./.golangci.yml
+
+# Setup your environment
+setup: update-dependencies generate
