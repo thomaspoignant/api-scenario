@@ -36,7 +36,7 @@ locally your development.
   - [Request](#request)
     - [Headers](#headers)
     - [Assertions](#assertions)
-      - [Assertion comparison](#assertion-comparison)
+      - [Assertion compostion](#assertion-compostion)
       - [Available comparison type](#available-comparison-type)
 - [Request Chaining](#request-chaining)
   - [Using Variables to Pass Data Between Steps](#using-variables-to-pass-data-between-steps)
@@ -336,7 +336,7 @@ headers:
 ### Assertions
 Assertions are a big part of api-scenario, this is the acceptance tests of your request, it will allow you to simply write test to verify that you endpoint is doing what you want.
 
-#### Assertion comparison
+#### Assertion compostion
 
 |Property        |Description  |
 |---             |---
@@ -352,9 +352,9 @@ Assertions are a big part of api-scenario, this is the acceptance tests of your 
   
   ```yaml
  - comparison: equals
-        property: schemas
-        value: User
-        source: response_json
+   property: schemas
+   value: User
+   source: response_json
   ```
 </details>
 
