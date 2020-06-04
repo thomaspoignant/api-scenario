@@ -1,35 +1,23 @@
 package model
 
 import (
-	"errors"
 	"net/http"
 	"time"
 
 	"github.com/sendgrid/rest"
-	"github.com/thomaspoignant/api-scenario/pkg/util"
 )
 
 type Response struct {
-	TimeElapsed time.Duration          `json:"time_elapsed,omitempty"` // e.g 1ms
-	StatusCode  int                    `json:"status_code,omitempty"`  // e.g. 200
-	Body        map[string]interface{} `json:"body,omitempty"`         // e.g. {"result: Success"}
-	Header      http.Header            `json:"header,omitempty"`       // e.g. map[X-Ratelimit-Limit:[600]]
+	TimeElapsed time.Duration `json:"time_elapsed,omitempty"` // e.g 1ms
+	StatusCode  int           `json:"status_code,omitempty"`  // e.g. 200
+	Body        string        `json:"body,omitempty"`         // e.g. {"result: Success"}
+	Header      http.Header   `json:"header,omitempty"`       // e.g. map[X-Ratelimit-Limit:[600]]
 }
 
 // Create a new responseApi from a rest.Response
 func NewResponse(restResponse rest.Response, timeElapsed time.Duration) (Response, error) {
-	var body map[string]interface{}
-	if len(restResponse.Body) > 0 && !util.IsJson(restResponse.Body) {
-		return Response{}, errors.New("there is a result and this is not a valid JSON api Response is not in JSON")
-	}
-
-	body, err := util.StringToJson(restResponse.Body)
-	if err != nil {
-		return Response{}, err
-	}
-
 	return Response{
-		Body:        body,
+		Body:        restResponse.Body,
 		StatusCode:  restResponse.StatusCode,
 		TimeElapsed: timeElapsed,
 		Header:      restResponse.Headers,

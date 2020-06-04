@@ -161,10 +161,21 @@ func attachVariablesToContext(response model.Response, vars []model.Variable) []
 				result = append(result, model.ResultVariable{Key: variable.Name, NewValue: header[0], Type: model.Created})
 			}
 
+		case model.ResponseText:
+			context.GetContext().Add(variable.Name, response.Body)
+			result = append(result, model.ResultVariable{Key: variable.Name, NewValue: response.Body, Type: model.Created})
+
 		case model.ResponseJson:
 			// Convert key name
 			jqPath := util.JsonConvertKeyName(variable.Property)
-			jq := jsonq.NewQuery(response.Body)
+
+			// Convert body to map[string]interface{}
+			body, err := util.StringToJson(response.Body)
+			if err != nil {
+				result = append(result, model.ResultVariable{Key: variable.Name, Err: err, Type: model.Created})
+			}
+
+			jq := jsonq.NewQuery(body)
 			extractedKey, err := jq.Interface(jqPath[:]...)
 			if err != nil {
 				result = append(result, model.ResultVariable{Key: variable.Name, Err: err, Type: model.Created})
