@@ -100,6 +100,10 @@ func TestRequestValid(t *testing.T) {
 				Name:     "response_header",
 				Property: "Content-Type",
 			},
+			{
+				Source: model.ResponseText,
+				Name: "response_text",
+			},
 		},
 		Assertions: []model.Assertion{
 			{
@@ -135,5 +139,5 @@ func TestRequestValid(t *testing.T) {
 	test.Equals(t, "Should have 1 assertion", 1, len(got.Assertions))
 	test.Equals(t, "Should have valid assertion", true, got.Assertions[0].Success)
 	test.Equals(t, "Should have patch 2 elements of the request", 2, len(got.VariablesApplied))
-	test.Equals(t, "Should have create 6 variables", 6, len(got.VariablesCreated))
+	test.Equals(t, "Should have create 7 variables", 7, len(got.VariablesCreated))
 }
