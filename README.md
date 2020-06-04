@@ -13,6 +13,8 @@ API-scenario is a simple command line tool that allow you to execute easily a sc
 It is perfect to make end to end tests, you could use in your CI workflow to validate your deployment or just to test 
 locally your development.
 
+
+![api-scenario demo](api-scenario.gif "api-scenario demo")
 ---
 
 - [Why this project?](#why-this-project)
