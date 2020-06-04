@@ -1213,6 +1213,19 @@ func TestResponseJsonEqualsBoolCompareWithSomethingElse(t *testing.T) {
 	})
 }
 
+func TestResponseJsonInvalidJson(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.Equal, Value: "toto", Property: "active", Source: model.ResponseJson}
+	te(t, assertion, model.Response{
+		Body: `{"hello":"world"`,
+	}, expectedResult{
+		source:   model.ResponseJson,
+		message:  "there is a result and this is not a valid JSON api Response is not in JSON",
+		property: assertion.Property,
+		success:  false,
+		err:      true,
+	})
+}
+
 // response_header
 var header http.Header = map[string][]string{
 	"Content-Type": []string{"application/json; charset=utf-8"},
