@@ -104,6 +104,8 @@ Available images are:
 - `docker pull thomaspoignant/api-scenario:vX.X` _(target the minor version)_
 - `docker pull thomaspoignant/api-scenario:vX.X.X` _(target a specific version)_
 
+[See docker hub page for usage.](https://hub.docker.com/r/thomaspoignant/api-scenario)
+
 ---
 # Command line usage
 
