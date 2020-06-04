@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"errors"
 	"fmt"
 	"github.com/jmoiron/jsonq"
 	"github.com/thomaspoignant/api-scenario/pkg/util"
@@ -71,7 +70,7 @@ func (sc *stepControllerImpl) request(step model.Step) (model.ResultStep, error)
 
 	req, variables, err := convertAndPatchToHttpRequest(step)
 	if err != nil {
-		return model.ResultStep{}, errors.New("impossible to convert the request")
+		return model.ResultStep{}, fmt.Errorf("impossible to convert the request [%s]", err.Error())
 	}
 
 	// init the result
