@@ -102,7 +102,7 @@ func TestRequestValid(t *testing.T) {
 			},
 			{
 				Source: model.ResponseText,
-				Name: "response_text",
+				Name:   "response_text",
 			},
 		},
 		Assertions: []model.Assertion{
