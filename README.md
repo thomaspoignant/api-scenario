@@ -36,7 +36,7 @@ locally your development.
   - [Request](#request)
     - [Headers](#headers)
     - [Assertions](#assertions)
-      - [Assertion composition](#assertion-composition)
+      - [Assertion comparison](#assertion-comparison)
       - [Available comparison type](#available-comparison-type)
 - [Request Chaining](#request-chaining)
   - [Using Variables to Pass Data Between Steps](#using-variables-to-pass-data-between-steps)
@@ -336,7 +336,7 @@ headers:
 ### Assertions
 Assertions are a big part of api-scenario, this is the acceptance tests of your request, it will allow you to simply write test to verify that you endpoint is doing what you want.
 
-#### Assertion composition
+#### Assertion comparison
 
 |Property        |Description  |
 |---             |---
