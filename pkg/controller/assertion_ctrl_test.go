@@ -656,7 +656,7 @@ func TestResponseJsonIsANumberStringValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsANumber, Property: "pointStr", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
-		message:  "'1500' was a number",
+		message:  "'pointStr' was a number",
 		property: assertion.Property,
 		success:  true,
 		err:      false,
@@ -667,7 +667,7 @@ func TestResponseJsonIsANumberStringInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsANumber, Property: "id", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
-		message:  "'id_2' was not a number",
+		message:  "'id' was not a number",
 		property: assertion.Property,
 		success:  false,
 		err:      false,
@@ -887,7 +887,7 @@ func TestResponseJsonEmptyStringValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Empty, Property: "companyName", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
-		message:  "'' was empty",
+		message:  "'companyName' was empty",
 		property: assertion.Property,
 		success:  true,
 		err:      false,
@@ -898,7 +898,7 @@ func TestResponseJsonEmptyStringInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Empty, Property: "id", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
-		message:  "'id_2' was not empty",
+		message:  "'id' was not empty",
 		property: assertion.Property,
 		success:  false,
 		err:      false,
@@ -1184,7 +1184,7 @@ func TestResponseJsonIsANumberInvalid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsANumber, Property: "emails", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
 		source:   model.ResponseJson,
-		message:  "'[map[primary:true value:indigo.anidter.ykxmid@test.com]]' was not a number",
+		message:  "'emails' was not a number",
 		property: assertion.Property,
 		success:  false,
 		err:      false,
@@ -1340,7 +1340,7 @@ func TestResponseTextIsEmptyValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Empty, Source: model.ResponseText}
 	te(t, assertion, responseText, expectedResult{
 		source:  model.ResponseText,
-		message: "'' was empty",
+		message: "'body' was empty",
 		success: true,
 		err:     false,
 	})
@@ -1351,7 +1351,7 @@ func TestResponseTextIsEmptyInValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Empty, Source: model.ResponseText}
 	te(t, assertion, responseText, expectedResult{
 		source:  model.ResponseText,
-		message: "'res' was not empty",
+		message: "'body' was not empty",
 		success: false,
 		err:     false,
 	})
@@ -1362,7 +1362,7 @@ func TestResponseTextIsNotEmptyValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.NotEmpty, Source: model.ResponseText}
 	te(t, assertion, responseText, expectedResult{
 		source:  model.ResponseText,
-		message: "'' was not empty",
+		message: "'body' was not empty",
 		success: true,
 		err:     false,
 	})
@@ -1373,7 +1373,7 @@ func TestResponseTextIsNotEmptyInValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.NotEmpty, Source: model.ResponseText}
 	te(t, assertion, responseText, expectedResult{
 		source:  model.ResponseText,
-		message: "'' was empty",
+		message: "'body' was empty",
 		success: false,
 		err:     false,
 	})
@@ -1439,7 +1439,7 @@ func TestResponseTextIsANumberInValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.IsANumber, Source: model.ResponseText}
 	te(t, assertion, responseText, expectedResult{
 		source:  model.ResponseText,
-		message: "'result' was not a number",
+		message: "'body' was not a number",
 		success: false,
 		err:     false,
 	})
@@ -1563,5 +1563,752 @@ func TestResponseTextGreaterThanOrEqualInValid(t *testing.T) {
 		message: "'9' was not greater than or equal to 10",
 		success: false,
 		err:     false,
+	})
+}
+
+// response_xml
+var bodyXml = `<?xml version="1.0" encoding="UTF-8"?>
+<root>
+   <active>true</active>
+   <building null="true" />
+   <company />
+   <companyName />
+   <emails>
+      <email>
+         <primary>true</primary>
+         <value>indigo.anidter.ykxmid@test.com</value>
+      </email>
+	  <email>
+         <primary>false</primary>
+         <value>indigo.anidter.ykxmid2@test.com</value>
+      </email>
+   </emails>
+   <id>id_2</id>
+   <meta>
+      <created>2020-01-09T09:04:34.588Z</created>
+      <lastModified>2020-01-09T09:05:55.943Z</lastModified>
+      <location>**REQUIRED**/Users/id_2</location>
+      <resourceType>User</resourceType>
+   </meta>
+   <name>
+      <familyName>Anidter</familyName>
+      <givenName>Indigo</givenName>
+   </name>
+   <point>1500</point>
+   <pointStr>1500</pointStr>
+   <roles />
+   <schemas>
+      <element>urn:ietf:params:scim:schemas:core:2.0:User</element>
+   </schemas>
+   <userName>indigo.anidter_ykxmid</userName>
+</root>`
+
+var responseXml = model.Response{
+	Body: bodyXml,
+}
+
+func TestResponseXmlEqualsStringValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.Equal, Value: "Anidter", Property: "root.name.familyName", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'Anidter' was equal to Anidter",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlEqualsStringComplexPath(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.Equal, Value: "indigo.anidter.ykxmid@test.com", Property: "root.emails.email[0].value", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'indigo.anidter.ykxmid@test.com' was equal to indigo.anidter.ykxmid@test.com",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlEqualsStringInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.Equal, Value: "Anidter1", Property: "root.name.familyName", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'Anidter' was not equal to Anidter1",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlEqualsNumberValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.Equal, Value: "1500", Property: "root.point", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'1500' was equal to 1500",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlNotEqualsNumberValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.NotEqual, Value: "1501", Property: "root.point", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'1500' was not equal to 1501",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlNotEqualsNumberInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.NotEqual, Value: "1500", Property: "root.point", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'1500' was equal to 1500",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlNotEqualsStringValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.NotEqual, Value: "not valid name", Property: "root.name.familyName", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'Anidter' was not equal to not valid name",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlNotEqualsStringInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.NotEqual, Value: "Anidter", Property: "root.name.familyName", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'Anidter' was equal to Anidter",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlContainsStringInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.Contains, Value: "not", Property: "root.name.familyName", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'Anidter' does not contains not",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlContainsStringValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.Contains, Value: "idt", Property: "root.name.familyName", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'Anidter' does contains idt",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlDoesNotContainStringValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.DoesNotContain, Value: "not", Property: "root.name.familyName", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'Anidter' does not contains not",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlDoesNotContainStringInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.DoesNotContain, Value: "idt", Property: "root.name.familyName", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'Anidter' does contains idt",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsANumberStringValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsANumber, Property: "root.pointStr", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.pointStr' was a number",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsANumberStringInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsANumber, Property: "root.id", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.id' was not a number",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlEqualNumberStringValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.EqualNumber, Property: "root.pointStr", Value: "1500.00", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'1500' was a number equal to 1500.00",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlEqualNumberStringInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.EqualNumber, Property: "root.pointStr", Value: "1501", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'1500' was not a number equal to 1501",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlEqualNumberStringNotANumber(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.EqualNumber, Property: "root.id", Value: "1501", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'id_2' was not a number impossible to use equal_number",
+		property: assertion.Property,
+		success:  false,
+		err:      true,
+	})
+}
+
+func TestResponseXmlEqualNumberStringInvalidAssertion(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.EqualNumber, Property: "root.pointStr", Value: "toto", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'toto' should be a number to compare with equal_number",
+		property: assertion.Property,
+		success:  false,
+		err:      true,
+	})
+}
+
+func TestResponseXmlIsLessThanStringValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsLessThan, Property: "root.pointStr", Value: "1501.00", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'1500' was less than 1501.00",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsLessThanStringInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsLessThan, Property: "root.pointStr", Value: "1499", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'1500' was not less than 1499",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsLessThanStringNotANumber(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsLessThan, Property: "root.id", Value: "1501", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'id_2' was not less than 1501",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsLessThanStringInvalidAssertion(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsLessThan, Property: "root.pointStr", Value: "toto", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'1500' was less than toto",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsGreaterThanStringValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsGreaterThan, Property: "root.pointStr", Value: "1499.00", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'1500' was greater than 1499.00",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsGreaterThanStringInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsGreaterThan, Property: "root.pointStr", Value: "1500", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'1500' was not greater than 1500",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsGreaterThanStringNotANumber(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsGreaterThan, Property: "root.id", Value: "1501", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'id_2' was greater than 1501",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsGreaterThanStringInvalidAssertion(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsGreaterThan, Property: "root.pointStr", Value: "toto", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'1500' was not greater than toto",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsLessThanOrEqualStringValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsLessThanOrEqual, Property: "root.pointStr", Value: "1501.00", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'1500' was less than or equal to 1501.00",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsLessThanOrEqualStringEqual(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsLessThanOrEqual, Property: "root.pointStr", Value: "1500.00", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'1500' was less than or equal to 1500.00",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsLessThanOrEqualStringInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsLessThanOrEqual, Property: "root.pointStr", Value: "1499", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'1500' was not less than or equal to 1499",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsLessThanOrEqualStringNotANumber(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsLessThanOrEqual, Property: "root.id", Value: "1501", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'id_2' was not less than or equal to 1501",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsGreaterThanOrEqualStringValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsGreaterThanOrEqual, Property: "root.pointStr", Value: "1499.00", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'1500' was greater than or equal to 1499.00",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsGreaterThanOrEqualStringNotANumber(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsGreaterThanOrEqual, Property: "root.id", Value: "1501", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'id_2' was greater than or equal to 1501",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsGreaterThanOrEqualStringInvalidAssertion(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsGreaterThanOrEqual, Property: "root.pointStr", Value: "toto", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'1500' was not greater than or equal to toto",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlEmptyStringValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.Empty, Property: "root.companyName", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.companyName' was empty",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlEmptyStringInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.Empty, Property: "root.id", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.id' was not empty",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlNotEmptyStringValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.NotEmpty, Property: "root.id", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.id' was not empty",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlNotEmptyStringInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.NotEmpty, Property: "root.companyName", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.companyName' was empty",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlEqualsNumberNumberValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.EqualNumber, Value: "1500", Property: "root.point", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'1500' was a number equal to 1500",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlEqualsNumberNumberInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.EqualNumber, Value: "1501", Property: "root.point", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'1500' was not a number equal to 1501",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlNotEqualsBoolInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.NotEqual, Value: "false", Property: "root.active", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'true' was not equal to false",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlNotEqualsBoolValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.NotEqual, Value: "true", Property: "root.active", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'true' was equal to true",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlEqualsBoolValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.Equal, Value: "true", Property: "root.active", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'true' was equal to true",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsANumberBool(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsANumber, Value: "true", Property: "root.active", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.active' was not a number",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlEqualsBoolInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.Equal, Value: "false", Property: "root.active", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'true' was not equal to false",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlNotEmptyValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.NotEmpty, Property: "root.emails", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.emails' was not empty",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlNotEmptyInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.NotEmpty, Property: "root.roles", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.roles' was empty",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlNotEmptyNotEmptyObject(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.NotEmpty, Property: "root.meta", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.meta' was not empty",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlEmptyValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.Empty, Property: "root.roles", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.roles' was empty",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlEmptyInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.Empty, Property: "root.emails", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.emails' was not empty",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlEmptyEmptyObject(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.Empty, Property: "root.company", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.company' was empty",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlHasSchemaValueValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.HasValue, Value: "urn:ietf:params:scim:schemas:core:2.0:User", Property: "root.schemas", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.schemas' had value",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlHasSchemaValueInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.HasValue, Value: "test", Property: "root.schemas", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.schemas' had no value",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsNumber(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsANumber, Property: "root.name", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.name' was not a number",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsNullNullObject(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsNull, Property: "root.building", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.building' was null",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsNullInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsNull, Property: "root.emails", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.emails' was not null",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlHasKeyValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.HasKey, Property: "root.meta", Value: "resourceType", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.meta' key does exist",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlHasKeyInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.HasKey, Property: "root.meta", Value: "invalidKey", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.meta' key does not exist",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlHasValueValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.HasValue, Property: "root.meta", Value: "User", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.meta' had value",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlHasValueInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.HasValue, Property: "root.meta", Value: "invalidValue", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.meta' had no value",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsANumberValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsANumber, Property: "root.point", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.point' was a number",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
+func TestResponseXmlIsANumberInvalid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsANumber, Property: "root.emails", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'root.emails' was not a number",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlNoKey(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.IsANumber, Property: "root.inexistant", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "Unable to locate root.inexistant property in path 'root.inexistant' in JSON",
+		property: assertion.Property,
+		success:  false,
+		err:      true,
+	})
+}
+
+func TestResponseXmlEqualsBoolCompareWithSomethingElse(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.Equal, Value: "toto", Property: "root.active", Source: model.ResponseXml}
+	te(t, assertion, responseXml, expectedResult{
+		source:   model.ResponseXml,
+		message:  "'true' was not equal to toto",
+		property: assertion.Property,
+		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseXmlInvalidJson(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.Equal, Value: "toto", Property: "root.active", Source: model.ResponseXml}
+	te(t, assertion, model.Response{
+		Body: `<root><hello>world`,
+	}, expectedResult{
+		source:   model.ResponseXml,
+		message:  "xml.Decoder.Token() - XML syntax error on line 1: unexpected EOF",
+		property: assertion.Property,
+		success:  false,
+		err:      true,
 	})
 }

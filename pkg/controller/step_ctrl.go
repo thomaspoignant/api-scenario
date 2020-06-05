@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"github.com/clbanning/mxj"
 	"github.com/jmoiron/jsonq"
 	"github.com/thomaspoignant/api-scenario/pkg/util"
 	"net/url"
@@ -166,6 +167,9 @@ func attachVariablesToContext(response model.Response, vars []model.Variable) []
 
 		case model.ResponseJson:
 			result = append(result, attachVariablesFromResponseJson(variable, response))
+
+		case model.ResponseXml:
+			result = append(result, attachVariablesFromResponseXml(variable, response))
 		}
 	}
 	return result
@@ -173,8 +177,6 @@ func attachVariablesToContext(response model.Response, vars []model.Variable) []
 
 // attachVariablesFromResponseJson extract variable from the JSON response and add it to the context.
 func attachVariablesFromResponseJson(variable model.Variable, response model.Response) model.ResultVariable {
-	// Convert key name
-	jqPath := util.JsonConvertKeyName(variable.Property)
 
 	// Convert body to map[string]interface{}
 	body, err := util.StringToJson(response.Body)
@@ -182,6 +184,25 @@ func attachVariablesFromResponseJson(variable model.Variable, response model.Res
 		return model.ResultVariable{Key: variable.Name, Err: err, Type: model.Created}
 	}
 
+	return attachVariablesFromResponseMap(variable, body)
+}
+
+// attachVariablesFromResponseXml extract variable from the XML response and add it to the context.
+func attachVariablesFromResponseXml(variable model.Variable, response model.Response) model.ResultVariable {
+
+	// Convert body to map[string]interface{}
+	body, err := mxj.NewMapXml([]byte(response.Body))
+	if err != nil {
+		return model.ResultVariable{Key: variable.Name, Err: err, Type: model.Created}
+	}
+
+	return attachVariablesFromResponseMap(variable, body)
+}
+
+func attachVariablesFromResponseMap(variable model.Variable, body map[string]interface{}) model.ResultVariable {
+
+	// Convert key name
+	jqPath := util.JsonConvertKeyName(variable.Property)
 	jq := jsonq.NewQuery(body)
 	extractedKey, err := jq.Interface(jqPath[:]...)
 	if err != nil {

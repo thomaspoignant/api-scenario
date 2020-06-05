@@ -3,6 +3,8 @@ package controller
 import (
 	"errors"
 	"fmt"
+	"github.com/clbanning/mxj"
+	"github.com/google/go-cmp/cmp"
 	"github.com/jmoiron/jsonq"
 	"github.com/thomaspoignant/api-scenario/pkg/model"
 	"github.com/thomaspoignant/api-scenario/pkg/util"
@@ -46,6 +48,11 @@ func (ctrl *assertionControllerImpl) Assert(assertion model.Assertion, resp mode
 		res.Source = assertion.Source
 		return res
 
+	case model.ResponseXml:
+		res := ctrl.assertResponseXml(assertion, resp.Body)
+		res.Source = assertion.Source
+		return res
+
 	case model.ResponseHeader:
 		res := ctrl.assertResponseHeader(assertion, resp.Header)
 		res.Source = assertion.Source
@@ -53,7 +60,7 @@ func (ctrl *assertionControllerImpl) Assert(assertion model.Assertion, resp mode
 
 	case model.ResponseText:
 		var res model.ResultAssertion
-
+		assertion.Property = "body"
 		if util.IsNumeric(resp.Body) {
 			bodyAsFloat, _ := strconv.ParseFloat(resp.Body, 64)
 			res = ctrl.assertNumber(assertion, bodyAsFloat)
@@ -98,7 +105,7 @@ func (ctrl *assertionControllerImpl) assertResponseHeader(assertion model.Assert
 	return result
 }
 
-// assertResponseHeader is testing an assertion on the JSON body of the response.
+// assertResponseJson is testing an assertion on the JSON body of the response.
 func (ctrl *assertionControllerImpl) assertResponseJson(assertion model.Assertion, bodyAsString string) model.ResultAssertion {
 
 	if len(bodyAsString) > 0 && !util.IsJson(bodyAsString) {
@@ -111,6 +118,26 @@ func (ctrl *assertionControllerImpl) assertResponseJson(assertion model.Assertio
 		return model.ResultAssertion{Success: false, Message: err.Error(), Err: err, Property: assertion.Property}
 	}
 
+	return ctrl.assertResponseMap(assertion, body)
+}
+
+// assertResponseXml is testing an assertion on the XML body of the response.
+func (ctrl *assertionControllerImpl) assertResponseXml(assertion model.Assertion, bodyAsString string) model.ResultAssertion {
+
+	if len(bodyAsString) == 0 {
+		message := "there is a result and this is not a valid XML api Response"
+		return model.ResultAssertion{Success: false, Message: message, Err: errors.New(message), Property: assertion.Property}
+	}
+
+	body, err := mxj.NewMapXml([]byte(bodyAsString))
+	if err != nil {
+		return model.ResultAssertion{Success: false, Message: err.Error(), Err: err, Property: assertion.Property}
+	}
+
+	return ctrl.assertResponseMap(assertion, body.Old())
+}
+
+func (ctrl *assertionControllerImpl) assertResponseMap(assertion model.Assertion, body map[string]interface{}) model.ResultAssertion {
 	// Convert property from Json syntax to an array of fields
 	jqPath := util.JsonConvertKeyName(assertion.Property)
 
@@ -249,7 +276,11 @@ func (ctrl *assertionControllerImpl) assertString(assertion model.Assertion, api
 
 	case model.IsANumber:
 		success := util.IsNumeric(apiValue)
-		return model.NewResultAssertion(comparison, success, apiValue)
+		var paramToDisplay string
+		if paramToDisplay = assertion.Property; len(paramToDisplay) == 0 {
+			paramToDisplay = apiValue
+		}
+		return model.NewResultAssertion(comparison, success, paramToDisplay)
 
 	case model.EqualNumber:
 		if util.IsNumeric(apiValue) {
@@ -281,7 +312,7 @@ func (ctrl *assertionControllerImpl) assertString(assertion model.Assertion, api
 
 	case model.Empty:
 		success := strings.TrimSpace(apiValue) == ""
-		return model.NewResultAssertion(comparison, success, apiValue)
+		return model.NewResultAssertion(comparison, success, propertyName)
 
 	default:
 		message := fmt.Sprintf(ComparisonNotSupportedMessage, comparison)
@@ -328,7 +359,7 @@ func (ctrl *assertionControllerImpl) assertArray(assertion model.Assertion, apiV
 
 	switch comparison {
 	case model.IsANumber:
-		return model.NewResultAssertion(comparison, false, apiValue)
+		return model.NewResultAssertion(comparison, false, propertyName)
 
 	case model.IsNull:
 		return model.NewResultAssertion(comparison, false, propertyName)
@@ -396,6 +427,14 @@ func (ctrl *assertionControllerImpl) assertMap(assertion model.Assertion, apiVal
 			if assert.Success {
 				return model.NewResultAssertion(comparison, true, propertyName)
 			}
+		}
+		return model.NewResultAssertion(comparison, false, propertyName)
+
+	case model.IsNull:
+		// This is a bit hacky but it allows to check null from XML body.
+		nullValue := map[string]interface{}{"-null": "true"}
+		if cmp.Equal(apiValue, nullValue) {
+			return model.NewResultAssertion(comparison, true, propertyName)
 		}
 		return model.NewResultAssertion(comparison, false, propertyName)
 
