@@ -1,20 +1,19 @@
 package controller
 
 import (
-	"errors"
 	"fmt"
+	"github.com/jmoiron/jsonq"
+	"github.com/thomaspoignant/api-scenario/pkg/util"
 	"net/url"
 	"reflect"
 	"strconv"
 	"time"
 
-	"github.com/jmoiron/jsonq"
 	"github.com/sendgrid/rest"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"github.com/thomaspoignant/api-scenario/pkg/context"
 	"github.com/thomaspoignant/api-scenario/pkg/model"
-	"github.com/thomaspoignant/api-scenario/pkg/util"
 )
 
 type StepController interface {
@@ -71,7 +70,7 @@ func (sc *stepControllerImpl) request(step model.Step) (model.ResultStep, error)
 
 	req, variables, err := convertAndPatchToHttpRequest(step)
 	if err != nil {
-		return model.ResultStep{}, errors.New("impossible to convert the request")
+		return model.ResultStep{}, fmt.Errorf("impossible to convert the request [%s]", err.Error())
 	}
 
 	// init the result
@@ -161,40 +160,56 @@ func attachVariablesToContext(response model.Response, vars []model.Variable) []
 				result = append(result, model.ResultVariable{Key: variable.Name, NewValue: header[0], Type: model.Created})
 			}
 
+		case model.ResponseText:
+			context.GetContext().Add(variable.Name, response.Body)
+			result = append(result, model.ResultVariable{Key: variable.Name, NewValue: response.Body, Type: model.Created})
+
 		case model.ResponseJson:
-			// Convert key name
-			jqPath := util.JsonConvertKeyName(variable.Property)
-			jq := jsonq.NewQuery(response.Body)
-			extractedKey, err := jq.Interface(jqPath[:]...)
-			if err != nil {
-				result = append(result, model.ResultVariable{Key: variable.Name, Err: err, Type: model.Created})
-			}
-
-			switch value := extractedKey.(type) {
-			case string:
-				context.GetContext().Add(variable.Name, value)
-				result = append(result, model.ResultVariable{Key: variable.Name, NewValue: value, Type: model.Created})
-
-			case bool:
-				castValue := strconv.FormatBool(value)
-				context.GetContext().Add(variable.Name, castValue)
-				result = append(result, model.ResultVariable{Key: variable.Name, NewValue: castValue, Type: model.Created})
-
-			case float64:
-				castValue := fmt.Sprintf("%g", value)
-				context.GetContext().Add(variable.Name, castValue)
-				result = append(result, model.ResultVariable{Key: variable.Name, NewValue: castValue, Type: model.Created})
-
-			default:
-				result = append(result, model.ResultVariable{
-					Key:  variable.Name,
-					Err:  fmt.Errorf("type %s not valid type to export as a variable", reflect.TypeOf(extractedKey)),
-					Type: model.Created,
-				})
-			}
+			result = append(result, attachVariablesFromResponseJson(variable, response))
 		}
 	}
 	return result
+}
+
+// attachVariablesFromResponseJson extract variable from the JSON response and add it to the context.
+func attachVariablesFromResponseJson(variable model.Variable, response model.Response) model.ResultVariable {
+	// Convert key name
+	jqPath := util.JsonConvertKeyName(variable.Property)
+
+	// Convert body to map[string]interface{}
+	body, err := util.StringToJson(response.Body)
+	if err != nil {
+		return model.ResultVariable{Key: variable.Name, Err: err, Type: model.Created}
+	}
+
+	jq := jsonq.NewQuery(body)
+	extractedKey, err := jq.Interface(jqPath[:]...)
+	if err != nil {
+		return model.ResultVariable{Key: variable.Name, Err: err, Type: model.Created}
+	}
+
+	switch value := extractedKey.(type) {
+	case string:
+		context.GetContext().Add(variable.Name, value)
+		return model.ResultVariable{Key: variable.Name, NewValue: value, Type: model.Created}
+
+	case bool:
+		castValue := strconv.FormatBool(value)
+		context.GetContext().Add(variable.Name, castValue)
+		return model.ResultVariable{Key: variable.Name, NewValue: castValue, Type: model.Created}
+
+	case float64:
+		castValue := fmt.Sprintf("%g", value)
+		context.GetContext().Add(variable.Name, castValue)
+		return model.ResultVariable{Key: variable.Name, NewValue: castValue, Type: model.Created}
+
+	default:
+		return model.ResultVariable{
+			Key:  variable.Name,
+			Err:  fmt.Errorf("type %s not valid type to export as a variable", reflect.TypeOf(extractedKey)),
+			Type: model.Created,
+		}
+	}
 }
 
 // convertAndPatchToHttpRequest create the HTTP request to call.

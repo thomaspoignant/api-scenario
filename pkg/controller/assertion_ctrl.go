@@ -51,6 +51,19 @@ func (ctrl *assertionControllerImpl) Assert(assertion model.Assertion, resp mode
 		res.Source = assertion.Source
 		return res
 
+	case model.ResponseText:
+		var res model.ResultAssertion
+
+		if util.IsNumeric(resp.Body) {
+			bodyAsFloat, _ := strconv.ParseFloat(resp.Body, 64)
+			res = ctrl.assertNumber(assertion, bodyAsFloat)
+		} else {
+			res = ctrl.assertString(assertion, resp.Body)
+		}
+
+		res.Source = assertion.Source
+		return res
+
 	default:
 		message := fmt.Sprintf("the Source %s is not valid", assertion.Source)
 		return model.ResultAssertion{Success: false, Err: errors.New(message), Message: message, Source: assertion.Source}
@@ -78,15 +91,26 @@ func (ctrl *assertionControllerImpl) assertResponseHeader(assertion model.Assert
 		return result
 	}
 
-	//Compare fisrt value of the given header key
-	//TODO handle many values for same key
+	// Compare first value of the given header key
+	// TODO handle many values for same key
 	result := ctrl.assertValue(assertion, h.Get(assertion.Property))
 	result.Property = assertion.Property
 	return result
 }
 
 // assertResponseHeader is testing an assertion on the JSON body of the response.
-func (ctrl *assertionControllerImpl) assertResponseJson(assertion model.Assertion, body map[string]interface{}) model.ResultAssertion {
+func (ctrl *assertionControllerImpl) assertResponseJson(assertion model.Assertion, bodyAsString string) model.ResultAssertion {
+
+	if len(bodyAsString) > 0 && !util.IsJson(bodyAsString) {
+		message := "there is a result and this is not a valid JSON api Response is not in JSON"
+		return model.ResultAssertion{Success: false, Message: message, Err: errors.New(message), Property: assertion.Property}
+	}
+
+	body, err := util.StringToJson(bodyAsString)
+	if err != nil {
+		return model.ResultAssertion{Success: false, Message: err.Error(), Err: err, Property: assertion.Property}
+	}
+
 	// Convert property from Json syntax to an array of fields
 	jqPath := util.JsonConvertKeyName(assertion.Property)
 

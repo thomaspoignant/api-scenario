@@ -37,6 +37,7 @@ locally your development.
     - [Headers](#headers)
     - [Assertions](#assertions)
       - [Assertion composition](#assertion-composition)
+      - [Available source type](#available-source-type)
       - [Available comparison type](#available-comparison-type)
 - [Request Chaining](#request-chaining)
   - [Using Variables to Pass Data Between Steps](#using-variables-to-pass-data-between-steps)
@@ -342,7 +343,7 @@ Assertions are a big part of api-scenario, this is the acceptance tests of your 
 
 |Property        |Description  |
 |---             |---
-|**source**      | The location of the data to extract for comparison.<br>Authorized values are:<br><ul><li>response_status</li><li>response_time</li><li>response_json</li><li>response_header</li></ul>
+|**source**      | The location of the data to extract for comparison.<br>See [available source type](#available-source-type) to have authorized values.
 |**comparison**  | The type of operation to perform when comparing the extracted data with the target value.  _([see Available comparison type](#available-comparison-type))_.
 |**property**    | The property of the source data to retrieve.<br><ul><li>For **HTTP headers**, this is the name of the header.</li><li>Data from a **JSON** response body can be extracted by specifying the path of the data using standard JavaScript notation.</li><li>Unused for text content, status code, response time and response size.</li>
 |**value**       | The expected value used to compare against the actual value. 
@@ -373,6 +374,16 @@ Assertions are a big part of api-scenario, this is the acceptance tests of your 
 ```
 </details>
 
+#### Available source type
+
+|Source                           |Config name        |Description  |
+|---                              |---                |---
+|**HTTP code**                    |`response_status`  |HTTP response status codes (https://developer.mozilla.org/en-US/docs/Web/HTTP/Status).
+|**Response time**                |`response_time`    |Duration of the request in seconds.
+|**Response Headers**             |`response_header`  |Target headers of the response.
+|**Body response _(JSON)_**       |`response_json`    |Target the response body extract in JSON.
+|**Body response _(plain text)_** |`response_text`    |Target the response body extract in plain text.
+
 #### Available comparison type
 
 |Comparison         |Config name                 |Description  |
@@ -383,8 +394,8 @@ Assertions are a big part of api-scenario, this is the acceptance tests of your 
 |**does not equal** |`not_equal`                 |A string comparison of the actual and target value.
 |**contains** 	    |`contains`                  |The actual value contains the target value as a substring.
 |**does not contain** 	|`does_not_contains`     |The target value is not found within the actual value.
-|**has key**        |`has_key`                   |Checks for the existence of the expected value within a dictionary's keys. The actual value must point to a dictionary (JSON only).
-|**has value** 	    |`has_value`                 |Checks a list or dictionary for the existence of the expected value in any of the list or dictionary values. The actual value must point to a JSON list or dictionary (JSON only).
+|**has key**        |`has_key`                   |Checks for the existence of the expected value within a dictionary's keys. The actual value must point to a dictionary **(JSON only)**.
+|**has value** 	    |`has_value`                 |Checks a list or dictionary for the existence of the expected value in any of the list or dictionary values. The actual value must point to a JSON list or dictionary **(JSON only)**.
 |**is null**        |`is_null`                   |Checks that a value for a given JSON key is null.
 |**is a number**    |`is_a_number`               |Validates the actual value is (or can be cast to) a valid numeric value.
 |**less than** 	    |`is_less_than`              |Validates the actual value is (or can be cast to) a number less than the target value.
@@ -392,8 +403,6 @@ Assertions are a big part of api-scenario, this is the acceptance tests of your 
 |**greater than** 	|`is_greater_than`           |Validates the actual value is (or can be cast to) a number greater than the target value.
 |**greater than or equal** 	|`is_greater_than_or_equal`|Validates the actual value is (or can be cast to) a number greater than or equal to the target value.
 |**equals (number)** 	|`equal_number`          |Validates the actual value is (or can be cast to) a number equal to the target value. This setting performs a numeric comparison: for example, "1.000" would be considered equal to "1".
-
-
 
 ---
 # Request Chaining

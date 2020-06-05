@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/thomaspoignant/api-scenario/pkg/controller"
 	"github.com/thomaspoignant/api-scenario/pkg/model"
-	"github.com/thomaspoignant/api-scenario/pkg/util"
 	"github.com/thomaspoignant/api-scenario/test"
 	"net/http"
 	"testing"
@@ -486,7 +485,7 @@ func TestResponseTimeNotSupportedComparison(t *testing.T) {
 }
 
 // response_json
-var body, _ = util.StringToJson(`{
+var body = `{
 		"schemas": [
 		  "urn:ietf:params:scim:schemas:core:2.0:User"
 		],
@@ -515,7 +514,8 @@ var body, _ = util.StringToJson(`{
 		"company": {},
 		"building": null,
 		"companyName": ""
-	 }`)
+	 }`
+
 var response = model.Response{
 	Body: body,
 }
@@ -1213,6 +1213,19 @@ func TestResponseJsonEqualsBoolCompareWithSomethingElse(t *testing.T) {
 	})
 }
 
+func TestResponseJsonInvalidJson(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.Equal, Value: "toto", Property: "active", Source: model.ResponseJson}
+	te(t, assertion, model.Response{
+		Body: `{"hello":"world"`,
+	}, expectedResult{
+		source:   model.ResponseJson,
+		message:  "there is a result and this is not a valid JSON api Response is not in JSON",
+		property: assertion.Property,
+		success:  false,
+		err:      true,
+	})
+}
+
 // response_header
 var header http.Header = map[string][]string{
 	"Content-Type": []string{"application/json; charset=utf-8"},
@@ -1274,5 +1287,281 @@ func TestResponseHeaderErrorNotFound(t *testing.T) {
 		property: assertion.Property,
 		success:  false,
 		err:      true,
+	})
+}
+
+// response_text
+func TestResponseTextEqualValid(t *testing.T) {
+	responseText := model.Response{Body: "result"}
+	assertion := model.Assertion{Comparison: model.Equal, Value: "result", Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'result' was equal to result",
+		success: true,
+		err:     false,
+	})
+}
+
+func TestResponseTextEqualInValid(t *testing.T) {
+	responseText := model.Response{Body: "result"}
+	assertion := model.Assertion{Comparison: model.Equal, Value: "not result", Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'result' was not equal to not result",
+		success: false,
+		err:     false,
+	})
+}
+
+func TestResponseTextDoesNotEqualInValid(t *testing.T) {
+	responseText := model.Response{Body: "result"}
+	assertion := model.Assertion{Comparison: model.NotEqual, Value: "result", Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'result' was equal to result",
+		success: false,
+		err:     false,
+	})
+}
+
+func TestResponseTextDoesNotEqualValid(t *testing.T) {
+	responseText := model.Response{Body: "result"}
+	assertion := model.Assertion{Comparison: model.NotEqual, Value: "not result", Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'result' was not equal to not result",
+		success: true,
+		err:     false,
+	})
+}
+
+func TestResponseTextIsEmptyValid(t *testing.T) {
+	responseText := model.Response{Body: ""}
+	assertion := model.Assertion{Comparison: model.Empty, Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'' was empty",
+		success: true,
+		err:     false,
+	})
+}
+
+func TestResponseTextIsEmptyInValid(t *testing.T) {
+	responseText := model.Response{Body: "res"}
+	assertion := model.Assertion{Comparison: model.Empty, Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'res' was not empty",
+		success: false,
+		err:     false,
+	})
+}
+
+func TestResponseTextIsNotEmptyValid(t *testing.T) {
+	responseText := model.Response{Body: "res"}
+	assertion := model.Assertion{Comparison: model.NotEmpty, Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'' was not empty",
+		success: true,
+		err:     false,
+	})
+}
+
+func TestResponseTextIsNotEmptyInValid(t *testing.T) {
+	responseText := model.Response{Body: ""}
+	assertion := model.Assertion{Comparison: model.NotEmpty, Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'' was empty",
+		success: false,
+		err:     false,
+	})
+}
+
+func TestResponseTextContainsValid(t *testing.T) {
+	responseText := model.Response{Body: "result"}
+	assertion := model.Assertion{Comparison: model.Contains, Value: "sul", Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'result' does contains sul",
+		success: true,
+		err:     false,
+	})
+}
+
+func TestResponseTextContainsInValid(t *testing.T) {
+	responseText := model.Response{Body: "result"}
+	assertion := model.Assertion{Comparison: model.Contains, Value: "suls", Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'result' does not contains suls",
+		success: false,
+		err:     false,
+	})
+}
+
+func TestResponseTextDoesNotContainsValid(t *testing.T) {
+	responseText := model.Response{Body: "result"}
+	assertion := model.Assertion{Comparison: model.DoesNotContain, Value: "suls", Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'result' does not contains suls",
+		success: true,
+		err:     false,
+	})
+}
+
+func TestResponseTextDoesNotContainsInValid(t *testing.T) {
+	responseText := model.Response{Body: "result"}
+	assertion := model.Assertion{Comparison: model.DoesNotContain, Value: "sul", Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'result' does contains sul",
+		success: false,
+		err:     false,
+	})
+}
+
+func TestResponseTextIsANumberValid(t *testing.T) {
+	responseText := model.Response{Body: "10"}
+	assertion := model.Assertion{Comparison: model.IsANumber, Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'10' was a number",
+		success: true,
+		err:     false,
+	})
+}
+
+func TestResponseTextIsANumberInValid(t *testing.T) {
+	responseText := model.Response{Body: "result"}
+	assertion := model.Assertion{Comparison: model.IsANumber, Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'result' was not a number",
+		success: false,
+		err:     false,
+	})
+}
+
+func TestResponseTextEqualNumberValid(t *testing.T) {
+	responseText := model.Response{Body: "10"}
+	assertion := model.Assertion{Comparison: model.EqualNumber, Value: "10", Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'10' was a number equal to 10",
+		success: true,
+		err:     false,
+	})
+}
+
+func TestResponseTextEqualNumberInValid(t *testing.T) {
+	responseText := model.Response{Body: "11"}
+	assertion := model.Assertion{Comparison: model.EqualNumber, Value: "10", Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'11' was not a number equal to 10",
+		success: false,
+		err:     false,
+	})
+}
+
+func TestResponseTextEqualNumberInValidString(t *testing.T) {
+	responseText := model.Response{Body: "result"}
+	assertion := model.Assertion{Comparison: model.EqualNumber, Value: "10", Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'result' was not a number impossible to use equal_number",
+		success: false,
+		err:     true,
+	})
+}
+
+func TestResponseTextLessThanValid(t *testing.T) {
+	responseText := model.Response{Body: "10"}
+	assertion := model.Assertion{Comparison: model.IsLessThan, Value: "11", Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'10' was less than 11",
+		success: true,
+		err:     false,
+	})
+}
+
+func TestResponseTextLessThanInValid(t *testing.T) {
+	responseText := model.Response{Body: "10"}
+	assertion := model.Assertion{Comparison: model.IsLessThan, Value: "9", Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'10' was not less than 9",
+		success: false,
+		err:     false,
+	})
+}
+
+func TestResponseTextLessThanOrEqualsValid(t *testing.T) {
+	responseText := model.Response{Body: "11"}
+	assertion := model.Assertion{Comparison: model.IsLessThanOrEqual, Value: "11", Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'11' was less than or equal to 11",
+		success: true,
+		err:     false,
+	})
+}
+
+func TestResponseTextLessThanOrEqualInValid(t *testing.T) {
+	responseText := model.Response{Body: "10"}
+	assertion := model.Assertion{Comparison: model.IsLessThanOrEqual, Value: "9", Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'10' was not less than or equal to 9",
+		success: false,
+		err:     false,
+	})
+}
+
+func TestResponseTextGreaterThanValid(t *testing.T) {
+	responseText := model.Response{Body: "11"}
+	assertion := model.Assertion{Comparison: model.IsGreaterThan, Value: "10", Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'11' was greater than 10",
+		success: true,
+		err:     false,
+	})
+}
+
+func TestResponseTextGreaterThanInValid(t *testing.T) {
+	responseText := model.Response{Body: "9"}
+	assertion := model.Assertion{Comparison: model.IsGreaterThan, Value: "10", Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'9' was not greater than 10",
+		success: false,
+		err:     false,
+	})
+}
+
+func TestResponseTextGreaterThanOrEqualsValid(t *testing.T) {
+	responseText := model.Response{Body: "11"}
+	assertion := model.Assertion{Comparison: model.IsGreaterThanOrEqual, Value: "11", Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'11' was greater than or equal to 11",
+		success: true,
+		err:     false,
+	})
+}
+
+func TestResponseTextGreaterThanOrEqualInValid(t *testing.T) {
+	responseText := model.Response{Body: "9"}
+	assertion := model.Assertion{Comparison: model.IsGreaterThanOrEqual, Value: "10", Source: model.ResponseText}
+	te(t, assertion, responseText, expectedResult{
+		source:  model.ResponseText,
+		message: "'9' was not greater than or equal to 10",
+		success: false,
+		err:     false,
 	})
 }

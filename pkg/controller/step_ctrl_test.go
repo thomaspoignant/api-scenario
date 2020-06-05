@@ -100,6 +100,10 @@ func TestRequestValid(t *testing.T) {
 				Name:     "response_header",
 				Property: "Content-Type",
 			},
+			{
+				Source: model.ResponseText,
+				Name:   "response_text",
+			},
 		},
 		Assertions: []model.Assertion{
 			{
@@ -135,5 +139,25 @@ func TestRequestValid(t *testing.T) {
 	test.Equals(t, "Should have 1 assertion", 1, len(got.Assertions))
 	test.Equals(t, "Should have valid assertion", true, got.Assertions[0].Success)
 	test.Equals(t, "Should have patch 2 elements of the request", 2, len(got.VariablesApplied))
-	test.Equals(t, "Should have create 6 variables", 6, len(got.VariablesCreated))
+	test.Equals(t, "Should have create 7 variables", 7, len(got.VariablesCreated))
+}
+
+func TestRequestInvalidUrl(t *testing.T) {
+	test.SetupLog()
+	testNumber := "1"
+	sc := controller.NewStepController(&test.ClientMock{}, controller.NewAssertionController())
+
+	step := model.Step{
+		StepType: model.RequestStep,
+		Body: `{"hello":"world_{{random_int(1,1)}}"}`,
+		URL:  "http://{elfdj/1/{{random_int(1,1)}}?param1=param1_{{random_int(1,1)}}&testNumber=" + testNumber,
+		Headers: map[string][]string{
+			"Content-Type": {"other_test_{{random_int(1,1)}}"},
+		},
+	}
+	_, err := sc.Run(step)
+
+	test.Assert(t, err != nil, "Should have an error")
+	want := "impossible to convert the request [parse \"http://{elfdj/1/1?param1=param1_1&testNumber=1\": invalid character \"{\" in host name]"
+	test.Equals(t, "should have parse error", want, err.Error())
 }
