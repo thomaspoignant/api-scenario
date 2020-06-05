@@ -2300,13 +2300,26 @@ func TestResponseXmlEqualsBoolCompareWithSomethingElse(t *testing.T) {
 	})
 }
 
-func TestResponseXmlInvalidJson(t *testing.T) {
+func TestResponseXmlInvalidXml(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Equal, Value: "toto", Property: "root.active", Source: model.ResponseXml}
 	te(t, assertion, model.Response{
 		Body: `<root><hello>world`,
 	}, expectedResult{
 		source:   model.ResponseXml,
 		message:  "xml.Decoder.Token() - XML syntax error on line 1: unexpected EOF",
+		property: assertion.Property,
+		success:  false,
+		err:      true,
+	})
+}
+
+func TestResponseXmlEmptyBody(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.Equal, Value: "toto", Property: "root.active", Source: model.ResponseXml}
+	te(t, assertion, model.Response{
+		Body: ``,
+	}, expectedResult{
+		source:   model.ResponseXml,
+		message:  "there is a result and this is not a valid XML api Response",
 		property: assertion.Property,
 		success:  false,
 		err:      true,
