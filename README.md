@@ -7,6 +7,7 @@
 [![Sonarcloud Status](https://sonarcloud.io/api/project_badges/measure?project=thomaspoignant_api-scenario&metric=alert_status)](https://sonarcloud.io/dashboard?id=thomaspoignant_api-scenario)
 ![Go version](https://img.shields.io/github/go-mod/go-version/thomaspoignant/api-scenario?logo=go%20version "Go version")
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fthomaspoignant%2Fapi-scenario.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fthomaspoignant%2Fapi-scenario?ref=badge_shield)
+[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/thomaspoignant/api-scenario?color=blue&logo=docker&sort=semver)](https://hub.docker.com/r/thomaspoignant/api-scenario)
  
 API-scenario is a simple command line tool that allow you to execute easily a scenario to test your APIs.  
 
