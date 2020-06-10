@@ -427,8 +427,11 @@ func sliceContainsValue(arr []interface{}, value string) bool {
 			}
 
 		case float64:
-			s64 := strconv.FormatFloat(item, 'E', -1, 64)
-			if s64 == value {
+			parsedVal, err := strconv.ParseFloat(value, 64)
+			if err != nil {
+				continue
+			}
+			if item == parsedVal {
 				return true
 			}
 		}

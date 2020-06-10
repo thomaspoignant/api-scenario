@@ -513,7 +513,9 @@ var body = `{
 		},
 		"company": {},
 		"building": null,
-		"companyName": ""
+		"companyName": "",
+		"externalIds": [1, 3, 6],
+		"boolSlice": [true, true]
 	 }`
 
 var response = model.Response{
@@ -530,6 +532,40 @@ func TestResponseJsonContainsArrayValid(t *testing.T) {
 	te(t, assertion, response, expectedResult{
 		source:  model.ResponseJson,
 		message: "'schemas' does contains urn:ietf:params:scim:schemas:core:2.0:User",
+		success: true,
+		err:     false,
+		property: assertion.Property,
+	})
+}
+
+func TestResponseJsonContainsArrayIntValid(t *testing.T) {
+	assertion := model.Assertion{
+		Comparison: model.Contains,
+		Value: "6",
+		Source: model.ResponseJson,
+		Property: "externalIds",
+	}
+
+	te(t, assertion, response, expectedResult{
+		source:  model.ResponseJson,
+		message: "'externalIds' does contains 6",
+		success: true,
+		err:     false,
+		property: assertion.Property,
+	})
+}
+
+func TestResponseJsonContainsArrayBoolValid(t *testing.T) {
+	assertion := model.Assertion{
+		Comparison: model.Contains,
+		Value: "true",
+		Source: model.ResponseJson,
+		Property: "boolSlice",
+	}
+
+	te(t, assertion, response, expectedResult{
+		source:  model.ResponseJson,
+		message: "'boolSlice' does contains true",
 		success: true,
 		err:     false,
 		property: assertion.Property,
