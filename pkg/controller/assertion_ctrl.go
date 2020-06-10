@@ -419,7 +419,6 @@ func sliceContainsValue(arr []interface{}, value string) bool {
 			if item == value {
 				return true
 			}
-			break
 
 		case bool:
 			if strconv.FormatBool(item) == value {
