@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/jmoiron/jsonq"
+	"github.com/thomaspoignant/api-scenario/pkg/context"
 	"github.com/thomaspoignant/api-scenario/pkg/model"
 	"github.com/thomaspoignant/api-scenario/pkg/util"
 	"net/http"
@@ -26,9 +27,15 @@ func NewAssertionController() AssertionController {
 
 const ComparisonNotSupportedMessage = "the comparison %s was not supported for the source"
 
+
+func (ctrl *assertionControllerImpl) patchAssertion(assertion model.Assertion) model.Assertion {
+	assertion.Value = context.GetContext().Patch(assertion.Value)
+	return assertion
+}
+
 // Assert is testing an assertion on a API response.
 func (ctrl *assertionControllerImpl) Assert(assertion model.Assertion, resp model.Response) model.ResultAssertion {
-
+	assertion = ctrl.patchAssertion(assertion)
 	switch assertion.Source {
 	case model.ResponseStatus:
 		res := ctrl.assertNumber(assertion, float64(resp.StatusCode))
