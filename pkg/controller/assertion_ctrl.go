@@ -27,15 +27,11 @@ func NewAssertionController() AssertionController {
 
 const ComparisonNotSupportedMessage = "the comparison %s was not supported for the source"
 
-
-func (ctrl *assertionControllerImpl) patchAssertion(assertion model.Assertion) model.Assertion {
-	assertion.Value = context.GetContext().Patch(assertion.Value)
-	return assertion
-}
-
 // Assert is testing an assertion on a API response.
 func (ctrl *assertionControllerImpl) Assert(assertion model.Assertion, resp model.Response) model.ResultAssertion {
+
 	assertion = ctrl.patchAssertion(assertion)
+
 	switch assertion.Source {
 	case model.ResponseStatus:
 		res := ctrl.assertNumber(assertion, float64(resp.StatusCode))
@@ -410,4 +406,10 @@ func (ctrl *assertionControllerImpl) assertMap(assertion model.Assertion, apiVal
 		message := fmt.Sprintf(ComparisonNotSupportedMessage, comparison)
 		return model.ResultAssertion{Success: false, Message: message, Err: errors.New(message)}
 	}
+}
+
+// patchAssertion patch the value of the assertion if there is a variable in it.
+func (ctrl *assertionControllerImpl) patchAssertion(assertion model.Assertion) model.Assertion {
+	assertion.Value = context.GetContext().Patch(assertion.Value)
+	return assertion
 }
