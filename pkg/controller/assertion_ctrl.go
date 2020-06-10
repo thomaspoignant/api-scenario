@@ -341,6 +341,12 @@ func (ctrl *assertionControllerImpl) assertArray(assertion model.Assertion, apiV
 		success := len(apiValue) == 0
 		return model.NewResultAssertion(comparison, success, propertyName)
 
+	case model.Contains:
+		return model.NewResultAssertion(comparison, sliceContainsValue(apiValue, assertion.Value), propertyName, assertion.Value)
+
+	case model.DoesNotContain:
+		return model.NewResultAssertion(comparison, !sliceContainsValue(apiValue, assertion.Value), propertyName, assertion.Value)
+
 	case model.HasValue:
 		for _, value := range apiValue {
 			newAssertion := model.Assertion{
@@ -403,4 +409,30 @@ func (ctrl *assertionControllerImpl) assertMap(assertion model.Assertion, apiVal
 		message := fmt.Sprintf(ComparisonNotSupportedMessage, comparison)
 		return model.ResultAssertion{Success: false, Message: message, Err: errors.New(message)}
 	}
+}
+
+// sliceContainsValue checks if a value is contains in a slice.
+func sliceContainsValue(arr []interface{}, value string) bool {
+	for _, v := range arr {
+		switch item := v.(type) {
+		case string:
+			if item == value {
+				return true
+			}
+			break
+
+		case bool:
+			if strconv.FormatBool(item) == value {
+				return true
+			}
+
+		case float64:
+			s64 := strconv.FormatFloat(item, 'E', -1, 64)
+			if s64 == value {
+				return true
+			}
+		}
+	}
+
+	return false
 }

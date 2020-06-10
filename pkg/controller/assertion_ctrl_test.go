@@ -519,6 +519,73 @@ var body = `{
 var response = model.Response{
 	Body: body,
 }
+func TestResponseJsonContainsArrayValid(t *testing.T) {
+	assertion := model.Assertion{
+		Comparison: model.Contains,
+		Value: "urn:ietf:params:scim:schemas:core:2.0:User",
+		Source: model.ResponseJson,
+		Property: "schemas",
+	}
+
+	te(t, assertion, response, expectedResult{
+		source:  model.ResponseJson,
+		message: "'schemas' does contains urn:ietf:params:scim:schemas:core:2.0:User",
+		success: true,
+		err:     false,
+		property: assertion.Property,
+	})
+}
+
+func TestResponseJsonContainsArrayInValid(t *testing.T) {
+	assertion := model.Assertion{
+		Comparison: model.Contains,
+		Value: "urn:ietf:params:scim",
+		Source: model.ResponseJson,
+		Property: "schemas",
+	}
+
+	te(t, assertion, response, expectedResult{
+		source:  model.ResponseJson,
+		message: "'schemas' does not contains urn:ietf:params:scim",
+		success: false,
+		err:     false,
+		property: assertion.Property,
+	})
+}
+
+func TestResponseJsonDoesNotContainsArrayValid(t *testing.T) {
+	assertion := model.Assertion{
+		Comparison: model.DoesNotContain,
+		Value: "invalidValue",
+		Source: model.ResponseJson,
+		Property: "schemas",
+	}
+
+	te(t, assertion, response, expectedResult{
+		source:  model.ResponseJson,
+		message: "'schemas' does not contains invalidValue",
+		success: true,
+		err:     false,
+		property: assertion.Property,
+	})
+}
+
+func TestResponseJsonDoesNotContainsArrayInValid(t *testing.T) {
+	assertion := model.Assertion{
+		Comparison: model.DoesNotContain,
+		Value: "urn:ietf:params:scim:schemas:core:2.0:User",
+		Source: model.ResponseJson,
+		Property: "schemas",
+	}
+
+	te(t, assertion, response, expectedResult{
+		source:  model.ResponseJson,
+		message: "'schemas' does contains urn:ietf:params:scim:schemas:core:2.0:User",
+		success: false,
+		err:     false,
+		property: assertion.Property,
+	})
+}
 
 func TestResponseJsonEqualsStringValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Equal, Value: "Anidter", Property: "name.familyName", Source: model.ResponseJson}
