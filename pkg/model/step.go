@@ -7,7 +7,7 @@ type Step struct {
 
 	Headers    map[string][]string `json:"headers,omitempty"`
 	Assertions []Assertion         `json:"assertions,omitempty"`
-	Method     string              `json:"Method,omitempty"`
+	Method     string              `json:"method,omitempty"`
 	Duration   int                 `json:"duration,omitempty"`
 	Body       string              `json:"body,omitempty"`
 }

@@ -394,7 +394,7 @@ Assertions are a big part of api-scenario, this is the acceptance tests of your 
 |**equals** 	    |`equal`                     |A string comparison of the actual and expected value. Non-string values are cast to a string before comparing. For comparing non-integer numbers, use equals (number).
 |**does not equal** |`not_equal`                 |A string comparison of the actual and target value.
 |**contains** 	    |`contains`                  |The actual value contains the target value as a substring.
-|**does not contain** 	|`does_not_contains`     |The target value is not found within the actual value.
+|**does not contain** 	|`does_not_contain`      |The target value is not found within the actual value.
 |**has key**        |`has_key`                   |Checks for the existence of the expected value within a dictionary's keys. The actual value must point to a dictionary **(JSON only)**.
 |**has value** 	    |`has_value`                 |Checks a list or dictionary for the existence of the expected value in any of the list or dictionary values. The actual value must point to a JSON list or dictionary **(JSON only)**.
 |**is null**        |`is_null`                   |Checks that a value for a given JSON key is null.
