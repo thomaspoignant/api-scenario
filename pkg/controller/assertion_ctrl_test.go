@@ -514,11 +514,114 @@ var body = `{
 		},
 		"company": {},
 		"building": null,
-		"companyName": ""
+		"companyName": "",
+		"externalIds": [1, 3, 6],
+		"boolSlice": [true, true]
 	 }`
 
 var response = model.Response{
 	Body: body,
+}
+func TestResponseJsonContainsArrayValid(t *testing.T) {
+	assertion := model.Assertion{
+		Comparison: model.Contains,
+		Value: "urn:ietf:params:scim:schemas:core:2.0:User",
+		Source: model.ResponseJson,
+		Property: "schemas",
+	}
+
+	te(t, assertion, response, expectedResult{
+		source:  model.ResponseJson,
+		message: "'schemas' does contains urn:ietf:params:scim:schemas:core:2.0:User",
+		success: true,
+		err:     false,
+		property: assertion.Property,
+	})
+}
+
+func TestResponseJsonContainsArrayIntValid(t *testing.T) {
+	assertion := model.Assertion{
+		Comparison: model.Contains,
+		Value: "6",
+		Source: model.ResponseJson,
+		Property: "externalIds",
+	}
+
+	te(t, assertion, response, expectedResult{
+		source:  model.ResponseJson,
+		message: "'externalIds' does contains 6",
+		success: true,
+		err:     false,
+		property: assertion.Property,
+	})
+}
+
+func TestResponseJsonContainsArrayBoolValid(t *testing.T) {
+	assertion := model.Assertion{
+		Comparison: model.Contains,
+		Value: "true",
+		Source: model.ResponseJson,
+		Property: "boolSlice",
+	}
+
+	te(t, assertion, response, expectedResult{
+		source:  model.ResponseJson,
+		message: "'boolSlice' does contains true",
+		success: true,
+		err:     false,
+		property: assertion.Property,
+	})
+}
+
+func TestResponseJsonContainsArrayInValid(t *testing.T) {
+	assertion := model.Assertion{
+		Comparison: model.Contains,
+		Value: "urn:ietf:params:scim",
+		Source: model.ResponseJson,
+		Property: "schemas",
+	}
+
+	te(t, assertion, response, expectedResult{
+		source:  model.ResponseJson,
+		message: "'schemas' does not contains urn:ietf:params:scim",
+		success: false,
+		err:     false,
+		property: assertion.Property,
+	})
+}
+
+func TestResponseJsonDoesNotContainsArrayValid(t *testing.T) {
+	assertion := model.Assertion{
+		Comparison: model.DoesNotContain,
+		Value: "invalidValue",
+		Source: model.ResponseJson,
+		Property: "schemas",
+	}
+
+	te(t, assertion, response, expectedResult{
+		source:  model.ResponseJson,
+		message: "'schemas' does not contains invalidValue",
+		success: true,
+		err:     false,
+		property: assertion.Property,
+	})
+}
+
+func TestResponseJsonDoesNotContainsArrayInValid(t *testing.T) {
+	assertion := model.Assertion{
+		Comparison: model.DoesNotContain,
+		Value: "urn:ietf:params:scim:schemas:core:2.0:User",
+		Source: model.ResponseJson,
+		Property: "schemas",
+	}
+
+	te(t, assertion, response, expectedResult{
+		source:  model.ResponseJson,
+		message: "'schemas' does contains urn:ietf:params:scim:schemas:core:2.0:User",
+		success: false,
+		err:     false,
+		property: assertion.Property,
+	})
 }
 
 func TestResponseJsonEqualsStringValid(t *testing.T) {
@@ -968,6 +1071,28 @@ func TestResponseJsonNotEqualsBoolValid(t *testing.T) {
 		message:  "'true' was equal to true",
 		property: assertion.Property,
 		success:  false,
+		err:      false,
+	})
+}
+
+func TestResponseJsonNotEqualsBoolErr(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.NotEqual, Value: "tru", Property: "active", Source: model.ResponseJson}
+	te(t, assertion, response, expectedResult{
+		source:   model.ResponseJson,
+		message:  "'tru' was not comparable with a boolean value true",
+		property: assertion.Property,
+		success:  false,
+		err:      true,
+	})
+}
+
+func TestResponseJsonNotEmptyBoolValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.NotEmpty, Property: "active", Source: model.ResponseJson}
+	te(t, assertion, response, expectedResult{
+		source:   model.ResponseJson,
+		message:  "'active' was not empty",
+		property: assertion.Property,
+		success:  true,
 		err:      false,
 	})
 }
