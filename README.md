@@ -113,7 +113,7 @@ Available images are:
 
 ## Version
 ```console
-$ api-scenario version
+api-scenario version
 # 0.1.0
 ```
 
@@ -121,7 +121,7 @@ $ api-scenario version
 To execute your scenario please use the `run` options and specify your scenario file.
 
 ```console
-$ api-scenario run --scenario="./scenario.json"
+api-scenario run --scenario="./scenario.json"
 ```
 
 There are several options you can use with this command:
@@ -145,7 +145,7 @@ _(If you prefer `YAML` result add `--output-format=YAML`)_.
 
 **Example:**
 ```console
-$ api-scenario run --scenario="./scenario.json" --output-file="<your file location>" --output-format=YAML
+api-scenario run --scenario="./scenario.json" --output-file="<your file location>" --output-format=YAML
 ```
 
 ---
@@ -242,7 +242,7 @@ We manipulate different concepts here.
 
 Now the first scenario is build, we can run it _(see complete scenario:  [YAML](examples/first-test.yml) / [JSON](examples/first-test.json))_.
 ```console
-$ api-scenario run --scenario="examples/first-test.json" --variable="baseUrl:https://reqres.in"
+api-scenario run --scenario="examples/first-test.json" --variable="baseUrl:https://reqres.in"
 ```
 What we are doing is here is running our scenario file, and we ask to replace every occurrence 
 of `{{baseUrl}}` by `https://reqres.in`.
@@ -459,7 +459,7 @@ Once defined, the variable is available to all requests within the test.
 
 To add a variable just use the option `--variable` or `-V` and specify the `key:value` of this variable.
 ```console
-$ ./api-scenario run -F your_file.json --variable="baseUrl:http://www.google.com/" -V "token:token1234"
+./api-scenario run -F your_file.json --variable="baseUrl:http://www.google.com/" -V "token:token1234"
 ```
 
 __Note that if you create a variable in a step with the same name of a global variable it will override it.__
@@ -470,7 +470,7 @@ You can add a header for all your requests by using the option `--header` or `-H
 for all requests.
 
 ```console
-$ ./api-scenario run -F your_file.json --header="Content-Type:application/json" -H "Authorization: Bearer Token123"
+./api-scenario run -F your_file.json --header="Content-Type:application/json" -H "Authorization: Bearer Token123"
 ```
 
 ## Built-in Variables and Functions
