@@ -44,7 +44,6 @@ jobs:
         - make generate
         - test -n "$TRAVIS_TAG" && docker login -u=thomaspoignant -p="$DOCKER_PASSWORD"
       script: curl -sL https://git.io/goreleaser | bash
-      after_success: git reset --hard HEAD
       deploy:
         - provider: script
           cleanup: false
