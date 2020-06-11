@@ -65,7 +65,7 @@ All the binaries are available in the [release](https://github.com/thomaspoignan
 ## Install using Homebrew (mac and linux)
 If you are using Homebrew package manager, you can install api-scenario with Homebrew. 
  
-```shell script
+```console
 brew tap thomaspoignant/homebrew-tap
 brew install api-scenario
 ```
@@ -73,7 +73,7 @@ brew install api-scenario
 ## Install using Scoop (windows)
 
 If you are on Windows and using scoop package manager, you can install api-scenario with [Scoop](https://scoop.sh/).
-```shell script
+```console
 scoop bucket add org https://github.com/thomaspoignant/scoop.git
 scoop install api-scenario
 ```
@@ -81,21 +81,21 @@ scoop install api-scenario
 ## Install using .deb file (linux)
 If you prefer to use directly the `.deb` file to install in your debian like linux distribution.  
 _Don't forget to set the correct version number._
-```shell script
+```console
 wget https://github.com/thomaspoignant/api-scenario/releases/download/vX.X.X/api-scenario_X.X.X_Tux_64-bit.deb && dpkg -i api-scenario_*.deb
 ```
 
 ## Install using .rpm file (linux)
 If you prefer to use directly the `.rpm` file to install in your centos/fedora like linux distribution.  
 _Don't forget to set the correct version number._
-```shell script
+```console
 wget https://github.com/thomaspoignant/api-scenario/releases/download/vX.X.X/api-scenario_X.X.X_Tux_64-bit.rpm && rpm -i api-scenario_*.rpm
 ```
 
 ## Use docker image
 To use the last version of our docker image you can pull `thomaspoignant/api-scenario:latest`.
 
-```shell script
+```console
 docker pull thomaspoignant/api-scenario:latest
 ```
 
@@ -112,7 +112,7 @@ Available images are:
 # Command line usage
 
 ## Version
-```shell script
+```console
 $ api-scenario version
 # 0.1.0
 ```
@@ -120,7 +120,7 @@ $ api-scenario version
 ## Execute your scenario
 To execute your scenario please use the `run` options and specify your scenario file.
 
-```shell script
+```console
 $ api-scenario run --scenario="./scenario.json"
 ```
 
@@ -144,7 +144,7 @@ You just have to add the option `--output-file="<your file location>"` and it wi
 _(If you prefer `YAML` result add `--output-format=YAML`)_.
 
 **Example:**
-```shell script
+```console
 $ api-scenario run --scenario="./scenario.json" --output-file="<your file location>" --output-format=YAML
 ```
 
@@ -241,7 +241,7 @@ We manipulate different concepts here.
 
 
 Now the first scenario is build, we can run it _(see complete scenario:  [YAML](examples/first-test.yml) / [JSON](examples/first-test.json))_.
-```shell script
+```console
 $ api-scenario run --scenario="examples/first-test.json" --variable="baseUrl:https://reqres.in"
 ```
 What we are doing is here is running our scenario file, and we ask to replace every occurrence 
@@ -458,7 +458,7 @@ should be stored in an Initial Variable.
 Once defined, the variable is available to all requests within the test.
 
 To add a variable just use the option `--variable` or `-V` and specify the `key:value` of this variable.
-```shell script
+```console
 $ ./api-scenario run -F your_file.json --variable="baseUrl:http://www.google.com/" -V "token:token1234"
 ```
 
@@ -469,7 +469,7 @@ Overriding headers works the same as [global variables](#global-variables).
 You can add a header for all your requests by using the option `--header` or `-H`, it will add or override the header 
 for all requests.
 
-```shell script
+```console
 $ ./api-scenario run -F your_file.json --header="Content-Type:application/json" -H "Authorization: Bearer Token123"
 ```
 
