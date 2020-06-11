@@ -293,27 +293,28 @@ func (ctrl *assertionControllerImpl) assertString(assertion model.Assertion, api
 func (ctrl *assertionControllerImpl) assertBool(assertion model.Assertion, apiValue bool) model.ResultAssertion {
 
 	comparison := assertion.Comparison
-	assertionValue := assertion.Value
 	propertyName := assertion.Property
 
-	// Parse the Assertions value to have the bool value
-	testValue, err := strconv.ParseBool(assertionValue)
-	if err != nil {
-		message := fmt.Sprintf("'%s' was not comparable with a boolean value %t", assertionValue, apiValue)
-		return model.ResultAssertion{Success: false, Message: message, Err: errors.New(message)}
-	}
-
 	switch comparison {
+	case model.NotEmpty:
+		return model.NewResultAssertion(comparison, true, propertyName)
+
 	case model.IsANumber:
 		return model.NewResultAssertion(comparison, false, propertyName)
 
 	case model.Equal:
-		success := testValue == apiValue
-		return model.NewResultAssertion(comparison, success, apiValue, assertionValue)
+		success, err := util.CompareBool(apiValue, assertion.Value)
+		if err != nil {
+			return model.ResultAssertion{Success: false, Message: err.Error(), Err: err}
+		}
+		return model.NewResultAssertion(comparison, success, apiValue, assertion.Value)
 
 	case model.NotEqual:
-		success := testValue != apiValue
-		return model.NewResultAssertion(comparison, success, apiValue, assertionValue)
+		notSuccess, err := util.CompareBool(apiValue, assertion.Value)
+		if err != nil {
+			return model.ResultAssertion{Success: false, Message: err.Error(), Err: err}
+		}
+		return model.NewResultAssertion(comparison, !notSuccess, apiValue, assertion.Value)
 
 	default:
 		message := fmt.Sprintf(ComparisonNotSupportedMessage, comparison)

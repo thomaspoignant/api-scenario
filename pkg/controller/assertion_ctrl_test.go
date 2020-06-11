@@ -971,6 +971,28 @@ func TestResponseJsonNotEqualsBoolValid(t *testing.T) {
 	})
 }
 
+func TestResponseJsonNotEqualsBoolErr(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.NotEqual, Value: "tru", Property: "active", Source: model.ResponseJson}
+	te(t, assertion, response, expectedResult{
+		source:   model.ResponseJson,
+		message:  "'tru' was not comparable with a boolean value true",
+		property: assertion.Property,
+		success:  false,
+		err:      true,
+	})
+}
+
+func TestResponseJsonNotEmptyBoolValid(t *testing.T) {
+	assertion := model.Assertion{Comparison: model.NotEmpty, Property: "active", Source: model.ResponseJson}
+	te(t, assertion, response, expectedResult{
+		source:   model.ResponseJson,
+		message:  "'active' was not empty",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+}
+
 func TestResponseJsonEqualsBoolValid(t *testing.T) {
 	assertion := model.Assertion{Comparison: model.Equal, Value: "true", Property: "active", Source: model.ResponseJson}
 	te(t, assertion, response, expectedResult{
