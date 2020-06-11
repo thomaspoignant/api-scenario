@@ -2,6 +2,7 @@ package controller_test
 
 import (
 	"fmt"
+	"github.com/thomaspoignant/api-scenario/pkg/context"
 	"github.com/thomaspoignant/api-scenario/pkg/controller"
 	"github.com/thomaspoignant/api-scenario/pkg/model"
 	"github.com/thomaspoignant/api-scenario/test"
@@ -1349,6 +1350,21 @@ func TestResponseJsonInvalidJson(t *testing.T) {
 		success:  false,
 		err:      true,
 	})
+}
+
+func TestVariableInAssertion(t *testing.T) {
+	context.GetContext().ResetContext()
+	context.GetContext().Add("name", "Anidter")
+
+	assertion := model.Assertion{Comparison: model.Equal, Value: "{{name}}", Property: "name.familyName", Source: model.ResponseJson}
+	te(t, assertion, response, expectedResult{
+		source:   model.ResponseJson,
+		message:  "'Anidter' was equal to Anidter",
+		property: assertion.Property,
+		success:  true,
+		err:      false,
+	})
+	context.GetContext().ResetContext()
 }
 
 // response_header

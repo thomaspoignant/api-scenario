@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/jmoiron/jsonq"
+	"github.com/thomaspoignant/api-scenario/pkg/context"
 	"github.com/thomaspoignant/api-scenario/pkg/model"
 	"github.com/thomaspoignant/api-scenario/pkg/util"
 	"net/http"
@@ -28,6 +29,8 @@ const ComparisonNotSupportedMessage = "the comparison %s was not supported for t
 
 // Assert is testing an assertion on a API response.
 func (ctrl *assertionControllerImpl) Assert(assertion model.Assertion, resp model.Response) model.ResultAssertion {
+
+	assertion = ctrl.patchAssertion(assertion)
 
 	switch assertion.Source {
 	case model.ResponseStatus:
@@ -410,6 +413,13 @@ func (ctrl *assertionControllerImpl) assertMap(assertion model.Assertion, apiVal
 		message := fmt.Sprintf(ComparisonNotSupportedMessage, comparison)
 		return model.ResultAssertion{Success: false, Message: message, Err: errors.New(message)}
 	}
+}
+
+
+// patchAssertion patch the value of the assertion if there is a variable in it.
+func (ctrl *assertionControllerImpl) patchAssertion(assertion model.Assertion) model.Assertion {
+	assertion.Value = context.GetContext().Patch(assertion.Value)
+	return assertion
 }
 
 // sliceContainsValue checks if a value is contains in a slice.
