@@ -292,6 +292,7 @@ This is useful when you have asynchronous API and allows waiting before calling 
 |**step_type**      | `request`
 |**url**            | URL of your endpoint
 |**method**         | HTTP verb of your request _(GET, POST, PUT, DELETE, OPTIONS, PATCH)_
+|**body**           | A string with the body of the request
 |**variables**      | Array of variables to extract from the response _([see Using Variables to Pass Data Between Steps for details](#))_
 |**headers**        | Object who contains all the headers attach to the request _([see how to add headers](#headers))_
 |**assertions**     | Array of assertions, this is the acceptance tests _([see how to create assertion tests](#assertions))_
