@@ -6,6 +6,7 @@ import (
 	"github.com/clbanning/mxj"
 	"github.com/google/go-cmp/cmp"
 	"github.com/jmoiron/jsonq"
+	"github.com/thomaspoignant/api-scenario/pkg/context"
 	"github.com/thomaspoignant/api-scenario/pkg/model"
 	"github.com/thomaspoignant/api-scenario/pkg/util"
 	"net/http"
@@ -30,6 +31,8 @@ const ComparisonNotSupportedMessage = "the comparison %s was not supported for t
 
 // Assert is testing an assertion on a API response.
 func (ctrl *assertionControllerImpl) Assert(assertion model.Assertion, resp model.Response) model.ResultAssertion {
+
+	assertion = ctrl.patchAssertion(assertion)
 
 	switch assertion.Source {
 	case model.ResponseStatus:
@@ -324,27 +327,28 @@ func (ctrl *assertionControllerImpl) assertString(assertion model.Assertion, api
 func (ctrl *assertionControllerImpl) assertBool(assertion model.Assertion, apiValue bool) model.ResultAssertion {
 
 	comparison := assertion.Comparison
-	assertionValue := assertion.Value
 	propertyName := assertion.Property
 
-	// Parse the Assertions value to have the bool value
-	testValue, err := strconv.ParseBool(assertionValue)
-	if err != nil {
-		message := fmt.Sprintf("'%s' was not comparable with a boolean value %t", assertionValue, apiValue)
-		return model.ResultAssertion{Success: false, Message: message, Err: errors.New(message)}
-	}
-
 	switch comparison {
+	case model.NotEmpty:
+		return model.NewResultAssertion(comparison, true, propertyName)
+
 	case model.IsANumber:
 		return model.NewResultAssertion(comparison, false, propertyName)
 
 	case model.Equal:
-		success := testValue == apiValue
-		return model.NewResultAssertion(comparison, success, apiValue, assertionValue)
+		success, err := util.CompareBool(apiValue, assertion.Value)
+		if err != nil {
+			return model.ResultAssertion{Success: false, Message: err.Error(), Err: err}
+		}
+		return model.NewResultAssertion(comparison, success, apiValue, assertion.Value)
 
 	case model.NotEqual:
-		success := testValue != apiValue
-		return model.NewResultAssertion(comparison, success, apiValue, assertionValue)
+		notSuccess, err := util.CompareBool(apiValue, assertion.Value)
+		if err != nil {
+			return model.ResultAssertion{Success: false, Message: err.Error(), Err: err}
+		}
+		return model.NewResultAssertion(comparison, !notSuccess, apiValue, assertion.Value)
 
 	default:
 		message := fmt.Sprintf(ComparisonNotSupportedMessage, comparison)
@@ -371,6 +375,12 @@ func (ctrl *assertionControllerImpl) assertArray(assertion model.Assertion, apiV
 	case model.Empty:
 		success := len(apiValue) == 0
 		return model.NewResultAssertion(comparison, success, propertyName)
+
+	case model.Contains:
+		return model.NewResultAssertion(comparison, sliceContainsValue(apiValue, assertion.Value), propertyName, assertion.Value)
+
+	case model.DoesNotContain:
+		return model.NewResultAssertion(comparison, !sliceContainsValue(apiValue, assertion.Value), propertyName, assertion.Value)
 
 	case model.HasValue:
 		for _, value := range apiValue {
@@ -442,4 +452,39 @@ func (ctrl *assertionControllerImpl) assertMap(assertion model.Assertion, apiVal
 		message := fmt.Sprintf(ComparisonNotSupportedMessage, comparison)
 		return model.ResultAssertion{Success: false, Message: message, Err: errors.New(message)}
 	}
+}
+
+
+// patchAssertion patch the value of the assertion if there is a variable in it.
+func (ctrl *assertionControllerImpl) patchAssertion(assertion model.Assertion) model.Assertion {
+	assertion.Value = context.GetContext().Patch(assertion.Value)
+	return assertion
+}
+
+// sliceContainsValue checks if a value is contains in a slice.
+func sliceContainsValue(arr []interface{}, value string) bool {
+	for _, v := range arr {
+		switch item := v.(type) {
+		case string:
+			if item == value {
+				return true
+			}
+
+		case bool:
+			if strconv.FormatBool(item) == value {
+				return true
+			}
+
+		case float64:
+			parsedVal, err := strconv.ParseFloat(value, 64)
+			if err != nil {
+				continue
+			}
+			if item == parsedVal {
+				return true
+			}
+		}
+	}
+
+	return false
 }

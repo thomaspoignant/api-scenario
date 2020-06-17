@@ -13,7 +13,7 @@ const (
 	IsGreaterThan                          //is_greater_than
 	IsGreaterThanOrEqual                   //is_greater_than_or_equal
 	Contains                               //contains
-	DoesNotContain                         //does_not_contains
+	DoesNotContain                         //does_not_contain
 	NotEmpty                               //not_empty
 	Empty                                  //empty
 	IsNull                                 //is_null

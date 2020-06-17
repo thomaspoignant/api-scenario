@@ -65,7 +65,7 @@ All the binaries are available in the [release](https://github.com/thomaspoignan
 ## Install using Homebrew (mac and linux)
 If you are using Homebrew package manager, you can install api-scenario with Homebrew. 
  
-```shell script
+```console
 brew tap thomaspoignant/homebrew-tap
 brew install api-scenario
 ```
@@ -73,7 +73,7 @@ brew install api-scenario
 ## Install using Scoop (windows)
 
 If you are on Windows and using scoop package manager, you can install api-scenario with [Scoop](https://scoop.sh/).
-```shell script
+```console
 scoop bucket add org https://github.com/thomaspoignant/scoop.git
 scoop install api-scenario
 ```
@@ -81,21 +81,21 @@ scoop install api-scenario
 ## Install using .deb file (linux)
 If you prefer to use directly the `.deb` file to install in your debian like linux distribution.  
 _Don't forget to set the correct version number._
-```shell script
+```console
 wget https://github.com/thomaspoignant/api-scenario/releases/download/vX.X.X/api-scenario_X.X.X_Tux_64-bit.deb && dpkg -i api-scenario_*.deb
 ```
 
 ## Install using .rpm file (linux)
 If you prefer to use directly the `.rpm` file to install in your centos/fedora like linux distribution.  
 _Don't forget to set the correct version number._
-```shell script
+```console
 wget https://github.com/thomaspoignant/api-scenario/releases/download/vX.X.X/api-scenario_X.X.X_Tux_64-bit.rpm && rpm -i api-scenario_*.rpm
 ```
 
 ## Use docker image
 To use the last version of our docker image you can pull `thomaspoignant/api-scenario:latest`.
 
-```shell script
+```console
 docker pull thomaspoignant/api-scenario:latest
 ```
 
@@ -112,16 +112,16 @@ Available images are:
 # Command line usage
 
 ## Version
-```shell script
-$ api-scenario version
+```console
+api-scenario version
 # 0.1.0
 ```
 
 ## Execute your scenario
 To execute your scenario please use the `run` options and specify your scenario file.
 
-```shell script
-$ api-scenario run --scenario="./scenario.json"
+```console
+api-scenario run --scenario="./scenario.json"
 ```
 
 There are several options you can use with this command:
@@ -144,8 +144,8 @@ You just have to add the option `--output-file="<your file location>"` and it wi
 _(If you prefer `YAML` result add `--output-format=YAML`)_.
 
 **Example:**
-```shell script
-$ api-scenario run --scenario="./scenario.json" --output-file="<your file location>" --output-format=YAML
+```console
+api-scenario run --scenario="./scenario.json" --output-file="<your file location>" --output-format=YAML
 ```
 
 ---
@@ -241,8 +241,8 @@ We manipulate different concepts here.
 
 
 Now the first scenario is build, we can run it _(see complete scenario:  [YAML](examples/first-test.yml) / [JSON](examples/first-test.json))_.
-```shell script
-$ api-scenario run --scenario="examples/first-test.json" --variable="baseUrl:https://reqres.in"
+```console
+api-scenario run --scenario="examples/first-test.json" --variable="baseUrl:https://reqres.in"
 ```
 What we are doing is here is running our scenario file, and we ask to replace every occurrence 
 of `{{baseUrl}}` by `https://reqres.in`.
@@ -292,6 +292,7 @@ This is useful when you have asynchronous API and allows waiting before calling 
 |**step_type**      | `request`
 |**url**            | URL of your endpoint
 |**method**         | HTTP verb of your request _(GET, POST, PUT, DELETE, OPTIONS, PATCH)_
+|**body**           | A string with the body of the request
 |**variables**      | Array of variables to extract from the response _([see Using Variables to Pass Data Between Steps for details](#))_
 |**headers**        | Object who contains all the headers attach to the request _([see how to add headers](#headers))_
 |**assertions**     | Array of assertions, this is the acceptance tests _([see how to create assertion tests](#assertions))_
@@ -395,9 +396,9 @@ Assertions are a big part of api-scenario, this is the acceptance tests of your 
 |**equals** 	    |`equal`                     |A string comparison of the actual and expected value. Non-string values are cast to a string before comparing. For comparing non-integer numbers, use equals (number).
 |**does not equal** |`not_equal`                 |A string comparison of the actual and target value.
 |**contains** 	    |`contains`                  |The actual value contains the target value as a substring.
-|**does not contain** 	|`does_not_contains`     |The target value is not found within the actual value.
-|**has key**        |`has_key`                   |Checks for the existence of the expected value within a dictionary's keys. The actual value must point to a dictionary **(JSON and XML only)**.
-|**has value** 	    |`has_value`                 |Checks a list or dictionary for the existence of the expected value in any of the list or dictionary values. The actual value must point to a JSON list or dictionary **(JSON and XML only)**.
+|**does not contain** 	|`does_not_contain`      |The target value is not found within the actual value.
+|**has key**        |`has_key`                   |Checks for the existence of the expected value within a dictionary's keys. The actual value must point to a dictionary **(JSON only)**.
+|**has value** 	    |`has_value`                 |Checks a list or dictionary for the existence of the expected value in any of the list or dictionary values. The actual value must point to a JSON list or dictionary **(JSON only)**.
 |**is null**        |`is_null`                   |Checks that a value for a given JSON or XML key is null.
 |**is a number**    |`is_a_number`               |Validates the actual value is (or can be cast to) a valid numeric value.
 |**less than** 	    |`is_less_than`              |Validates the actual value is (or can be cast to) a number less than the target value.
@@ -459,8 +460,8 @@ should be stored in an Initial Variable.
 Once defined, the variable is available to all requests within the test.
 
 To add a variable just use the option `--variable` or `-V` and specify the `key:value` of this variable.
-```shell script
-$ ./api-scenario run -F your_file.json --variable="baseUrl:http://www.google.com/" -V "token:token1234"
+```console
+./api-scenario run -F your_file.json --variable="baseUrl:http://www.google.com/" -V "token:token1234"
 ```
 
 __Note that if you create a variable in a step with the same name of a global variable it will override it.__
@@ -470,8 +471,8 @@ Overriding headers works the same as [global variables](#global-variables).
 You can add a header for all your requests by using the option `--header` or `-H`, it will add or override the header 
 for all requests.
 
-```shell script
-$ ./api-scenario run -F your_file.json --header="Content-Type:application/json" -H "Authorization: Bearer Token123"
+```console
+./api-scenario run -F your_file.json --header="Content-Type:application/json" -H "Authorization: Bearer Token123"
 ```
 
 ## Built-in Variables and Functions
