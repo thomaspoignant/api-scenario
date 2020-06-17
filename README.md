@@ -347,7 +347,7 @@ Assertions are a big part of api-scenario, this is the acceptance tests of your 
 |---             |---
 |**source**      | The location of the data to extract for comparison.<br>See [available source type](#available-source-type) to have authorized values.
 |**comparison**  | The type of operation to perform when comparing the extracted data with the target value.  _([see Available comparison type](#available-comparison-type))_.
-|**property**    | The property of the source data to retrieve.<br><ul><li>For **HTTP headers**, this is the name of the header.</li><li>Data from a **JSON** response body can be extracted by specifying the path of the data using standard JavaScript notation.</li><li>Unused for text content, status code, response time and response size.</li>
+|**property**    | The property of the source data to retrieve.<br><ul><li>For **HTTP headers**, this is the name of the header.</li><li>Data from a **JSON / XML** response body can be extracted by specifying the path of the data using standard JavaScript notation.</li><li>Unused for text content, status code, response time and response size.</li>
 |**value**       | The expected value used to compare against the actual value. 
 
 
@@ -385,6 +385,7 @@ Assertions are a big part of api-scenario, this is the acceptance tests of your 
 |**Response Headers**             |`response_header`  |Target headers of the response.
 |**Body response _(JSON)_**       |`response_json`    |Target the response body extract in JSON.
 |**Body response _(plain text)_** |`response_text`    |Target the response body extract in plain text.
+|**Body response _(XML)_**        |`response_xml `    |Target the response body extract in XML.
 
 #### Available comparison type
 
@@ -398,7 +399,7 @@ Assertions are a big part of api-scenario, this is the acceptance tests of your 
 |**does not contain** 	|`does_not_contain`      |The target value is not found within the actual value.
 |**has key**        |`has_key`                   |Checks for the existence of the expected value within a dictionary's keys. The actual value must point to a dictionary **(JSON only)**.
 |**has value** 	    |`has_value`                 |Checks a list or dictionary for the existence of the expected value in any of the list or dictionary values. The actual value must point to a JSON list or dictionary **(JSON only)**.
-|**is null**        |`is_null`                   |Checks that a value for a given JSON key is null.
+|**is null**        |`is_null`                   |Checks that a value for a given JSON or XML key is null.
 |**is a number**    |`is_a_number`               |Validates the actual value is (or can be cast to) a valid numeric value.
 |**less than** 	    |`is_less_than`              |Validates the actual value is (or can be cast to) a number less than the target value.
 |**less than or equal** |`is_less_than_or_equals`|Validates the actual value is (or can be cast to) a number less than or equal to the target value.

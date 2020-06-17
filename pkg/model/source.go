@@ -9,4 +9,5 @@ const (
 	ResponseJson                 //response_json
 	ResponseHeader               //response_header
 	ResponseText                 //response_text
+	ResponseXml                  //response_xml
 )

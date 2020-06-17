@@ -49,7 +49,7 @@ func TestOutputPause(t *testing.T) {
 }
 
 // Request
-func TestRequestValid(t *testing.T) {
+func TestRequestValidJson(t *testing.T) {
 	test.SetupLog()
 	testNumber := "1"
 	sc := controller.NewStepController(&test.ClientMock{}, controller.NewAssertionController())
@@ -149,8 +149,8 @@ func TestRequestInvalidUrl(t *testing.T) {
 
 	step := model.Step{
 		StepType: model.RequestStep,
-		Body: `{"hello":"world_{{random_int(1,1)}}"}`,
-		URL:  "http://{elfdj/1/{{random_int(1,1)}}?param1=param1_{{random_int(1,1)}}&testNumber=" + testNumber,
+		Body:     `{"hello":"world_{{random_int(1,1)}}"}`,
+		URL:      "http://{elfdj/1/{{random_int(1,1)}}?param1=param1_{{random_int(1,1)}}&testNumber=" + testNumber,
 		Headers: map[string][]string{
 			"Content-Type": {"other_test_{{random_int(1,1)}}"},
 		},
@@ -160,4 +160,45 @@ func TestRequestInvalidUrl(t *testing.T) {
 	test.Assert(t, err != nil, "Should have an error")
 	want := "impossible to convert the request [parse \"http://{elfdj/1/1?param1=param1_1&testNumber=1\": invalid character \"{\" in host name]"
 	test.Equals(t, "should have parse error", want, err.Error())
+}
+
+func TestRequestValidXml(t *testing.T) {
+	test.SetupLog()
+	testNumber := "2"
+	sc := controller.NewStepController(&test.ClientMock{}, controller.NewAssertionController())
+
+	context.GetContext().Add("baseUrl", "test.com")
+	step := model.Step{
+		URL:  "http://{{baseUrl}}/1?testNumber=" + testNumber,
+		Headers: map[string][]string{
+			"Content-Type": {"other_test_{{random_int(1,1)}}"},
+		},
+		Method:   "GET",
+		StepType: model.RequestStep,
+		Variables: []model.Variable{
+			{
+				Source:   model.ResponseXml,
+				Property: "root.hello",
+				Name:     "hello",
+			},
+		},
+		Assertions: []model.Assertion{
+			{
+				Comparison: model.Equal,
+				Value:      "200",
+				Source:     model.ResponseStatus,
+			},
+		},
+	}
+	got, _ := sc.Run(step)
+
+	test.Equals(t, "StepType should be request", model.RequestStep, got.StepType)
+	test.Assert(t, got.StepTime > 0, "StepTime should be positive")
+
+	// Check response
+	test.Assert(t, got.Response.TimeElapsed > 0, "TimeElapsed should be positive")
+	test.Equals(t, "Should have response status = 200", 200, got.Response.StatusCode)
+	test.Equals(t, "Should have 1 assertion", 1, len(got.Assertions))
+	test.Equals(t, "Should have valid assertion", true, got.Assertions[0].Success)
+	test.Equals(t, "Should have create 1 variables", 1, len(got.VariablesCreated))
 }
