@@ -31,6 +31,11 @@ func (s *scenarioControllerImpl) Run(scenario model.Scenario) model.ScenarioResu
 	logrus.Infof("%s\n", scenario.Description)
 
 	for _, step := range scenario.Steps {
+		if step.Skipped {
+			logrus.Error("step is skipped")
+			continue
+		}
+
 		stepRes, err := s.stepController.Run(step)
 		if err != nil {
 			logrus.Errorf("impossible to execute the step: %v\n%v", err, step)
