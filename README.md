@@ -262,6 +262,7 @@ This is useful when you have asynchronous API and allows waiting before calling 
 |---            |---
 |**step_type**      | `pause`
 |**duration**       | Number of seconds to wait.
+|**skipped**        | If true the step is skipped and nothing is running.
 
 **Example:** _Wait for 5 seconds_
 <details open>
@@ -296,6 +297,7 @@ This is useful when you have asynchronous API and allows waiting before calling 
 |**variables**      | Array of variables to extract from the response _([see Using Variables to Pass Data Between Steps for details](#))_
 |**headers**        | Object who contains all the headers attach to the request _([see how to add headers](#headers))_
 |**assertions**     | Array of assertions, this is the acceptance tests _([see how to create assertion tests](#assertions))_
+|**skipped**        | If true the step is skipped and nothing is running.
 
 ### Headers
 Headers are represented by an object containing all the headers to send.  
