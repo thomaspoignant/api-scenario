@@ -10,4 +10,5 @@ type Step struct {
 	Method     string              `json:"method,omitempty"`
 	Duration   int                 `json:"duration,omitempty"`
 	Body       string              `json:"body,omitempty"`
+	Skipped    bool                `json:"skipped,omitempty"`
 }
