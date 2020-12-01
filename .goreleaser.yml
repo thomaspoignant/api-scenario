@@ -3,8 +3,7 @@ before:
     - make update-dependencies
     - make generate
 builds:
-  -
-    goos:
+  - goos:
       - freebsd
       - windows
       - darwin
@@ -16,12 +15,12 @@ builds:
       - 386
 
 archives:
-- replacements:
-    darwin: Darwin
-    linux: Linux
-    windows: Windows
-    386: i386
-    amd64: x86_64
+  - replacements:
+      darwin: Darwin
+      linux: Linux
+      windows: Windows
+      386: i386
+      amd64: x86_64
 
 checksum:
   name_template: 'checksums.txt'
@@ -33,22 +32,20 @@ changelog:
   sort: asc
   filters:
     exclude:
-    - '^docs:'
-    - '^test:'
-    - '^examples:'
+      - '^docs:'
+      - '^test:'
+      - '^examples:'
 
 dockers:
-  -
-    goos: linux
+  - goos: linux
     image_templates:
       - thomaspoignant/{{.ProjectName}}:latest
       - thomaspoignant/{{.ProjectName}}:{{ .Tag }}
       - thomaspoignant/{{.ProjectName}}:v{{ .Major }}
       - thomaspoignant/{{.ProjectName}}:v{{ .Major }}.{{ .Minor }}
 brews:
-  -
-    # Github repository to push the tap to.
-    github:
+  - # Github repository to push the tap to.
+    tap:
       owner: thomaspoignant
       name: homebrew-tap
 
@@ -75,8 +72,7 @@ scoop:
   license: Unlicence
 
 nfpms:
-  -
-    # Replacements for GOOS and GOARCH in the package name.
+  - # Replacements for GOOS and GOARCH in the package name.
     # Keys should be valid GOOSs or GOARCHs.
     # Values are the respective replacements.
     replacements:
