@@ -3,6 +3,7 @@ module github.com/thomaspoignant/api-scenario
 go 1.14
 
 require (
+	github.com/alvaroloes/enumer v1.1.2 // indirect
 	github.com/clbanning/mxj v1.8.4
 	github.com/fatih/color v1.9.0
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
